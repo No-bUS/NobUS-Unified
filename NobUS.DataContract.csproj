@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Attribute\" />
+    <Folder Include="Entity\" />
+    <Folder Include="Snapshot\" />
+  </ItemGroup>
+
 </Project>
