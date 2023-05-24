@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Attribute\" />
     <Folder Include="Entity\" />
-    <Folder Include="Snapshot\" />
+    <Folder Include="ValueObject\" />
   </ItemGroup>
 
 </Project>
