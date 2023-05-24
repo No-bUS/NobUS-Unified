@@ -1,4 +1,4 @@
 namespace NobUS.DataContract.Entity
 {
-  public sealed record Route(string Name, string Caption, Station[] Stations);
+  public sealed partial record Route(string Name, string Caption, Station[] Stations);
 }

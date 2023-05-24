@@ -1,6 +1,6 @@
-using NobUS.DataContract.Attribute;
+using NobUS.DataContract.ValueObject;
 
 namespace NobUS.DataContract.Entity
 {
-  public sealed record Station(string Name, string Caption, Coordinate Coordinate);
+  public sealed partial record Station(int Code, string Name, string Caption, Coordinate Coordinate);
 }
