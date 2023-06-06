@@ -9,11 +9,9 @@ servers:
 paths: 
   /BusStops:
     get:
-      summary: Get list of bus stops
-      description: Get information about bus stops
       operationId: GetListOfBusStops
       responses:
-        '200':
+        200:
           description: OK
           content:
             text/html:
@@ -46,13 +44,11 @@ paths:
           $ref: '#/components/responses/401'
   /ShuttleService:
     get:
-      summary: Get shuttle service
-      description: Get all oncoming shuttle bus services at a specified stop
       operationId: GetShuttleService
       parameters:
         - $ref: '#/components/parameters/busstopname'
       responses:
-        '200':
+        200:
           description: A successful response containing the shuttle service result
           content:
             text/html:
@@ -137,7 +133,6 @@ paths:
                         example: "Kent Ridge MRT"
         404:
           $ref: '#/components/responses/404-busstop'
-
         401:
           $ref: '#/components/responses/401'
   /ActiveBus:
@@ -208,7 +203,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/route_code'
       responses:
-        '200':
+        200:
           description: A successful response.
           content:
             text/html:
@@ -224,14 +219,15 @@ paths:
                           anyOf:
                             - $ref: '#/components/schemas/CheckPoint'
                             - $ref: '#/components/schemas/BusStopCheckPoint'
+        401:
+          $ref: '#/components/responses/401'
   /PickupPoint:
     get:
       summary: Get a list of pickup points for a route
       parameters:
         - $ref: '#/components/parameters/route_code'
       responses:
-        '200':
-          description: A successful response
+        200:
           content:
             text/html:
               schema:
@@ -273,8 +269,6 @@ paths:
                               example: 103.769671
   /RouteMinMaxTime:
     get:
-      summary: Get route min max time
-      description: Get the minimum and maximum operating time of a route
       operationId: GetRouteMinMaxTime
       parameters:
         - $ref: '#/components/parameters/route_code'
@@ -321,8 +315,6 @@ paths:
           $ref: '#/components/responses/401'
   /ServiceDescription:
     get:
-      summary: Get service description
-      description: Get brief path for each route
       operationId: GetServiceDescription
       responses:
         200:
@@ -350,8 +342,6 @@ paths:
           $ref: '#/components/responses/401'
   /Announcements:
     get:
-      summary: Get announcements
-      description: Get all announcements
       operationId: GetAnnouncements
       responses:
         200:
@@ -396,8 +386,6 @@ paths:
           $ref: '#/components/responses/401'
   /publicity:
     get:
-      summary: Get Publicity
-      description: Get all publicity information.
       operationId: GetPublicity
       responses:
         200:
@@ -453,8 +441,6 @@ paths:
           $ref: '#/components/responses/401'
   /TickerTapes:
     get:
-      summary: Get ticker tapes
-      description: Get all ticker tapes
       operationId: GetTickerTapes
       responses:
         200:
@@ -512,8 +498,6 @@ paths:
                         format: date-time
   /CheckPoint:
     get:
-      summary: Get checkpoints
-      description: Get all checkpoints of a specified route
       operationId: GetAllCheckpoints
       parameters:
         - $ref: '#/components/parameters/route_code'
