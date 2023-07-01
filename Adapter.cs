@@ -8,15 +8,15 @@ namespace NobUS.DataContract.Reader.OfficialAPI
   internal static class Adapter
   {
     internal static Route AdaptRoute(ServiceDescription rawRouteMetadata, IEnumerable<Pickuppoint> rawRouteStops) =>
-      new(rawRouteMetadata.Route, rawRouteStops.Select(AdaptStation).ToArray());
+      new(rawRouteMetadata.Route, rawRouteMetadata.Route, rawRouteStops.Select(AdaptStation).ToArray());
 
     internal static Station AdaptStation(Busstops rawStation) =>
-      new(rawStation.Name, rawStation.Caption, new Coordinate(rawStation.Latitude, rawStation.Longitude));
+      new(-1, rawStation.Name, rawStation.Caption, new Coordinate(rawStation.Latitude, rawStation.Longitude));
 
     internal static Station AdaptStation(Pickuppoint rawStation) =>
-      new(rawStation.Busstopcode, rawStation.Pickupname, new Coordinate(rawStation.Lng, rawStation.Lat));
+      new(-1, rawStation.Busstopcode, rawStation.Pickupname, new Coordinate(rawStation.Lng, rawStation.Lat));
 
-    internal static ArrivalEvent AdaptArrivalEvent(Station station, _etas rawEta, Dictionary<int, ShuttleJob> shuttleJobDictionary) => 
+    internal static ArrivalEvent AdaptArrivalEvent(Station station, _etas rawEta, Dictionary<int, ShuttleJob> shuttleJobDictionary) =>
       new(station, shuttleJobDictionary[rawEta.Jobid], new TimeSpan(0, 0, rawEta.Eta_s), DateTime.Now);
 
     internal static MassPoint AdaptMassPoint(Activebus rawMassPoint) =>
