@@ -9,7 +9,8 @@ public class CongestedClient
 {
   public CongestedClient(SchemaClient? client, HttpClient? httpClient)
   {
-    _client = client ?? new SchemaClient(httpClient ?? new HttpClient());
+    var _httpClient = httpClient ?? Utility.GetHttpClientWithAuth();
+    _client = client ?? new SchemaClient(_httpClient);
     InitStations();
     InitRoutes();
     InitVehicles();
