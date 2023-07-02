@@ -152,6 +152,7 @@ paths:
                 properties:
                   ActiveBusResult:
                     type: object
+                    required: [ActiveBusCount, Timestamp]
                     properties:
                       ActiveBusCount:
                           type: string
@@ -163,6 +164,7 @@ paths:
                         type: array
                         items:
                           type: object
+                          nullable: true
                           properties:
                             vehplate:
                               type: string
@@ -179,20 +181,25 @@ paths:
                               format: double
                             loadInfo:
                               type: object
+                              nullable: true
                               properties:
                                 occupancy:
                                   type: number
+                                  nullable: true
                                   format: double
                                 crowdLevel:
                                   type: string
+                                  nullable: true
                                   enum:
                                     - low
                                     - medium
                                     - high
                                 capacity:
                                   type: integer
+                                  nullable: true
                                 ridership:
                                   type: integer
+                                  nullable: true
         401:
           $ref: '#/components/responses/401'
         404:
