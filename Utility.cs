@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using NobUS.DataContract.Reader.OfficialAPI.Client;
+
 namespace NobUS.DataContract.Reader.OfficialAPI
 {
   internal static class Utility
@@ -12,5 +13,13 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                     Convert.ToBase64String(Encoding.ASCII.GetBytes("NUSnextbus:13dL?zY,3feWR^\"T")));
       return httpClient;
     }
+
+    public static IEnumerable<_etas> GetEtasFromShuttles(IEnumerable<Shuttles> shuttles) =>
+      shuttles.Where(ss => ss != null)
+        .Where(ss => ss._etas != null)
+        .Where(ss => ss._etas.Count > 0)
+        .SelectMany(ss => ss._etas)
+        .Where(x => x != null)
+        .Distinct();
   }
 }

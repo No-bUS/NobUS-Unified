@@ -58,17 +58,20 @@ public class CongestedClient
   private void InitVehicles()
   {
     IEnumerable<string> StationToPlatesConverter(Station station) =>
-      _client.GetShuttleServiceAsync(station.Name)
-        .Result.ShuttleServiceResult.Shuttles.SelectMany(ss => ss._etas)
-        .Select(eta => eta.Plate);
-
-    var runningVehicles = _stationSet.Select(StationToPlatesConverter).SelectMany(p => p)
+      Utility.GetEtasFromShuttles(_client.GetShuttleServiceAsync(station.Name)
+        .Result.ShuttleServiceResult.Shuttles).Select(eta => eta.Plate);
+    
+    var plates = _stationSet.Select(StationToPlatesConverter);
+    var runningVehicles = plates
+      .SelectMany(p => p)
+      .Where(p => !_vehicles.ContainsKey(p))
       .Select(p => new Vehicle(null, p));
     foreach (var runningVehicle in runningVehicles)
     {
       _vehicles.Add(runningVehicle.Plate, runningVehicle);
       _vehicleSet.Add(runningVehicle);
     }
+
   }
 
   public void UpdateVehicleLocations()
@@ -91,7 +94,7 @@ public class CongestedClient
   {
     var rawShuttleJobs = _client.GetActiveBusAsync(route.Name);
     var rawOngoingShuttleJobs = _stationSet.Select(station =>
-        _client.GetShuttleServiceAsync(station.Name).Result.ShuttleServiceResult.Shuttles.SelectMany(ss => ss._etas))
+      Utility.GetEtasFromShuttles(_client.GetShuttleServiceAsync(station.Name).Result.ShuttleServiceResult.Shuttles))
       .SelectMany(e => e);
     ICollection<Activebus> shuttleJobs = rawShuttleJobs.Result.ActiveBusResult.Activebus;
     foreach (var shuttleJob in shuttleJobs)
