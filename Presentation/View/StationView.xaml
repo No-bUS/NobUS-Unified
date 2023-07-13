@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
+             x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView">
+    <mdc:Card BackgroundColour="{DynamicResource SurfaceColor}"
+              Elevation="3"
+              EnableTouchEvents="False"
+              Shape="10"
+              x:Name="InfoCard">
+        <Grid RowDefinitions="auto,auto,auto">
+            <Label x:Name="NameLabel"
+                   HorizontalOptions="Start"
+                   Grid.Row="1"
+                   Text="{x:Binding Path=ViewModel.Station.Name}" />
+            <HorizontalStackLayout  Grid.Row="2"
+                                    HorizontalOptions="End"
+                                    Spacing="8">
+                <Label x:Name="CaptionLabel"
+                       Text="{x:Binding Path=ViewModel.Station.Caption}" />
+            </HorizontalStackLayout>
+        </Grid>
+    </mdc:Card>
+</ContentView>
