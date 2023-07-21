@@ -16,7 +16,7 @@ namespace NobUS.DataContract.Reader.OfficialAPI
     internal static Station AdaptStation(Pickuppoint rawStation) =>
       new(-1, rawStation.Busstopcode, rawStation.Pickupname, new Coordinate(rawStation.Lng, rawStation.Lat));
 
-    internal static ArrivalEvent AdaptArrivalEvent(Station station, _etas rawEta, Dictionary<int, ShuttleJob> shuttleJobDictionary) =>
+    internal static ArrivalEvent AdaptArrivalEvent(Station station, _etas rawEta, IDictionary<int, ShuttleJob> shuttleJobDictionary) =>
       new(station, shuttleJobDictionary[rawEta.Jobid], new TimeSpan(0, 0, rawEta.Eta_s), DateTime.Now);
 
     internal static MassPoint AdaptMassPoint(Activebus rawMassPoint) =>

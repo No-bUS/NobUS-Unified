@@ -1,188 +1,128 @@
-﻿using NobUS.DataContract.Model.Entity;
+﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
+using NobUS.DataContract.Model.Entity;
 using NobUS.DataContract.Model.ValueObject.Snapshot;
 using NobUS.DataContract.Reader.OfficialAPI.Client;
-using System.Collections.Immutable;
 
-namespace NobUS.DataContract.Reader.OfficialAPI;
-
-public partial record CongestedClient : IClient
+namespace NobUS.DataContract.Reader.OfficialAPI
 {
-    public CongestedClient(SchemaClient? client, HttpClient? httpClient)
+    public record CongestedClient : IClient
     {
-        var _httpClient = httpClient ?? Utility.GetHttpClientWithAuth();
-        _client = client ?? new SchemaClient(_httpClient);
-        InitStations();
-        InitRoutes();
-        InitVehicles();
-        foreach (var route in _routeSet)
+        private static readonly TimeSpan UpdateInterval = TimeSpan.FromMinutes(3);
+        private readonly SchemaClient _client;
+
+        private readonly ConcurrentDictionary<string, Route> _routes = new();
+        private readonly ConcurrentDictionary<int, ShuttleJob> _shuttleJobs = new();
+        private readonly ConcurrentDictionary<string, Station> _stations = new();
+        private readonly ConcurrentDictionary<string, Vehicle> _vehicles = new();
+
+        public CongestedClient() => _client = new SchemaClient(Utility.GetHttpClientWithAuth());
+
+        private Task InitAsync => Task.WhenAll(InitStations, InitRoutes, InitVehicles)
+            .ContinueWith(_ => _routes.Values.Select(InitShuttleJobs))
+            .ContinueWith(_ => BackgroundUpdater);
+
+        private Task BackgroundUpdater => Task.Run(async () =>
         {
-            InitShuttleJobs(route);
-        }
-    }
-
-    public CongestedClient()
-    {
-        _client = new SchemaClient(Utility.GetHttpClientWithAuth());
-        InitStations();
-        InitRoutes();
-        InitVehicles();
-        foreach (var route in _routeSet)
-        {
-            InitShuttleJobs(route);
-        }
-    }
-
-    private readonly SchemaClient _client;
-    private readonly Dictionary<string, Route> _routes = new();
-    private readonly HashSet<Route> _routeSet = new();
-    private readonly Dictionary<string, Station> _stations = new();
-    private readonly HashSet<Station> _stationSet = new();
-    private readonly Dictionary<int, ShuttleJob> _shuttleJobs = new();
-    private readonly HashSet<ShuttleJob> _shuttleJobSet = new();
-    private readonly Dictionary<string, Vehicle> _vehicles = new();
-    private readonly HashSet<Vehicle> _vehicleSet = new();
-
-    private void InitStations()
-    {
-        var rawStations = _client.GetListOfBusStopsAsync();
-        ICollection<Busstops> stations = rawStations.Result.BusStopsResult.Busstops;
-        foreach (var station in stations)
-        {
-            var adaptedStation = Adapter.AdaptStation(station);
-            _stations.Add(station.Name, adaptedStation);
-            _stationSet.Add(adaptedStation);
-        }
-    }
-
-    private void InitRoutes()
-    {
-        var rawRoutes = _client.GetServiceDescriptionAsync();
-        ICollection<ServiceDescription> routes = rawRoutes.Result.ServiceDescriptionResult.ServiceDescription;
-        foreach (var route in routes)
-        {
-            var rawRouteStops = _client.PickupPointAsync(route.Route);
-            var adaptedRoute = Adapter.AdaptRoute(route, rawRouteStops.Result.PickupPointResult.Pickuppoint);
-            _routes.Add(route.Route, adaptedRoute);
-            _routeSet.Add(adaptedRoute);
-        }
-    }
-
-    private void InitVehicles()
-    {
-        IEnumerable<string> StationToPlatesConverter(Station station) =>
-          Utility.GetEtasFromShuttles(_client.GetShuttleServiceAsync(station.Name)
-            .Result.ShuttleServiceResult.Shuttles).Select(eta => eta.Plate);
-
-        var plates = _stationSet.Select(StationToPlatesConverter);
-        var runningVehicles = plates
-          .SelectMany(p => p)
-          .Where(p => !_vehicles.ContainsKey(p))
-          .Select(p => new Vehicle(null, p));
-        foreach (var runningVehicle in runningVehicles)
-        {
-            _vehicles.Add(runningVehicle.Plate, runningVehicle);
-            _vehicleSet.Add(runningVehicle);
-        }
-
-    }
-
-    public void UpdateVehicleLocations()
-    {
-        foreach (var route in _routeSet)
-        {
-            var activeBuses = _client.GetActiveBusAsync(route.Name).Result.ActiveBusResult.Activebus;
-            foreach (var activeBus in activeBuses)
+            while (true)
             {
-                var vehicle = _vehicles[activeBus.Vehplate];
-                var updatedVehicle = vehicle with { MassPoint = Adapter.AdaptMassPoint(activeBus) };
-                _vehicles[activeBus.Vehplate] = updatedVehicle;
-                _vehicleSet.Remove(vehicle);
-                _vehicleSet.Add(updatedVehicle);
+                await UpdateVehicleLocations();
+                await Task.Delay(UpdateInterval);
             }
-        }
-    }
+            // ReSharper disable once FunctionNeverReturns
+        });
 
-    private void InitShuttleJobs(Route route)
-    {
-        var rawShuttleJobs = _client.GetActiveBusAsync(route.Name);
-        var rawOngoingShuttleJobs = _stationSet.Select(station =>
-          Utility.GetEtasFromShuttles(_client.GetShuttleServiceAsync(station.Name).Result.ShuttleServiceResult.Shuttles))
-          .SelectMany(e => e).ToList();
-        ICollection<Activebus> shuttleJobs = rawShuttleJobs.Result.ActiveBusResult.Activebus;
-        if (rawOngoingShuttleJobs.Count < 1) return;
-        foreach (var shuttleJob in shuttleJobs)
+        private Task InitStations => Task.Run(_client.GetListOfBusStopsAsync)
+            .ContinueWith(ss =>
+                ss.Result.BusStopsResult.Busstops.Select(Adapter.AdaptStation).Select(s => _stations.TryAdd(s.Name, s))
+                    .ToList());
+
+        private Task InitRoutes =>
+            Task.Run(_client.GetServiceDescriptionAsync)
+                .ContinueWith(rs => rs.Result.ServiceDescriptionResult.ServiceDescription.Select(r =>
+                        Adapter.AdaptRoute(r, _client.PickupPointAsync(r.Route).Result.PickupPointResult.Pickuppoint))
+                    .Select(r => _routes.TryAdd(r.Name, r)));
+
+        private Task InitVehicles =>
+            InitStations.ContinueWith(_ => _stations.Values
+                .Select(s => _client.GetShuttleServiceAsync(s.Name).Result.ShuttleServiceResult.Shuttles)
+                .Select(Utility.GetEtasFromShuttles)
+                .Select(etas => etas.Select(eta => eta.Plate))
+                .Select(p => p.Where(key => !_vehicles.ContainsKey(key)).Select(plate => new Vehicle(null, plate)))
+                .Select(x => x.Select(vehicle => _vehicles.TryAdd(vehicle.Plate, vehicle)))
+                .ToList());
+
+        public async Task<IImmutableList<Station>> GetStationsAsync() =>
+            await InitStations.ContinueWith(_ => _stations.Values.ToImmutableList());
+
+        public async Task<IImmutableList<Route>> GetRoutesAsync() =>
+            await InitRoutes.ContinueWith(_ => _routes.Values.ToImmutableList());
+
+        public async Task<IImmutableList<Vehicle>> GetVehiclesAsync() =>
+            await InitVehicles.ContinueWith(_ => _vehicles.Values.ToImmutableList());
+
+        public async Task<IImmutableList<ShuttleJob>> GetShuttleJobsAsync() =>
+            await InitAsync.ContinueWith(_ => _shuttleJobs.Values.ToImmutableList());
+
+        public async Task<IImmutableList<Station>> GetStationsAsync(Route route) =>
+            await InitRoutes.ContinueWith(_ => route.Stations.ToImmutableList());
+
+        public async Task<IImmutableList<ArrivalEvent>> GetArrivalEventsAsync(Station station) =>
+            await Task.Run(() =>
+                _client.GetShuttleServiceAsync(station.Name).Result.ShuttleServiceResult.Shuttles
+                    .SelectMany(ss => ss._etas).Select(eta => Adapter.AdaptArrivalEvent(station, eta, _shuttleJobs))
+                    .ToImmutableList());
+
+        public async Task<IImmutableList<TResult>> GetAsync<TResult>() where TResult : class
         {
-            if (!rawOngoingShuttleJobs.Any(e => e.Plate == shuttleJob.Vehplate))
+            return Type.GetTypeCode(typeof(TResult)) switch
             {
-                continue;
-            }
-            var adaptedShuttleJob = new ShuttleJob(rawOngoingShuttleJobs.First(e => e.Plate == shuttleJob.Vehplate).Jobid,
-              route, _vehicles[shuttleJob.Vehplate]);
-            _shuttleJobs.Add(adaptedShuttleJob.Id, adaptedShuttleJob);
-            _shuttleJobSet.Add(adaptedShuttleJob);
-        }
-    }
-
-    public IEnumerable<Station> GetStations() => _stationSet.ToImmutableList();
-    public async Task<IImmutableList<Station>> GetStationsAsync() => await Task.FromResult(_stationSet.ToImmutableList());
-    public async Task<IImmutableList<Station>> GetStationsAsync(CancellationToken ct) => await Task.FromResult(_stationSet.ToImmutableList());
-    public IEnumerable<Route> GetRoutes() => _routeSet.ToImmutableList();
-    public async Task<IImmutableList<Route>> GetRoutesAsync() => await Task.FromResult(_routeSet.ToImmutableList());
-
-    public IEnumerable<Vehicle> GetVehicles()
-    {
-        UpdateVehicleLocations();
-        return _vehicleSet.ToImmutableList();
-    }
-    public async Task<IImmutableList<Vehicle>> GetVehiclesAsync()
-    {
-        UpdateVehicleLocations();
-        return await Task.FromResult(_vehicleSet.ToImmutableList());
-    }
-
-    public IEnumerable<ShuttleJob> GetShuttleJobs() => _shuttleJobSet.ToImmutableList();
-    public async Task<IImmutableList<ShuttleJob>> GetShuttleJobsAsync() => await Task.FromResult(_shuttleJobSet.ToImmutableList());
-    public ImmutableDictionary<string, Station> GetStationsDictionary() => _stations.ToImmutableDictionary();
-    public ImmutableDictionary<string, Route> GetRoutesDictionary() => _routes.ToImmutableDictionary();
-
-    public ImmutableDictionary<string, Vehicle> GetVehiclesDictionary()
-    {
-        UpdateVehicleLocations();
-        return _vehicles.ToImmutableDictionary();
-    }
-
-    public ImmutableDictionary<int, ShuttleJob> GetShuttleJobsDictionary() => _shuttleJobs.ToImmutableDictionary();
-
-    public IEnumerable<Station> GetStations(Route route) => route.Stations.ToImmutableList();
-    public async Task<IImmutableList<Station>> GetStationsAsync(Route route) => await Task.FromResult(route.Stations.ToImmutableList());
-
-    public IEnumerable<ArrivalEvent> GetArrivalEvents(Station station)
-      => _client.GetShuttleServiceAsync(station.Name).Result.ShuttleServiceResult.Shuttles.SelectMany(ss => ss._etas)
-        .Select(eta => Adapter.AdaptArrivalEvent(station, eta, _shuttleJobs));
-    public async Task<IImmutableList<ArrivalEvent>> GetArrivalEventsAsync(Station station)
-      => await Task.FromResult(_client.GetShuttleServiceAsync(station.Name).Result.ShuttleServiceResult.Shuttles.SelectMany(ss => ss._etas)
-                 .Select(eta => Adapter.AdaptArrivalEvent(station, eta, _shuttleJobs)).ToImmutableList());
-
-    public async Task<IImmutableList<T>> GetAsync<T>() where T : class
-    {
-        switch (Type.GetTypeCode(typeof(T)))
-        {
-            case TypeCode.Object:
-                switch (typeof(T))
+                TypeCode.Object => typeof(TResult) switch
                 {
-                    case Type t when t == typeof(Station):
-                        return (IImmutableList<T>)await GetStationsAsync();
-                    case Type t when t == typeof(Route):
-                        return (IImmutableList<T>)await GetRoutesAsync();
-                    case Type t when t == typeof(Vehicle):
-                        return (IImmutableList<T>)await GetVehiclesAsync();
-                    case Type t when t == typeof(ShuttleJob):
-                        return (IImmutableList<T>)await GetShuttleJobsAsync();
-
-                }
-                return await Task.FromResult(ImmutableList<T>.Empty);
-            default:
-                return await Task.FromResult(ImmutableList<T>.Empty);
+                    { } t when t == typeof(Station) => (IImmutableList<TResult>)await GetStationsAsync(),
+                    { } t when t == typeof(Route) => (IImmutableList<TResult>)await GetRoutesAsync(),
+                    { } t when t == typeof(Vehicle) => (IImmutableList<TResult>)await GetVehiclesAsync(),
+                    { } t when t == typeof(ShuttleJob) => (IImmutableList<TResult>)await GetShuttleJobsAsync(),
+                    _ => ImmutableList<TResult>.Empty
+                },
+                _ => ImmutableList<TResult>.Empty
+            };
         }
+
+        public async Task<IImmutableList<TResult>> GetAsync<TResult, TQuery>(TQuery query)
+            where TResult : class
+            where TQuery : class
+        {
+            return Type.GetTypeCode(typeof(TResult)) switch
+            {
+                TypeCode.Object => typeof(TResult) switch
+                {
+                    { } t when t == typeof(ArrivalEvent) && query is Station station =>
+                        (IImmutableList<TResult>)await GetArrivalEventsAsync(station),
+                    { } t when t == typeof(Station) && query is Route route =>
+                        (IImmutableList<TResult>)await GetStationsAsync(route),
+                    _ => ImmutableList<TResult>.Empty
+                },
+                _ => ImmutableList<TResult>.Empty
+            };
+        }
+
+        private Task InitShuttleJobs(Route route) =>
+            Task.Run(() => (_client.GetActiveBusAsync(route.Name).Result.ActiveBusResult.Activebus, _stations.Values
+                    .Select(station =>
+                        Utility.GetEtasFromShuttles(_client.GetShuttleServiceAsync(station.Name).Result
+                            .ShuttleServiceResult
+                            .Shuttles))
+                    .SelectMany(e => e)))
+                .ContinueWith(tuple => tuple.Result.Activebus
+                    .Where(b => tuple.Result.Item2.All(e => e.Plate != b.Vehplate))
+                    .Select(b => new ShuttleJob(tuple.Result.Item2.First(e => e.Plate == b.Vehplate).Jobid, route,
+                        _vehicles[b.Vehplate]))
+                    .Select(j => _shuttleJobs.TryAdd(j.Id, j)).ToList());
+
+        private Task UpdateVehicleLocations() => InitVehicles.ContinueWith(_ => _routes.Values.Select(r => _client
+            .GetActiveBusAsync(r.Name).Result.ActiveBusResult.Activebus.Select(
+                b => _vehicles[b.Vehplate] = _vehicles[b.Vehplate] with { MassPoint = Adapter.AdaptMassPoint(b) })
+            .ToList()).ToList());
     }
 }
