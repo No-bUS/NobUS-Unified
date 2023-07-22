@@ -4,8 +4,14 @@ namespace NobUS.Frontend.MAUI.Presentation.View
 {
     public partial class StationView : ContentView
     {
-        public static readonly BindableProperty ViewModelProperty
-            = BindableProperty.Create(nameof(ViewModel), typeof(StationViewModel), typeof(StationView), null);
+        public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(nameof(ViewModel),
+            typeof(StationViewModel), typeof(StationView), null, BindingMode.OneTime);
+
+        public StationView()
+        {
+            InitializeComponent();
+            InfoCard.BindingContext = this;
+        }
 
         public StationViewModel ViewModel
         {
@@ -13,10 +19,9 @@ namespace NobUS.Frontend.MAUI.Presentation.View
             set => SetValue(ViewModelProperty, value);
         }
 
-        public StationView()
+        private async void ShowArrivalEventList(object sender, EventArgs e)
         {
-            InitializeComponent();
-            InfoCard.BindingContext = this;
+            EtaListView.ItemsSource = await ViewModel.ArrivalEvents;
         }
     }
 }

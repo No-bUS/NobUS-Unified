@@ -3,12 +3,14 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
-             x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView">
+             x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
+             xmlns:snapshot="clr-namespace:NobUS.DataContract.Model.ValueObject.Snapshot;assembly=NobUS.DataContract.Model">
     <mdc:Card BackgroundColour="{DynamicResource SurfaceColor}"
               Elevation="3"
               EnableTouchEvents="False"
               Shape="10"
-              x:Name="InfoCard">
+              x:Name="InfoCard"
+              >
         <Grid RowDefinitions="auto,auto,auto">
             <Label x:Name="NameLabel"
                    HorizontalOptions="Start"
@@ -19,7 +21,20 @@
                                     Spacing="8">
                 <Label x:Name="CaptionLabel"
                        Text="{x:Binding Path=ViewModel.Station.Caption}" />
+                <ListView x:Name="EtaListView">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell x:DataType="snapshot:ArrivalEvent">
+                                <StackLayout>
+                                    <Label Text="{Binding Path=.ShuttleJob.Route.Name}" />
+                                    <Label Text="{Binding Path=.EstimatedArrivalSpan}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </HorizontalStackLayout>
+            <Button Clicked="ShowArrivalEventList" Grid.Row="3" MaximumHeightRequest="30" MaximumWidthRequest="100" />
         </Grid>
     </mdc:Card>
 </ContentView>
