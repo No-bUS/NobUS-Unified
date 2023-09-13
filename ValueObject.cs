@@ -1,4 +1,4 @@
-namespace NobUS.DataContract.Model.ValueObject
+﻿namespace NobUS.DataContract.Model
 {
     public sealed partial record Coordinate(double Longitude, double Latitude)
     {
@@ -15,4 +15,10 @@ namespace NobUS.DataContract.Model.ValueObject
             return 12745.6 * Math.Asin(Math.Sqrt(sinSquareHalf(Latitude - other.Latitude) + Math.Cos(rad(Latitude)) * Math.Cos(rad(other.Latitude)) * sinSquareHalf(other.Longitude - Longitude))); // earth radius 6.372,8Km x 2 = 12745.6
         }
     }
+
+    public sealed partial record Velocity(double Value, double Direction);
+
+    public sealed partial record MassPoint(Coordinate Coordinate, Velocity Velocity);
+
+    public sealed partial record ArrivalEvent(Station Station, ShuttleJob ShuttleJob, TimeSpan EstimatedArrivalSpan, DateTime CurrentTime);
 }
