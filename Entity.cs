@@ -19,7 +19,6 @@ namespace NobUS.DataContract.Model
             Variant == Type.Twin ? new RouteStation(Id / 10 + 10 - Id % 10, Variant) : null;
     }
 
-
     public record Route(string Name, List<RouteStation> Stations, Route.Type Variant)
     {
         public enum Type
@@ -30,27 +29,42 @@ namespace NobUS.DataContract.Model
         }
 
         [JsonIgnore]
-        public RouteStation Origin => Variant switch
-        {
-            Type.Loop or Type.Unidirectional => Stations[0],
-            Type.Bidirectional => Stations.Find(x => FilterStations(true).Invoke(x))!,
-            _ => throw new NotImplementedException()
-        };
+        public RouteStation Origin =>
+            Variant switch
+            {
+                Type.Loop or Type.Unidirectional => Stations[0],
+                Type.Bidirectional => Stations.Find(x => FilterStations(true).Invoke(x))!,
+                _ => throw new NotImplementedException()
+            };
 
         [JsonIgnore]
-        public RouteStation[] ToStations => Variant switch
-        {
-            Type.Bidirectional or Type.Unidirectional => Stations.Where(FilterStations(true)).ToArray(),
-            Type.Loop => Stations.Where(FilterStations(true))
-                .Concat(Stations.Where(FilterStations(false)).Reverse()
-                    .Select(x => x.Variant is RouteStation.Type.Twin ? x.Opposite! : x)).ToArray(),
-            _ => throw new NotImplementedException()
-        };
+        public RouteStation[] ToStations =>
+            Variant switch
+            {
+                Type.Bidirectional
+                or Type.Unidirectional
+                    => Stations.Where(FilterStations(true)).ToArray(),
+                Type.Loop
+                    => Stations
+                        .Where(FilterStations(true))
+                        .Concat(
+                            Stations
+                                .Where(FilterStations(false))
+                                .Reverse()
+                                .Select(x => x.Variant is RouteStation.Type.Twin ? x.Opposite! : x)
+                        )
+                        .ToArray(),
+                _ => throw new NotImplementedException()
+            };
 
-        [JsonIgnore] public RouteStation[] FromStations => Stations.Where(FilterStations(false)).ToArray();
+        [JsonIgnore]
+        public RouteStation[] FromStations => Stations.Where(FilterStations(false)).ToArray();
 
-        protected static Func<RouteStation, bool> FilterStations(bool isTo, bool includeShared = true,
-            bool includeTwin = true) =>
+        protected static Func<RouteStation, bool> FilterStations(
+            bool isTo,
+            bool includeShared = true,
+            bool includeTwin = true
+        ) =>
             station =>
             {
                 return station.Variant switch
