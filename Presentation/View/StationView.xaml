@@ -29,14 +29,20 @@
             </Grid.RowDefinitions>
 
             <Label
-                x:Name="NameLabel"
+                x:Name="CodeRoadLabel"
                 FontSize="{StaticResource Small}"
                 Grid.Column="0"
                 Grid.Row="0"
                 HorizontalOptions="Start"
-                Text="{x:Binding Path=ViewModel.Station.Name}"
                 TextColor="{StaticResource OnPrimaryContainerColor}"
-            />
+            >
+                <Label.Text>
+                    <MultiBinding StringFormat="{}{0} | {1}">
+                        <Binding Path="ViewModel.Station.Code" />
+                        <Binding Path="ViewModel.Station.Road" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
 
             <Label
                 x:Name="DistanceLabel"
