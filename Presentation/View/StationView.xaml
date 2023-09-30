@@ -50,7 +50,7 @@
                 Grid.Column="1"
                 Grid.Row="0"
                 HorizontalOptions="End"
-                Text="Locating..."
+                Text="{x:Binding ViewModel.Distance, StringFormat='{}{0:F2} m'}"
                 TextColor="{StaticResource SecondaryText}"
             />
 
