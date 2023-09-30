@@ -1,0 +1,139 @@
+[
+    {
+        "Coordinate": {
+            "Latitude": 1.319333,
+            "Longitude": 103.818262
+        },
+        "Road": "Bukit Timah Rd",
+        "Name": "Oei Tiong Ham Building",
+        "Code": 16391
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.322586,
+            "Longitude": 103.816135
+        },
+        "Opposite": 41021,
+        "Road": "Bukit Timah Rd",
+        "Name": "Botanic Gardens MRT",
+        "Code": 16392
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.303653,
+            "Longitude": 103.774688
+        },
+        "Road": "College Link Rd",
+        "Name": "University Town",
+        "Code": 16381
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.301816,
+            "Longitude": 103.769533
+        },
+        "Road": "Clementi Rd",
+        "Name": "Kent Vale",
+        "Code": 16371
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.294552,
+            "Longitude": 103.770635
+        },
+        "Road": "Kent Ridge Dr",
+        "Name": "LT 13",
+        "Code": 16372
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.293619,
+            "Longitude": 103.771475
+        },
+        "Road": "Kent Ridge Dr",
+        "Name": "AS 5",
+        "Code": 16373
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.293223,
+            "Longitude": 103.775068
+        },
+        "Opposite": 18304,
+        "Road": "Business Link",
+        "Name": "BIZ 2",
+        "Code": 16361
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.291765,
+            "Longitude": 103.780419
+        },
+        "Road": "Prince George's Park",
+        "Name": "Prince George's Park",
+        "Code": 16321
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.290969,
+            "Longitude": 103.78109
+        },
+        "Road": "Prince George's Park",
+        "Name": "Prince George's Park Foyer",
+        "Code": 16329
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.294431,
+            "Longitude": 103.775217
+        },
+        "Road": "Research Link",
+        "Name": "COM 3",
+        "Code": 16364
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.293208,
+            "Longitude": 103.772618
+        },
+        "Road": "Kent Ridge Dr",
+        "Name": "Opp NUSS",
+        "Code": 16365
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.29534,
+            "Longitude": 103.770617
+        },
+        "Road": "Kent Ridge Dr",
+        "Name": "Ventus",
+        "Code": 16374
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.293654,
+            "Longitude": 103.776898
+        },
+        "Road": "Prince George's Park",
+        "Name": "TCOMS",
+        "Code": 16319
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.29483,
+            "Longitude": 103.773687
+        },
+        "Road": "Computing Dr",
+        "Name": "COM 2",
+        "Code": 16319
+    },
+    {
+        "Coordinate": {
+            "Latitude": 1.293789,
+            "Longitude": 103.776715
+        },
+        "Road": "NUS Rd",
+        "Name": "Opp TCOMS",
+        "Code": 16311
+    }
+]

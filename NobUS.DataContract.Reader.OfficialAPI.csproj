@@ -8,11 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resource\Schema.yaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <OpenApiReference Include="Resource\Schema.yaml" CodeGenerator="NSwagCSharp" Namespace="NobUS.DataContract.Reader.OfficialAPI.Client" ClassName="SchemaClient" />
+    <None Remove="Resource\Schema.yaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +27,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NobUS.DataContract.Model\NobUS.DataContract.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Resource\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

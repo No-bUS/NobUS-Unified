@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
-using NobUS.DataContract.Model.Entity;
-using NobUS.DataContract.Model.ValueObject.Snapshot;
+using NobUS.DataContract.Model;
 
 namespace NobUS.DataContract.Reader.OfficialAPI
 {
@@ -10,21 +9,27 @@ namespace NobUS.DataContract.Reader.OfficialAPI
         Task<IImmutableList<Route>> GetRoutesAsync();
         Task<IImmutableList<Vehicle>> GetVehiclesAsync();
         Task<IImmutableList<ShuttleJob>> GetShuttleJobsAsync();
-        Task<IImmutableList<Station>> GetStationsAsync(Route route);
+        Task<IImmutableList<RouteStation>> GetStationsAsync(Route route);
         Task<IImmutableList<ArrivalEvent>> GetArrivalEventsAsync(Station station);
 
-        async Task<IImmutableList<TResult>> GetAsync<TResult>() where TResult : class
+        async Task<IImmutableList<TResult>> GetAsync<TResult>()
+            where TResult : class
         {
             return Type.GetTypeCode(typeof(TResult)) switch
             {
-                TypeCode.Object => typeof(TResult) switch
-                {
-                    { } t when t == typeof(Station) => (IImmutableList<TResult>)await GetStationsAsync(),
-                    { } t when t == typeof(Route) => (IImmutableList<TResult>)await GetRoutesAsync(),
-                    { } t when t == typeof(Vehicle) => (IImmutableList<TResult>)await GetVehiclesAsync(),
-                    { } t when t == typeof(ShuttleJob) => (IImmutableList<TResult>)await GetShuttleJobsAsync(),
-                    _ => ImmutableList<TResult>.Empty
-                },
+                TypeCode.Object
+                    => typeof(TResult) switch
+                    {
+                        { } t when t == typeof(Station)
+                            => (IImmutableList<TResult>)await GetStationsAsync(),
+                        { } t when t == typeof(Route)
+                            => (IImmutableList<TResult>)await GetRoutesAsync(),
+                        { } t when t == typeof(Vehicle)
+                            => (IImmutableList<TResult>)await GetVehiclesAsync(),
+                        { } t when t == typeof(ShuttleJob)
+                            => (IImmutableList<TResult>)await GetShuttleJobsAsync(),
+                        _ => ImmutableList<TResult>.Empty
+                    },
                 _ => ImmutableList<TResult>.Empty
             };
         }
@@ -35,14 +40,15 @@ namespace NobUS.DataContract.Reader.OfficialAPI
         {
             return Type.GetTypeCode(typeof(TResult)) switch
             {
-                TypeCode.Object => typeof(TResult) switch
-                {
-                    { } t when t == typeof(ArrivalEvent) && query is Station station =>
-                        (IImmutableList<TResult>)await GetArrivalEventsAsync(station),
-                    { } t when t == typeof(Station) && query is Route route =>
-                        (IImmutableList<TResult>)await GetStationsAsync(route),
-                    _ => ImmutableList<TResult>.Empty
-                },
+                TypeCode.Object
+                    => typeof(TResult) switch
+                    {
+                        { } t when t == typeof(ArrivalEvent) && query is Station station
+                            => (IImmutableList<TResult>)await GetArrivalEventsAsync(station),
+                        { } t when t == typeof(Station) && query is Route route
+                            => (IImmutableList<TResult>)await GetStationsAsync(route),
+                        _ => ImmutableList<TResult>.Empty
+                    },
                 _ => ImmutableList<TResult>.Empty
             };
         }

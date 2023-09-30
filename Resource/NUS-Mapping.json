@@ -1,0 +1,146 @@
+[
+    {
+        "QueryName": "OTH",
+        "Name": "Oei Tiong Ham Building"
+    },
+    {
+        "QueryName": "BG-MRT",
+        "Name": "Botanic Gardens MRT"
+    },
+    {
+        "QueryName": "KR-MRT",
+        "Name": "Kent Ridge MRT"
+    },
+    {
+        "QueryName": "LT27",
+        "Name": "LT 27"
+    },
+    {
+        "QueryName": "UHALL",
+        "Name": "University Hall"
+    },
+    {
+        "QueryName": "UHC-OPP",
+        "Name": "Opp University Health Centre"
+    },
+    {
+        "QueryName": "UTOWN",
+        "Name": "University Town"
+    },
+    {
+        "QueryName": "RAFFLES",
+        "Name": "Raffles Hall"
+    },
+    {
+        "QueryName": "KV",
+        "Name": "Kent Vale"
+    },
+    {
+        "QueryName": "MUSEUM",
+        "Name": "Museum"
+    },
+    {
+        "QueryName": "YIH",
+        "Name": "Yusof Ishak House"
+    },
+    {
+        "QueryName": "CLB",
+        "Name": "Central Library"
+    },
+    {
+        "QueryName": "LT13",
+        "Name": "LT 13"
+    },
+    {
+        "QueryName": "AS5",
+        "Name": "AS 5"
+    },
+    {
+        "QueryName": "BIZ2",
+        "Name": "BIZ 2"
+    },
+    {
+        "QueryName": "PGP",
+        "Name": "Prince George's Park"
+    },
+    {
+        "QueryName": "CG",
+        "Name": "College Green"
+    },
+    {
+        "QueryName": "EA",
+        "Name": "EA"
+    },
+    {
+        "QueryName": "SDE3",
+        "Name": "SDE 3"
+    },
+    {
+        "QueryName": "IT",
+        "Name": "Information Technology"
+    },
+    {
+        "QueryName": "YIH-OPP",
+        "Name": "Opp Yusof Ishak House"
+    },
+    {
+        "QueryName": "SDE3-OPP",
+        "Name": "Opp SDE 3"
+    },
+    {
+        "QueryName": "JP-SCH-16151",
+        "Name": "The Japanese Primary School"
+    },
+    {
+        "QueryName": "UHC",
+        "Name": "University Health Centre"
+    },
+    {
+        "QueryName": "UHALL-OPP",
+        "Name": "Opp University Hall"
+    },
+    {
+        "QueryName": "S17",
+        "Name": "S 17"
+    },
+    {
+        "QueryName": "KR-MRT-OPP",
+        "Name": "Opp Kent Ridge MRT"
+    },
+    {
+        "QueryName": "PGPR",
+        "Name": "Prince George's Park Foyer"
+    },
+    {
+        "QueryName": "COM3",
+        "Name": "COM 3"
+    },
+    {
+        "QueryName": "HSSML-OPP",
+        "Name": "Opp HSSML"
+    },
+    {
+        "QueryName": "NUSS-OPP",
+        "Name": "Opp NUSS"
+    },
+    {
+        "QueryName": "LT13-OPP",
+        "Name": "Ventus"
+    },
+    {
+        "QueryName": "KRB",
+        "Name": "Kent Ridge Bus Terminal"
+    },
+    {
+        "QueryName": "TCOMS",
+        "Name": "TCOMS"
+    },
+    {
+        "QueryName": "COM2",
+        "Name": "COM 2"
+    },
+    {
+        "QueryName": "TCOMS-OPP",
+        "Name": "Opp TCOMS"
+    }
+]
