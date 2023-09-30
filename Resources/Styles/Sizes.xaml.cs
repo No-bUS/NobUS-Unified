@@ -1,9 +1,10 @@
-namespace NobUS.Frontend.MAUI.Resources.Styles;
-
-public partial class Sizes : ResourceDictionary
+namespace NobUS.Frontend.MAUI.Resources.Styles
 {
-    public Sizes()
+    public partial class Sizes : ResourceDictionary
     {
-        InitializeComponent();
+        public Sizes()
+        {
+            InitializeComponent();
+        }
     }
 }

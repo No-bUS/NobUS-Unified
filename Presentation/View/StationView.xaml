@@ -1,22 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
-             x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
-             xmlns:snapshot="clr-namespace:NobUS.DataContract.Model;assembly=NobUS.DataContract.Model"
-             xmlns:viewModel="clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:view="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
-             HorizontalOptions="Fill"
-             VerticalOptions="Fill">
-    <mdc:Card BackgroundColour="{DynamicResource SurfaceColor}"
-              Elevation="3"
-              Shape="10"
-              x:DataType="view:StationView"
-              x:Name="InfoCard"
-              >
-        <Grid Padding='10'>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
+    xmlns:snapshot="clr-namespace:NobUS.DataContract.Model;assembly=NobUS.DataContract.Model"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:view="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
+    xmlns:viewModel="clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
+    HorizontalOptions="Fill"
+    VerticalOptions="Fill"
+>
+    <mdc:Card
+        x:DataType="view:StationView"
+        x:Name="InfoCard"
+        BackgroundColour="{DynamicResource SurfaceColor}"
+        Elevation="3"
+        Shape="10"
+    >
+        <Grid Padding="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -26,61 +28,81 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <Label x:Name="NameLabel"
-                   TextColor="{StaticResource OnPrimaryContainerColor}"
-                   HorizontalOptions="Start"
-                   Grid.Row="0"
-                   FontSize="{StaticResource Small}"
-                   Grid.Column="0"
-                   Text="{x:Binding Path=ViewModel.Station.Name}" />
+            <Label
+                x:Name="NameLabel"
+                FontSize="{StaticResource Small}"
+                Grid.Column="0"
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                Text="{x:Binding Path=ViewModel.Station.Name}"
+                TextColor="{StaticResource OnPrimaryContainerColor}"
+            />
 
-            <Label x:Name="DistanceLabel"
-                   TextColor="{StaticResource SecondaryText}"
-                   HorizontalOptions="End"
-                   FontSize="{StaticResource Small}"
-                   Grid.Row="0"
-                   Grid.Column="1"
-                   Text="Locating..." />
+            <Label
+                x:Name="DistanceLabel"
+                FontSize="{StaticResource Small}"
+                Grid.Column="1"
+                Grid.Row="0"
+                HorizontalOptions="End"
+                Text="Locating..."
+                TextColor="{StaticResource SecondaryText}"
+            />
 
-            <toolkit:Expander Grid.Column="0"
-                              Grid.Row="1"
-                              ExpandedChanged="ShowArrivalEventList"
-                              x:Name="EtaListViewExpander">
+            <toolkit:Expander
+                x:Name="EtaListViewExpander"
+                ExpandedChanged="ShowArrivalEventList"
+                Grid.Column="0"
+                Grid.Row="1"
+            >
                 <toolkit:Expander.Header>
-                    <Label x:Name="CaptionLabel"
-                           HorizontalOptions="Start"
-                           FontSize="30"
-                           TextColor="{StaticResource PrimaryText}"
-                           Text="{x:Binding Path=ViewModel.Station.Name}" />
+                    <Label
+                        x:Name="CaptionLabel"
+                        FontSize="30"
+                        HorizontalOptions="Start"
+                        Text="{x:Binding Path=ViewModel.Station.Name}"
+                        TextColor="{StaticResource PrimaryText}"
+                    />
 
                 </toolkit:Expander.Header>
-                <ListView x:Name="EtaListView"
-                          HorizontalOptions="Start"
-                          SelectionMode='None'
-                          SeparatorVisibility='None'
-                          VerticalScrollBarVisibility="Never"
-                          HasUnevenRows='True'>
+                <ListView
+                    x:Name="EtaListView"
+                    HasUnevenRows="True"
+                    HorizontalOptions="Start"
+                    SelectionMode="None"
+                    SeparatorVisibility="None"
+                    VerticalScrollBarVisibility="Never"
+                >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell x:DataType="viewModel:GroupedArrivalEventsViewModel">
                                 <Grid ColumnDefinitions="auto,*">
-                                    <Label Text="{x:Binding Path=RouteName}"
-                                           Grid.Column="0"
-                                           FontSize="{StaticResource Base}" />
-                                    <FlexLayout BindableLayout.ItemsSource="{x:Binding Path=ArrivalEvents}"
-                                                Direction="Row"
-                                                Wrap="NoWrap"
-                                                AlignItems='Start'
-                                                Grid.Column="1">
+                                    <Label
+                                        FontSize="{StaticResource Base}"
+                                        Grid.Column="0"
+                                        Text="{x:Binding Path=RouteName}"
+                                    />
+                                    <FlexLayout
+                                        AlignItems="Start"
+                                        BindableLayout.ItemsSource="{x:Binding Path=ArrivalEvents}"
+                                        Direction="Row"
+                                        Grid.Column="1"
+                                        Wrap="NoWrap"
+                                    >
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate x:DataType="snapshot:ArrivalEvent">
-                                                <Label FontSize="{StaticResource Base}"
-                                                       Margin="5,0"
-                                                       FlexLayout.Basis='Auto'>
+                                                <Label
+                                                    FlexLayout.Basis="Auto"
+                                                    FontSize="{StaticResource Base}"
+                                                    Margin="5,0"
+                                                >
                                                     <Label.Text>
                                                         <MultiBinding StringFormat="{}{0:0}m {1}s">
-                                                            <Binding Path="EstimatedArrivalSpan.TotalMinutes" />
-                                                            <Binding Path="EstimatedArrivalSpan.Seconds" />
+                                                            <Binding
+                                                                Path="EstimatedArrivalSpan.TotalMinutes"
+                                                            />
+                                                            <Binding
+                                                                Path="EstimatedArrivalSpan.Seconds"
+                                                            />
                                                         </MultiBinding>
                                                     </Label.Text>
                                                 </Label>

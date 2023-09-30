@@ -1,15 +1,14 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace NobUS.Frontend.MAUI;
-
-[Application]
-public class MainApplication : MauiApplication
+namespace NobUS.Frontend.MAUI
 {
-    public MainApplication(IntPtr handle, JniHandleOwnership ownership)
-        : base(handle, ownership)
+    [Application]
+    public class MainApplication : MauiApplication
     {
-    }
+        public MainApplication(IntPtr handle, JniHandleOwnership ownership)
+            : base(handle, ownership) { }
 
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+    }
 }

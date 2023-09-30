@@ -1,11 +1,12 @@
+using NobUS.DataContract.Model;
+
 namespace NobUS.Frontend.MAUI.Service
 {
-    using NobUS.DataContract.Model;
     internal class LocationProvider : ILocationProvider
     {
-        private readonly Task<Location> _locationTask =
-            Geolocation.Default.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Default,
-                TimeSpan.FromSeconds(30)));
+        private readonly Task<Location> _locationTask = Geolocation.Default.GetLocationAsync(
+            new GeolocationRequest(GeolocationAccuracy.Default, TimeSpan.FromSeconds(30))
+        );
 
         private Coordinate _location;
 

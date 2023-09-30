@@ -2,8 +2,8 @@
 
 namespace NobUS.Frontend.MAUI.Presentation.ViewModel
 {
-    public partial record GroupedArrivalEventsViewModel(string RouteName, IEnumerable<ArrivalEvent> ArrivalEvents)
-    {
-
-    }
+    public record GroupedArrivalEventsViewModel(
+        string RouteName,
+        IEnumerable<ArrivalEvent> ArrivalEvents
+    ) { }
 }

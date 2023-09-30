@@ -40,7 +40,7 @@ namespace NobUS.Frontend.MAUI.Presentation.View
                 .ToList();
             EtaListView.ItemsSource = groupedArrivalEventsViewModels;
         }
-        
+
         private async void LoadDistance(object sender, EventArgs e)
         {
             var distance = await ViewModel.DistanceTask;

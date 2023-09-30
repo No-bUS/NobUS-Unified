@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModel="clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel"
-             x:Class="NobUS.Frontend.MAUI.Presentation.View.GroupedArrivalEventsView">
-            <HorizontalStackLayout x:Name="ArrivalEventsPanel">
-                <Label Text="{x:Binding Path=RouteName}" />
-            </HorizontalStackLayout>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:model="clr-namespace:NobUS.DataContract.Model"
+    xmlns:view="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="NobUS.Frontend.MAUI.Presentation.View.GroupedArrivalEventsView"
+>
+    <HorizontalStackLayout x:Name="ArrivalEventsPanel">
+        <Label Text="{x:Binding Path=RouteName}" />
+    </HorizontalStackLayout>
 </ContentView>

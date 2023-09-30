@@ -1,14 +1,15 @@
-﻿using NobUS.Frontend.MAUI.Repository;
+﻿using CommonServiceLocator;
 using NobUS.DataContract.Model;
-using System.Linq;
+using NobUS.Frontend.MAUI.Repository;
 
 namespace NobUS.Frontend.MAUI.Presentation.ViewModel
 {
-    public partial record StationListViewModel()
+    public record StationListViewModel
     {
         private readonly IRepository<Station> _stationRepository =
-            CommonServiceLocator.ServiceLocator.Current.GetInstance<IRepository<Station>>();
+            ServiceLocator.Current.GetInstance<IRepository<Station>>();
 
-        public async Task<List<StationViewModel>> GetAll() => (await _stationRepository.GetAll()).Select(s => new StationViewModel(s)).ToList();
+        public async Task<List<StationViewModel>> GetAll() =>
+            (await _stationRepository.GetAll()).Select(s => new StationViewModel(s)).ToList();
     }
 }

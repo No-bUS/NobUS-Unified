@@ -3,7 +3,8 @@ using NobUS.DataContract.Reader.OfficialAPI;
 
 namespace NobUS.Frontend.MAUI.Repository
 {
-    public record StaticRepository<T> : IRepository<T> where T : class
+    public record StaticRepository<T> : IRepository<T>
+        where T : class
     {
         private readonly Task _initialization;
         private readonly List<Func<Task<IEnumerable<T>>>> _sources = new();
@@ -26,8 +27,7 @@ namespace NobUS.Frontend.MAUI.Repository
             await _initialization.ContinueWith(_ => _values.ToImmutableList());
 
         public async Task<IRepository<T>> Refresh() =>
-            await Task
-                .WhenAny(_sources.Select(async s => _values.AddRange(await s())))
+            await Task.WhenAny(_sources.Select(async s => _values.AddRange(await s())))
                 .ContinueWith(_ => _values = _values.Distinct().ToList())
                 .ContinueWith(_ => this);
     }

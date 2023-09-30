@@ -1,29 +1,32 @@
 using NobUS.Frontend.MAUI.Presentation.ViewModel;
 
-namespace NobUS.Frontend.MAUI.Presentation.View;
-
-public partial class GroupedArrivalEventsView : ContentView
+namespace NobUS.Frontend.MAUI.Presentation.View
 {
-    public static readonly BindableProperty GroupedArrivalEventsProperty = BindableProperty.Create(nameof(GroupedArrivalEvents), typeof(GroupedArrivalEventsViewModel), typeof(GroupedArrivalEventsView));
-
-    public GroupedArrivalEventsViewModel GroupedArrivalEvents
+    public partial class GroupedArrivalEventsView : ContentView
     {
-        get => (GroupedArrivalEventsViewModel)GetValue(GroupedArrivalEventsProperty);
-        set => SetValue(GroupedArrivalEventsProperty, value);
-    }
+        public static readonly BindableProperty GroupedArrivalEventsProperty =
+            BindableProperty.Create(
+                nameof(GroupedArrivalEvents),
+                typeof(GroupedArrivalEventsViewModel),
+                typeof(GroupedArrivalEventsView)
+            );
 
-
-    public GroupedArrivalEventsView()
-    {
-        InitializeComponent();
-        while (GroupedArrivalEvents == null) { };
-
-        foreach (var arrival in GroupedArrivalEvents.ArrivalEvents)
+        public GroupedArrivalEventsView()
         {
-            ArrivalEventsPanel.Children.Add(new Label
-            {
-                Text = arrival.EstimatedArrivalSpan.ToString(),
-            });
+            InitializeComponent();
+            while (GroupedArrivalEvents == null) { }
+            ;
+
+            foreach (var arrival in GroupedArrivalEvents.ArrivalEvents)
+                ArrivalEventsPanel.Children.Add(
+                    new Label { Text = arrival.EstimatedArrivalSpan.ToString() }
+                );
+        }
+
+        public GroupedArrivalEventsViewModel GroupedArrivalEvents
+        {
+            get => (GroupedArrivalEventsViewModel)GetValue(GroupedArrivalEventsProperty);
+            set => SetValue(GroupedArrivalEventsProperty, value);
         }
     }
 }
