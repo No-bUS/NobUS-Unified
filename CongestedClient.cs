@@ -25,13 +25,16 @@ namespace NobUS.DataContract.Reader.OfficialAPI
 
         private readonly ConcurrentDictionary<int, ShuttleJob> _shuttleJobs = new();
 
-        private static readonly ReadOnlyDictionary<string, Station> Stations = JsonConvert
-            .DeserializeObject<Station[]>(Encoding.UTF8.GetString(Resources.NUS_Stations))!
-            .ToDictionary(s => s.Name)
-            .AsReadOnly();
         private static readonly ReadOnlyDictionary<string, string> QueryNameMapping = JsonConvert
             .DeserializeObject<QueryNameMapping[]>(Encoding.UTF8.GetString(Resources.NUS_Mapping))!
             .ToDictionary(m => m.Name, m => m.QueryName)
+            .AsReadOnly();
+        private static readonly ReadOnlyDictionary<string, Station> Stations = JsonConvert
+            .DeserializeObject<Station[]>(Encoding.UTF8.GetString(Resources.NUS_Stations))!
+            .Concat(JsonConvert
+                .DeserializeObject<Station[]>(Encoding.UTF8.GetString(Resources.Public_Stations))!)
+            .Where(s => QueryNameMapping.ContainsKey(s.Name))
+            .ToDictionary(s => s.Name)
             .AsReadOnly();
         private static readonly ReadOnlyDictionary<string, Route> Routes = JsonConvert
             .DeserializeObject<Route[]>(Encoding.UTF8.GetString(Resources.NUS_Routes))!

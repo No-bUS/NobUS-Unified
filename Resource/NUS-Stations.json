@@ -20,15 +20,6 @@
     },
     {
         "Coordinate": {
-            "Latitude": 1.303653,
-            "Longitude": 103.774688
-        },
-        "Road": "College Link Rd",
-        "Name": "University Town",
-        "Code": 16381
-    },
-    {
-        "Coordinate": {
             "Latitude": 1.301816,
             "Longitude": 103.769533
         },
