@@ -40,7 +40,7 @@
                    FontSize="{StaticResource Small}"
                    Grid.Row="0"
                    Grid.Column="1"
-                   Text="123 m" />
+                   Text="Locating..." />
 
             <toolkit:Expander Grid.Column="0"
                               Grid.Row="1"
@@ -58,6 +58,7 @@
                           HorizontalOptions="Start"
                           SelectionMode='None'
                           SeparatorVisibility='None'
+                          VerticalScrollBarVisibility="Never"
                           HasUnevenRows='True'>
                     <ListView.ItemTemplate>
                         <DataTemplate>

@@ -3,14 +3,13 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NobUS.Frontend.MAUI.Presentation.View.StationListView"
-             xmlns:local="using:NobUS.Frontend.MAUI.Presentation.View">
+             xmlns:local="using:NobUS.Frontend.MAUI.Presentation.View"
+             xmlns:viewModel='clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel'>
     <ListView x:Name="ListView" SelectionMode='None' SeparatorVisibility='None' HasUnevenRows='True'>
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <local:StationView
-                                       ViewModel="{x:Binding  Path=.}"
-                                       Padding="0,0,0,10" />
+                    <local:StationView x:DataType='viewModel:StationViewModel' ViewModel="{x:Binding Path=.}" Padding="0,0,0,10" />
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>

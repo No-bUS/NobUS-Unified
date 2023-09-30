@@ -6,7 +6,7 @@
              x:Class="NobUS.Frontend.MAUI.Presentation.View.MainPage">
     <FlexLayout>
         <ScrollView>
-            <local:StationListView Padding="30,0" />
+            <local:StationListView Padding="10,0" />
         </ScrollView>
     </FlexLayout>
 </ContentPage>

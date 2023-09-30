@@ -16,6 +16,8 @@ namespace NobUS.Frontend.MAUI.Presentation.View
         {
             InitializeComponent();
             InfoCard.BindingContext = this;
+            Loaded += LoadArrivalEvents;
+            Loaded += LoadDistance;
         }
 
         public StationViewModel ViewModel
@@ -24,17 +26,25 @@ namespace NobUS.Frontend.MAUI.Presentation.View
             set => SetValue(ViewModelProperty, value);
         }
 
-        private async void ShowArrivalEventList(object sender, EventArgs e)
+        private void ShowArrivalEventList(object sender, EventArgs e)
+        {
+            EtaListView.IsVisible = EtaListViewExpander.IsExpanded;
+        }
+
+        private async void LoadArrivalEvents(object sender, EventArgs e)
         {
             var groupedArrivalEventsViewModels = (await ViewModel.ArrivalEvents)
                 .OrderBy(ae => ae.ShuttleJob.Route.Name)
                 .GroupBy(ae => ae.ShuttleJob.Route.Name)
                 .Select(g => new GroupedArrivalEventsViewModel(g.Key, g))
                 .ToList();
-
-            EtaListView.IsVisible = EtaListViewExpander.IsExpanded;
             EtaListView.ItemsSource = groupedArrivalEventsViewModels;
-            EtaListView.VerticalScrollBarVisibility = ScrollBarVisibility.Never;
+        }
+        
+        private async void LoadDistance(object sender, EventArgs e)
+        {
+            var distance = await ViewModel.DistanceTask;
+            DistanceLabel.Text = $"{distance * 1000:F1} m";
         }
     }
 }
