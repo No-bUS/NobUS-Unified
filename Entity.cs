@@ -1,59 +1,75 @@
+using System.Text.Json.Serialization;
+
 namespace NobUS.DataContract.Model
 {
-
     public abstract record EntityBase<TId>(TId Id);
 
-    public abstract record Node<TOther, TOtherId, TId>(TId Id, List<TOtherId> OtherIDs) : EntityBase<TId>(Id);
-
-    public abstract record RouteStation(int Id) : EntityBase<int>(Id)
+    public record RouteStation(int Id, RouteStation.Type Variant) : EntityBase<int>(Id)
     {
-        public record SoloStation(int Id, bool IsTo) : RouteStation(Id);
-        public record TwinStation(int Id) : RouteStation(Id)
+        public enum Type
         {
-            public TwinStation GetCounterpart() => Id % 10 == 1 ? new TwinStation(Id + 8) : new TwinStation(Id - 8);
+            To,
+            From,
+            Both,
+            Twin
         }
-        public record SharedStation(int Id) : RouteStation(Id);
+
+        [JsonIgnore]
+        public RouteStation? Opposite =>
+            Variant == Type.Twin ? new RouteStation(Id / 10 + 10 - Id % 10, Variant) : null;
     }
 
-    public abstract partial record Route(string Name, List<RouteStation> Stations) : Node<Station, int, string>(Name, Stations.Select(x => x.Id).ToList())
-    {
-        public abstract RouteStation Origin { get; }
 
-        protected Func<RouteStation, bool> FilterStations(bool isTo, bool includeShared = true, bool includeTwin = true) =>
+    public record Route(string Name, List<RouteStation> Stations, Route.Type Variant)
+    {
+        public enum Type
+        {
+            Loop,
+            Bidirectional,
+            Unidirectional
+        }
+
+        [JsonIgnore]
+        public RouteStation Origin => Variant switch
+        {
+            Type.Loop or Type.Unidirectional => Stations[0],
+            Type.Bidirectional => Stations.Find(x => FilterStations(true).Invoke(x))!,
+            _ => throw new NotImplementedException()
+        };
+
+        [JsonIgnore]
+        public RouteStation[] ToStations => Variant switch
+        {
+            Type.Bidirectional or Type.Unidirectional => Stations.Where(FilterStations(true)).ToArray(),
+            Type.Loop => Stations.Where(FilterStations(true))
+                .Concat(Stations.Where(FilterStations(false)).Reverse()
+                    .Select(x => x.Variant is RouteStation.Type.Twin ? x.Opposite! : x)).ToArray(),
+            _ => throw new NotImplementedException()
+        };
+
+        [JsonIgnore] public RouteStation[] FromStations => Stations.Where(FilterStations(false)).ToArray();
+
+        protected static Func<RouteStation, bool> FilterStations(bool isTo, bool includeShared = true,
+            bool includeTwin = true) =>
             station =>
             {
-                return station switch
+                return station.Variant switch
                 {
-                    RouteStation.SoloStation solo => solo.IsTo == isTo,
-                    RouteStation.TwinStation _ => includeTwin,
-                    RouteStation.SharedStation _ => includeShared,
-                    _ => false
+                    RouteStation.Type.To => isTo,
+                    RouteStation.Type.From => !isTo,
+                    RouteStation.Type.Twin => includeTwin,
+                    RouteStation.Type.Both => includeShared,
+                    _ => throw new NotImplementedException()
                 };
             };
-
-        public record LoopRoute(string Name, List<RouteStation> Stations) : Route(Name, Stations)
-        {
-            public override RouteStation Origin => Stations[0];
-            public List<RouteStation> RoundTripStations =>
-                Stations.Where(FilterStations(true))
-                    .Concat(Stations.Where(FilterStations(false)).Reverse().Select(x => x is RouteStation.TwinStation station ? station.GetCounterpart() : x)).ToList();
-        }
-        public record BidirectionalRoute(string Name, List<RouteStation> Stations) : Route(Name, Stations)
-        {
-            public override RouteStation Origin => Stations.Find(x => FilterStations(isTo: true).Invoke(x))!;
-        }
-        public record UnidirectionalRoute(string Name, List<RouteStation> Stations) : Route(Name, Stations)
-        {
-            public override RouteStation Origin => Stations[0];
-        }
     }
-    
-    public abstract record Station(int Code, string Name, string Road, Coordinate Coordinate, List<string> RouteIDs)
+
+    public record Station(int Code, string Name, string Road, Coordinate Coordinate)
     {
-        public record SoloStation(int Code, string Name, string Road, Coordinate Coordinate, List<string> RouteIDs) : Station(Code, Name, Road, Coordinate, RouteIDs);
-        public record TwinStation(int Code, string Name, string Road, Coordinate Coordinate, int OppositeCode, List<string> RouteIDs) : Station(Code, Name, Road, Coordinate, RouteIDs);
+        public Station? Opposite { get; }
     }
 
     public record ShuttleJob(int Id, Route Route, Vehicle Vehicle);
+
     public record Vehicle(MassPoint? MassPoint, string Plate);
 }
