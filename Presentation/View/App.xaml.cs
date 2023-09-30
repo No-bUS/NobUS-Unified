@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.CommonServiceLocator;
-using NobUS.DataContract.Model.Entity;
+using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Façade;
 using NobUS.Frontend.MAUI.Presentation.ViewModel;

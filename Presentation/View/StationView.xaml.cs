@@ -4,8 +4,13 @@ namespace NobUS.Frontend.MAUI.Presentation.View
 {
     public partial class StationView : ContentView
     {
-        public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(nameof(ViewModel),
-            typeof(StationViewModel), typeof(StationView), null, BindingMode.OneTime);
+        public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
+            nameof(ViewModel),
+            typeof(StationViewModel),
+            typeof(StationView),
+            null,
+            BindingMode.OneTime
+        );
 
         public StationView()
         {
@@ -21,7 +26,15 @@ namespace NobUS.Frontend.MAUI.Presentation.View
 
         private async void ShowArrivalEventList(object sender, EventArgs e)
         {
-            EtaListView.ItemsSource = await ViewModel.ArrivalEvents;
+            var groupedArrivalEventsViewModels = (await ViewModel.ArrivalEvents)
+                .OrderBy(ae => ae.ShuttleJob.Route.Name)
+                .GroupBy(ae => ae.ShuttleJob.Route.Name)
+                .Select(g => new GroupedArrivalEventsViewModel(g.Key, g))
+                .ToList();
+
+            EtaListView.IsVisible = EtaListViewExpander.IsExpanded;
+            EtaListView.ItemsSource = groupedArrivalEventsViewModels;
+            EtaListView.VerticalScrollBarVisibility = ScrollBarVisibility.Never;
         }
     }
 }

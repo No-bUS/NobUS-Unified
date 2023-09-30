@@ -4,15 +4,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NobUS.Frontend.MAUI.Presentation.View.StationListView"
              xmlns:local="using:NobUS.Frontend.MAUI.Presentation.View">
-    <ContentView.Resources>
-        </ContentView.Resources>
-        <ListView x:Name="ListView">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <local:StationView ViewModel="{x:Binding  Path=.}" />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+    <ListView x:Name="ListView" SelectionMode='None' SeparatorVisibility='None' HasUnevenRows='True'>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <local:StationView
+                                       ViewModel="{x:Binding  Path=.}"
+                                       Padding="0,0,0,10" />
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentView>

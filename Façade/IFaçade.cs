@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Immutable;
 
 namespace NobUS.Frontend.MAUI.Façade
 {
@@ -14,6 +9,5 @@ namespace NobUS.Frontend.MAUI.Façade
         Task<IImmutableList<TResult>> GetAsync<TResult, TQuery>(TQuery query)
             where TResult : class
             where TQuery : class;
-
     }
 }

@@ -10,6 +10,7 @@ namespace NobUS.Frontend.MAUI.Presentation.View
         public StationListView()
         {
             InitializeComponent();
+            ListView.BindingContext = this;
             ViewModel.GetAll().ContinueWith(
                 async r => ListView.ItemsSource = await r,
                 TaskScheduler.FromCurrentSynchronizationContext()

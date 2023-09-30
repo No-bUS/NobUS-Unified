@@ -4,37 +4,94 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
              x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
-             xmlns:snapshot="clr-namespace:NobUS.DataContract.Model.ValueObject.Snapshot;assembly=NobUS.DataContract.Model">
+             xmlns:snapshot="clr-namespace:NobUS.DataContract.Model;assembly=NobUS.DataContract.Model"
+             xmlns:viewModel="clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:view="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
+             HorizontalOptions="Fill"
+             VerticalOptions="Fill">
     <mdc:Card BackgroundColour="{DynamicResource SurfaceColor}"
               Elevation="3"
-              EnableTouchEvents="False"
               Shape="10"
+              x:DataType="view:StationView"
               x:Name="InfoCard"
               >
-        <Grid RowDefinitions="auto,auto,auto">
+        <Grid Padding='10'>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
             <Label x:Name="NameLabel"
+                   TextColor="{StaticResource OnPrimaryContainerColor}"
                    HorizontalOptions="Start"
-                   Grid.Row="1"
+                   Grid.Row="0"
+                   FontSize="{StaticResource Small}"
+                   Grid.Column="0"
                    Text="{x:Binding Path=ViewModel.Station.Name}" />
-            <HorizontalStackLayout  Grid.Row="2"
-                                    HorizontalOptions="End"
-                                    Spacing="8">
-                <Label x:Name="CaptionLabel"
-                       Text="{x:Binding Path=ViewModel.Station.Caption}" />
-                <ListView x:Name="EtaListView">
+
+            <Label x:Name="DistanceLabel"
+                   TextColor="{StaticResource SecondaryText}"
+                   HorizontalOptions="End"
+                   FontSize="{StaticResource Small}"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   Text="123 m" />
+
+            <toolkit:Expander Grid.Column="0"
+                              Grid.Row="1"
+                              ExpandedChanged="ShowArrivalEventList"
+                              x:Name="EtaListViewExpander">
+                <toolkit:Expander.Header>
+                    <Label x:Name="CaptionLabel"
+                           HorizontalOptions="Start"
+                           FontSize="30"
+                           TextColor="{StaticResource PrimaryText}"
+                           Text="{x:Binding Path=ViewModel.Station.Name}" />
+
+                </toolkit:Expander.Header>
+                <ListView x:Name="EtaListView"
+                          HorizontalOptions="Start"
+                          SelectionMode='None'
+                          SeparatorVisibility='None'
+                          HasUnevenRows='True'>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell x:DataType="snapshot:ArrivalEvent">
-                                <StackLayout>
-                                    <Label Text="{Binding Path=.ShuttleJob.Route.Name}" />
-                                    <Label Text="{Binding Path=.EstimatedArrivalSpan}" />
-                                </StackLayout>
+                            <ViewCell x:DataType="viewModel:GroupedArrivalEventsViewModel">
+                                <Grid ColumnDefinitions="auto,*">
+                                    <Label Text="{x:Binding Path=RouteName}"
+                                           Grid.Column="0"
+                                           FontSize="{StaticResource Base}" />
+                                    <FlexLayout BindableLayout.ItemsSource="{x:Binding Path=ArrivalEvents}"
+                                                Direction="Row"
+                                                Wrap="NoWrap"
+                                                AlignItems='Start'
+                                                Grid.Column="1">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="snapshot:ArrivalEvent">
+                                                <Label FontSize="{StaticResource Base}"
+                                                       Margin="5,0"
+                                                       FlexLayout.Basis='Auto'>
+                                                    <Label.Text>
+                                                        <MultiBinding StringFormat="{}{0:0}m {1}s">
+                                                            <Binding Path="EstimatedArrivalSpan.TotalMinutes" />
+                                                            <Binding Path="EstimatedArrivalSpan.Seconds" />
+                                                        </MultiBinding>
+                                                    </Label.Text>
+                                                </Label>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </HorizontalStackLayout>
-            <Button Clicked="ShowArrivalEventList" Grid.Row="3" MaximumHeightRequest="30" MaximumWidthRequest="100" />
+            </toolkit:Expander>
         </Grid>
     </mdc:Card>
 </ContentView>

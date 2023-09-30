@@ -1,4 +1,5 @@
-﻿using Material.Components.Maui.Extensions;
+﻿using CommunityToolkit.Maui;
+using Material.Components.Maui.Extensions;
 using Microsoft.Extensions.Logging;
 using NobUS.Frontend.MAUI.Presentation.View;
 
@@ -11,6 +12,7 @@ namespace NobUS.Frontend.MAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseMaterialComponents(new List<string>())
                 .ConfigureFonts(fonts =>
                 {
