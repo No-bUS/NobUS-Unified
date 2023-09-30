@@ -3,7 +3,6 @@ using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
-using NobUS.Frontend.MAUI.Façade;
 using NobUS.Frontend.MAUI.Presentation.ViewModel;
 using NobUS.Frontend.MAUI.Repository;
 using NobUS.Frontend.MAUI.Service;
@@ -32,7 +31,6 @@ namespace NobUS.Frontend.MAUI.Presentation.View
                 .RegisterType<StaticRepository<Route>>()
                 .As<IRepository<Route>>()
                 .SingleInstance();
-            autofacContainerBuilder.RegisterType<DummyFaçade>().As<IFaçade>().SingleInstance();
             autofacContainerBuilder
                 .RegisterType<StationListViewModel>()
                 .As<StationListViewModel>()
