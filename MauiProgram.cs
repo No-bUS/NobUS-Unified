@@ -13,12 +13,7 @@ namespace NobUS.Frontend.MAUI
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
-                .UseMaterialComponents(new List<string>())
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                .UseMaterialComponents(new List<string>());
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
