@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:model="clr-namespace:NobUS.DataContract.Model"
+    xmlns:model="clr-namespace:NobUS.DataContract.Model;assembly=NobUS.DataContract.Model"
     xmlns:view="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.GroupedArrivalEventsView"
 >
-    <HorizontalStackLayout x:Name="ArrivalEventsPanel">
-        <Label Text="{x:Binding Path=RouteName}" />
-    </HorizontalStackLayout>
+    <Grid x:DataType="view:GroupedArrivalEventsView" x:Name="Grid" ColumnDefinitions="auto,*">
+        <Label
+            FontSize="{StaticResource Base}"
+            Grid.Column="0"
+            Text="{x:Binding Path=ViewModel.RouteName}"
+        />
+        <FlexLayout
+            AlignItems="Start"
+            BindableLayout.ItemsSource="{x:Binding Path=ViewModel.ArrivalEvents}"
+            Direction="Row"
+            Grid.Column="1"
+            Wrap="NoWrap"
+        >
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="model:ArrivalEvent">
+                    <Label
+                        FlexLayout.Basis="Auto"
+                        FontSize="{StaticResource Base}"
+                        Margin="5,0"
+                        TextColor="White"
+                    >
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:0}m {1}s">
+                                <Binding Path="EstimatedArrivalSpan.TotalMinutes" />
+                                <Binding Path="EstimatedArrivalSpan.Seconds" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>
+    </Grid>
 </ContentView>

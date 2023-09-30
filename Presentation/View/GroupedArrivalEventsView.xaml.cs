@@ -4,29 +4,24 @@ namespace NobUS.Frontend.MAUI.Presentation.View
 {
     public partial class GroupedArrivalEventsView : ContentView
     {
-        public static readonly BindableProperty GroupedArrivalEventsProperty =
-            BindableProperty.Create(
-                nameof(GroupedArrivalEvents),
-                typeof(GroupedArrivalEventsViewModel),
-                typeof(GroupedArrivalEventsView)
-            );
+        public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
+            nameof(ViewModel),
+            typeof(GroupedArrivalEventsViewModel),
+            typeof(GroupedArrivalEventsView),
+            null,
+            BindingMode.OneTime
+        );
 
         public GroupedArrivalEventsView()
         {
             InitializeComponent();
-            while (GroupedArrivalEvents == null) { }
-            ;
-
-            foreach (var arrival in GroupedArrivalEvents.ArrivalEvents)
-                ArrivalEventsPanel.Children.Add(
-                    new Label { Text = arrival.EstimatedArrivalSpan.ToString() }
-                );
+            Grid.BindingContext = this;
         }
 
-        public GroupedArrivalEventsViewModel GroupedArrivalEvents
+        public GroupedArrivalEventsViewModel ViewModel
         {
-            get => (GroupedArrivalEventsViewModel)GetValue(GroupedArrivalEventsProperty);
-            set => SetValue(GroupedArrivalEventsProperty, value);
+            get => (GroupedArrivalEventsViewModel)GetValue(ViewModelProperty);
+            set => SetValue(ViewModelProperty, value);
         }
     }
 }

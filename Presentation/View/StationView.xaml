@@ -2,7 +2,6 @@
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
-    xmlns:snapshot="clr-namespace:NobUS.DataContract.Model;assembly=NobUS.DataContract.Model"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:view="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
     xmlns:viewModel="clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel"
@@ -81,41 +80,10 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell x:DataType="viewModel:GroupedArrivalEventsViewModel">
-                                <Grid ColumnDefinitions="auto,*">
-                                    <Label
-                                        FontSize="{StaticResource Base}"
-                                        Grid.Column="0"
-                                        Text="{x:Binding Path=RouteName}"
-                                    />
-                                    <FlexLayout
-                                        AlignItems="Start"
-                                        BindableLayout.ItemsSource="{x:Binding Path=ArrivalEvents}"
-                                        Direction="Row"
-                                        Grid.Column="1"
-                                        Wrap="NoWrap"
-                                    >
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate x:DataType="snapshot:ArrivalEvent">
-                                                <Label
-                                                    FlexLayout.Basis="Auto"
-                                                    FontSize="{StaticResource Base}"
-                                                    Margin="5,0"
-                                                >
-                                                    <Label.Text>
-                                                        <MultiBinding StringFormat="{}{0:0}m {1}s">
-                                                            <Binding
-                                                                Path="EstimatedArrivalSpan.TotalMinutes"
-                                                            />
-                                                            <Binding
-                                                                Path="EstimatedArrivalSpan.Seconds"
-                                                            />
-                                                        </MultiBinding>
-                                                    </Label.Text>
-                                                </Label>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </FlexLayout>
-                                </Grid>
+                              <view:GroupedArrivalEventsView
+                                    x:DataType="viewModel:GroupedArrivalEventsViewModel"
+                                    ViewModel="{x:Binding .}"
+                                />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
