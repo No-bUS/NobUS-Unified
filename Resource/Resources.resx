@@ -126,18 +126,18 @@
   </resheader>
   <data name="NUS-Mapping" type="System.Resources.ResXFileRef">
     <value
-        >.\NUS-Mapping.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        >.\NUS-Mapping.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="NUS-Routes" type="System.Resources.ResXFileRef">
     <value
-        >.\NUS-Routes.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        >.\NUS-Routes.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="NUS-Stations" type="System.Resources.ResXFileRef">
     <value
-        >.\NUS-Stations.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        >.\NUS-Stations.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Public-Stations" type="System.Resources.ResXFileRef">
     <value
-    >.\Public-Stations.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    >.\Public-Stations.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

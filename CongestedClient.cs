@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI.Client;
-using NobUS.DataContract.Reader.OfficialAPI.Properties;
+using NobUS.DataContract.Reader.OfficialAPI.Resource;
 
 namespace NobUS.DataContract.Reader.OfficialAPI
 {
@@ -26,18 +26,18 @@ namespace NobUS.DataContract.Reader.OfficialAPI
         private readonly ConcurrentDictionary<int, ShuttleJob> _shuttleJobs = new();
 
         private static readonly ReadOnlyDictionary<string, string> QueryNameMapping = JsonConvert
-            .DeserializeObject<QueryNameMapping[]>(Encoding.UTF8.GetString(Resources.NUS_Mapping))!
+            .DeserializeObject<QueryNameMapping[]>(Resources.NUS_Mapping)!
             .ToDictionary(m => m.Name, m => m.QueryName)
             .AsReadOnly();
         private static readonly ReadOnlyDictionary<string, Station> Stations = JsonConvert
-            .DeserializeObject<Station[]>(Encoding.UTF8.GetString(Resources.NUS_Stations))!
+            .DeserializeObject<Station[]>(Resources.NUS_Stations)!
             .Concat(JsonConvert
-                .DeserializeObject<Station[]>(Encoding.UTF8.GetString(Resources.Public_Stations))!)
+                .DeserializeObject<Station[]>(Resources.Public_Stations)!)
             .Where(s => QueryNameMapping.ContainsKey(s.Name))
             .ToDictionary(s => s.Name)
             .AsReadOnly();
         private static readonly ReadOnlyDictionary<string, Route> Routes = JsonConvert
-            .DeserializeObject<Route[]>(Encoding.UTF8.GetString(Resources.NUS_Routes))!
+            .DeserializeObject<Route[]>(Resources.NUS_Routes)!
             .ToDictionary(r => r.Name)
             .AsReadOnly();
 
