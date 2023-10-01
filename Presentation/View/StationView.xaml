@@ -1,22 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
-    x:DataType="viewModel:StationViewModel"
     xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:view="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
     xmlns:viewModel="clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
+    x:DataType="viewModel:StationViewModel"
     BindingContext="{x:Binding Path=.,Source={RelativeSource AncestorType={x:Type viewModel:StationViewModel},AncestorLevel=0}}"
     HorizontalOptions="Fill"
     VerticalOptions="Fill"
 >
-    <mdc:Card
-        BackgroundColour="{DynamicResource SurfaceColor}"
-        Elevation="3"
-        Shape="10"
-    >
+    <mdc:Card BackgroundColour="{StaticResource SecondaryContainer}" Elevation="3" Shape="10">
         <Grid Padding="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -32,7 +28,7 @@
                 Grid.Column="0"
                 Grid.Row="0"
                 HorizontalOptions="Start"
-                TextColor="{StaticResource OnPrimaryContainerColor}"
+                TextColor="{StaticResource OnSecondaryContainer}"
             >
                 <Label.Text>
                     <MultiBinding StringFormat="{}{0} | {1}">
@@ -46,8 +42,8 @@
                 Grid.Column="1"
                 Grid.Row="0"
                 HorizontalOptions="End"
-                TextColor="{StaticResource SecondaryText}"
                 Text="{x:Binding .Distance, StringFormat='{}{0:F2} m'}"
+                TextColor="{StaticResource OnSecondaryContainer}"
             />
 
             <toolkit:Expander
@@ -60,8 +56,8 @@
                     <Label
                         FontSize="30"
                         HorizontalOptions="Start"
-                        TextColor="{StaticResource PrimaryText}"
                         Text="{x:Binding Path=.Station.Name}"
+                        TextColor="{StaticResource OnSecondaryContainer}"
                     />
 
                 </toolkit:Expander.Header>

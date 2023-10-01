@@ -5,8 +5,13 @@
     xmlns:local="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Shell.FlyoutBehavior="Disabled"
+    BackgroundColor="{StaticResource Surface}"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarBackgroundColor="{StaticResource Primary}"
+    Shell.TabBarTitleColor="{StaticResource OnPrimary}"
 >
-
-    <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" Title="NobUS" />
-
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate local:StationsPage}" Title="Stations" />
+        <ShellContent ContentTemplate="{DataTemplate local:StationsPage}" Title="About" />
+    </TabBar>
 </Shell>

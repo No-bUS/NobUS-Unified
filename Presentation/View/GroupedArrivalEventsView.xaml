@@ -13,6 +13,7 @@
             FontSize="{StaticResource Base}"
             Grid.Column="0"
             Text="{x:Binding Path=.RouteName}"
+            TextColor="{StaticResource OnSecondaryContainer}"
         />
         <FlexLayout
             AlignItems="Start"
@@ -27,7 +28,7 @@
                         FlexLayout.Basis="Auto"
                         FontSize="{StaticResource Base}"
                         Margin="5,0"
-                        TextColor="White"
+                        TextColor="{StaticResource OnSecondaryContainer}"
                     >
                         <Label.Text>
                             <MultiBinding StringFormat="{}{0:0}m {1}s">
