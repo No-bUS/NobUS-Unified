@@ -13,6 +13,25 @@ namespace NobUS.Frontend.MAUI
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .ConfigureFonts(fonts =>
+                {
+                    new[]
+                    {
+                        "Black",
+                        "ExtraBold",
+                        "SemiBold",
+                        "Bold",
+                        "Medium",
+                        "Regular",
+                        "Light",
+                        "ExtraLight",
+                        "Thin",
+                        "ExtraThin"
+                    }
+                        .SelectMany(w => new[] { "Italic", "" }, (w, s) => $"{w}{s}")
+                        .ToList()
+                        .ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
+                })
                 .UseMaterialComponents(new List<string>());
 #if DEBUG
             builder.Logging.AddDebug();

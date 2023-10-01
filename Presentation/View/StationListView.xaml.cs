@@ -19,15 +19,20 @@ namespace NobUS.Frontend.MAUI.Presentation.View
             _viewModel
                 .GetAll()
                 .ContinueWith(
-                    async r =>
+                    async r => ListView.ItemsSource = await r,
+                    TaskScheduler.FromCurrentSynchronizationContext()
+                );
+
+            _locationProvider
+                .GetLocationAsync()
+                .ContinueWith(
+                    async locationTask =>
                     {
-                        var location = await _locationProvider.GetLocationAsync();
-                        var viewModels = await r;
-                        viewModels.ForEach(
-                            viewModel =>
-                                viewModel.Distance =
-                                    viewModel.Station.Coordinate.DistanceTo(location) * 1000
-                        );
+                        var location = await locationTask;
+                        var viewModels = await _viewModel.GetAll();
+                        foreach (var viewModel in viewModels)
+                            viewModel.Distance =
+                                viewModel.Station.Coordinate.DistanceTo(location) * 1000;
                         viewModels.Sort((a, b) => a.Distance.CompareTo(b.Distance));
                         ListView.ItemsSource = viewModels;
                     },

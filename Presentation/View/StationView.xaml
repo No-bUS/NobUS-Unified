@@ -24,7 +24,6 @@
             </Grid.RowDefinitions>
 
             <Label
-                FontSize="{StaticResource Small}"
                 Grid.Column="0"
                 Grid.Row="0"
                 HorizontalOptions="Start"
@@ -38,7 +37,6 @@
                 </Label.Text>
             </Label>
             <Label
-                FontSize="{StaticResource Small}"
                 Grid.Column="1"
                 Grid.Row="0"
                 HorizontalOptions="End"
@@ -46,27 +44,21 @@
                 TextColor="{StaticResource OnSecondaryContainer}"
             />
 
-            <toolkit:Expander
-                x:Name="EtaListViewExpander"
-                ExpandedChanged="ShowArrivalEventList"
-                Grid.Column="0"
-                Grid.Row="1"
-            >
+            <toolkit:Expander x:Name="EtaListViewExpander" Grid.Column="0" Grid.Row="1">
                 <toolkit:Expander.Header>
                     <Label
-                        FontSize="30"
+                        FontFamily="ExtraBold"
+                        FontSize="{StaticResource Medium}"
                         HorizontalOptions="Start"
                         Text="{x:Binding Path=.Station.Name}"
                         TextColor="{StaticResource OnSecondaryContainer}"
                     />
-
                 </toolkit:Expander.Header>
                 <ListView
                     x:Name="EtaListView"
                     HasUnevenRows="True"
                     HorizontalOptions="Start"
                     SelectionMode="None"
-                    SeparatorVisibility="None"
                     VerticalScrollBarVisibility="Never"
                 >
                     <ListView.ItemTemplate>

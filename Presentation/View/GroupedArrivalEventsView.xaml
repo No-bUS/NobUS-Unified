@@ -15,14 +15,16 @@
             Text="{x:Binding Path=.RouteName}"
             TextColor="{StaticResource OnSecondaryContainer}"
         />
-        <FlexLayout
-            AlignItems="Start"
-            BindableLayout.ItemsSource="{x:Binding Path=.ArrivalEvents}"
-            Direction="Row"
+        <CollectionView
             Grid.Column="1"
-            Wrap="NoWrap"
+            ItemSizingStrategy="MeasureFirstItem"
+            ItemsSource="{x:Binding Path=.FirstArrivalEvents}"
+            SelectionMode="None"
         >
-            <BindableLayout.ItemTemplate>
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:ArrivalEvent">
                     <Label
                         FlexLayout.Basis="Auto"
@@ -38,7 +40,7 @@
                         </Label.Text>
                     </Label>
                 </DataTemplate>
-            </BindableLayout.ItemTemplate>
-        </FlexLayout>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </Grid>
 </ContentView>
