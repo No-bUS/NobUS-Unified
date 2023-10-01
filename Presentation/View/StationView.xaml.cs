@@ -15,7 +15,6 @@ namespace NobUS.Frontend.MAUI.Presentation.View
         public StationView()
         {
             InitializeComponent();
-            InfoCard.BindingContext = this;
             Loaded += LoadArrivalEvents;
         }
 

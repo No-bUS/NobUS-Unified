@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.StationListView"
     xmlns:local="using:NobUS.Frontend.MAUI.Presentation.View"
-    xmlns:viewModel="clr-namespace:NobUS.Frontend.MAUI.Presentation.ViewModel"
+    xmlns:viewModel="using:NobUS.Frontend.MAUI.Presentation.ViewModel"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 >
     <ListView
@@ -13,12 +13,11 @@
         SeparatorVisibility="None"
     >
         <ListView.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="viewModel:StationViewModel">
                 <ViewCell>
                     <local:StationView
-                        x:DataType="viewModel:StationViewModel"
                         Padding="0,0,0,10"
-                        ViewModel="{x:Binding Path=.}"
+                        ViewModel="{x:Binding Path=., Source={RelativeSource AncestorType={x:Type viewModel:StationViewModel},AncestorLevel=1}}"
                     />
                 </ViewCell>
             </DataTemplate>

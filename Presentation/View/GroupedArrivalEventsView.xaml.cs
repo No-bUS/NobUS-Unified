@@ -15,7 +15,6 @@ namespace NobUS.Frontend.MAUI.Presentation.View
         public GroupedArrivalEventsView()
         {
             InitializeComponent();
-            Grid.BindingContext = this;
         }
 
         public GroupedArrivalEventsViewModel ViewModel
