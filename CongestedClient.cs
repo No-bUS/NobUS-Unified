@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
-using System.Text;
 using Newtonsoft.Json;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI.Client;
@@ -10,7 +9,13 @@ using NobUS.DataContract.Reader.OfficialAPI.Resource;
 namespace NobUS.DataContract.Reader.OfficialAPI
 {
     [JsonObject]
-    internal record QueryNameMapping(string QueryName, string Name);
+    internal record QueryNameMap(string QueryName, int Code);
+
+    internal static class StationExtension
+    {
+        internal static string QueryName(this Station station) =>
+            CongestedClient.QueryNameMapping.GetValueOrDefault(station.Code, "UTOWN");
+    }
 
     public record CongestedClient : IClient
     {
@@ -25,15 +30,14 @@ namespace NobUS.DataContract.Reader.OfficialAPI
 
         private readonly ConcurrentDictionary<int, ShuttleJob> _shuttleJobs = new();
 
-        private static readonly ReadOnlyDictionary<string, string> QueryNameMapping = JsonConvert
-            .DeserializeObject<QueryNameMapping[]>(Resources.NUS_Mapping)!
-            .ToDictionary(m => m.Name, m => m.QueryName)
+        internal static readonly ReadOnlyDictionary<int, string> QueryNameMapping = JsonConvert
+            .DeserializeObject<QueryNameMap[]>(Resources.NUS_Mapping)!
+            .ToDictionary(m => m.Code, m => m.QueryName)
             .AsReadOnly();
         private static readonly ReadOnlyDictionary<string, Station> Stations = JsonConvert
             .DeserializeObject<Station[]>(Resources.NUS_Stations)!
-            .Concat(JsonConvert
-                .DeserializeObject<Station[]>(Resources.Public_Stations)!)
-            .Where(s => QueryNameMapping.ContainsKey(s.Name))
+            .Concat(JsonConvert.DeserializeObject<Station[]>(Resources.Public_Stations)!)
+            .Where(s => QueryNameMapping.ContainsKey(s.Code))
             .ToDictionary(s => s.Name)
             .AsReadOnly();
         private static readonly ReadOnlyDictionary<string, Route> Routes = JsonConvert
@@ -73,9 +77,7 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                         .Select(
                             s =>
                                 _client
-                                    .GetShuttleServiceAsync(
-                                        QueryNameMapping.GetValueOrDefault(s.Name)
-                                    )
+                                    .GetShuttleServiceAsync(s.QueryName())
                                     .Result.ShuttleServiceResult.Shuttles
                         )
                         .Select(Utility.GetEtasFromShuttles)
@@ -90,11 +92,13 @@ namespace NobUS.DataContract.Reader.OfficialAPI
             );
 
         private Task InitShuttleJobsAll =>
-            Task.Run(() =>
-            {
-                Stations.Values.Select(InitShuttleJobs).ToList();
-                Routes.Values.Select(InitShuttleJobs).ToList();
-            });
+            Task.WhenAll(
+                new[]
+                {
+                    Stations.Values.Select(InitShuttleJobs),
+                    Routes.Values.Select(InitShuttleJobs)
+                }.SelectMany(x => x)
+            );
 
         private Task UpdateVehicleLocations =>
             _initVehicles.ContinueWith(
@@ -140,7 +144,7 @@ namespace NobUS.DataContract.Reader.OfficialAPI
             await _initShuttleJobsAll.ContinueWith(
                 _ =>
                     _client
-                        .GetShuttleServiceAsync(QueryNameMapping.GetValueOrDefault(station.Name))
+                        .GetShuttleServiceAsync(station.QueryName())
                         .Result.ShuttleServiceResult.Shuttles.Where(ss => ss != null)
                         .Where(ss => ss._etas != null)
                         .SelectMany(ss => ss._etas)
@@ -154,9 +158,7 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                     Utility
                         .GetRouteNameAndEtasFromShuttles(
                             _client
-                                .GetShuttleServiceAsync(
-                                    QueryNameMapping.GetValueOrDefault(station.Name)
-                                )
+                                .GetShuttleServiceAsync(station.QueryName())
                                 .Result.ShuttleServiceResult.Shuttles
                         )
                         .Select(

@@ -1,146 +1,146 @@
 [
     {
         "QueryName": "OTH",
-        "Name": "Oei Tiong Ham Building"
+        "Code": 16391
     },
     {
         "QueryName": "BG-MRT",
-        "Name": "Botanic Gardens MRT"
+        "Code": 16392
     },
     {
         "QueryName": "KR-MRT",
-        "Name": "Kent Ridge MRT"
+        "Code": 18331
     },
     {
         "QueryName": "LT27",
-        "Name": "LT 27"
+        "Code": 18301
     },
     {
         "QueryName": "UHALL",
-        "Name": "University Hall"
+        "Code": 18311
     },
     {
         "QueryName": "UHC-OPP",
-        "Name": "Opp University Health Centre"
+        "Code": 18321
     },
     {
         "QueryName": "UTOWN",
-        "Name": "University Town"
+        "Code": 19059
     },
     {
         "QueryName": "RAFFLES",
-        "Name": "Raffles Hall"
+        "Code": 16169
     },
     {
         "QueryName": "KV",
-        "Name": "Kent Vale"
+        "Code": 16371
     },
     {
         "QueryName": "MUSEUM",
-        "Name": "Museum"
+        "Code": 16161
     },
     {
         "QueryName": "YIH",
-        "Name": "Yusof Ishak House"
+        "Code": 16171
     },
     {
         "QueryName": "CLB",
-        "Name": "Central Library"
+        "Code": 16181
     },
     {
         "QueryName": "LT13",
-        "Name": "LT 13"
+        "Code": 16372
     },
     {
         "QueryName": "AS5",
-        "Name": "AS 5"
+        "Code": 16373
     },
     {
         "QueryName": "BIZ2",
-        "Name": "BIZ 2"
+        "Code": 16361
     },
     {
         "QueryName": "PGP",
-        "Name": "Prince George's Park"
+        "Code": 16321
     },
     {
         "QueryName": "CG",
-        "Name": "College Green"
+        "Code": 16398
     },
     {
         "QueryName": "EA",
-        "Name": "EA"
+        "Code": 16159
     },
     {
         "QueryName": "SDE3",
-        "Name": "SDE 3"
+        "Code": "16149"
     },
     {
         "QueryName": "IT",
-        "Name": "Information Technology"
+        "Code": "16189"
     },
     {
         "QueryName": "YIH-OPP",
-        "Name": "Opp Yusof Ishak House"
+        "Code": 16179
     },
     {
         "QueryName": "SDE3-OPP",
-        "Name": "Opp SDE 3"
+        "Code": 16141
     },
     {
         "QueryName": "JP-SCH-16151",
-        "Name": "The Japanese Primary School"
+        "Code": 16151
     },
     {
         "QueryName": "UHC",
-        "Name": "University Health Centre"
+        "Code": 18329
     },
     {
         "QueryName": "UHALL-OPP",
-        "Name": "Opp University Hall"
+        "Code": 18319
     },
     {
         "QueryName": "S17",
-        "Name": "S 17"
+        "Code": 18309
     },
     {
         "QueryName": "KR-MRT-OPP",
-        "Name": "Opp Kent Ridge MRT"
+        "Code": 18339
     },
     {
         "QueryName": "PGPR",
-        "Name": "Prince George's Park Foyer"
+        "Code": 16329
     },
     {
         "QueryName": "COM3",
-        "Name": "COM 3"
+        "Code": 16364
     },
     {
         "QueryName": "HSSML-OPP",
-        "Name": "Opp HSSML"
+        "Code": 18304
     },
     {
         "QueryName": "NUSS-OPP",
-        "Name": "Opp NUSS"
+        "Code": 16365
     },
     {
         "QueryName": "LT13-OPP",
-        "Name": "Ventus"
+        "Code": 16374
     },
     {
         "QueryName": "KRB",
-        "Name": "Kent Ridge Bus Terminal"
+        "Code": 16009
     },
     {
         "QueryName": "TCOMS",
-        "Name": "TCOMS"
+        "Code": 16319
     },
     {
         "QueryName": "COM2",
-        "Name": "COM 2"
+        "Code": 16339
     },
     {
         "QueryName": "TCOMS-OPP",
-        "Name": "Opp TCOMS"
+        "Code": 16311
     }
 ]
