@@ -18,6 +18,6 @@ namespace NobUS.Frontend.MAUI.Presentation.ViewModel
         public double Distance { get; set; }
 
         public Task<IImmutableList<ArrivalEvent>> ArrivalEvents =>
-            ServiceLocator.Current.GetInstance<IClient>().GetAsync<ArrivalEvent, Station>(Station);
+            ServiceLocator.Current.GetInstance<IClient>().GetArrivalEventsAsync(Station);
     }
 }

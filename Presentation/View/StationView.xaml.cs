@@ -16,6 +16,7 @@ namespace NobUS.Frontend.MAUI.Presentation.View
         {
             InitializeComponent();
             Loaded += LoadArrivalEvents;
+            EtaListViewExpander.ExpandedChanged += LoadArrivalEvents;
         }
 
         public StationViewModel ViewModel
@@ -24,19 +25,9 @@ namespace NobUS.Frontend.MAUI.Presentation.View
             set => SetValue(ViewModelProperty, value);
         }
 
-        private void ShowArrivalEventList(object sender, EventArgs e)
-        {
-            EtaListView.IsVisible = EtaListViewExpander.IsExpanded;
-        }
-
-        private async void LoadArrivalEvents(object sender, EventArgs e)
-        {
-            var groupedArrivalEventsViewModels = (await ViewModel.ArrivalEvents)
-                .OrderBy(ae => ae.ShuttleJob.Route.Name)
+        private async void LoadArrivalEvents(object sender, EventArgs e) =>
+            EtaListView.ItemsSource = (await ViewModel.ArrivalEvents)
                 .GroupBy(ae => ae.ShuttleJob.Route.Name)
-                .Select(g => new GroupedArrivalEventsViewModel(g.Key, g))
-                .ToList();
-            EtaListView.ItemsSource = groupedArrivalEventsViewModels;
-        }
+                .Select(g => new GroupedArrivalEventsViewModel(g.Key, g.ToList()));
     }
 }

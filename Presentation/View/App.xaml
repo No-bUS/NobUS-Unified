@@ -2,6 +2,7 @@
 <Application
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:styles="clr-namespace:Material.Components.Maui.Styles;assembly=Material.Components.Maui"
+    xmlns:utils="using:NobUS.Frontend.MAUI.Presentation.Utils"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.App"
 >
@@ -13,5 +14,6 @@
                 <styles:MaterialStyles />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        <utils:MathConverter x:Key="MathConverter" />
     </Application.Resources>
 </Application>

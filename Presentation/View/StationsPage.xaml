@@ -2,9 +2,27 @@
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:local="using:NobUS.Frontend.MAUI.Presentation.View"
+    xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.StationsPage"
     BackgroundColor="{StaticResource Surface}"
 >
-    <local:StationListView Padding="10,0" />
+    <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
+        <local:StationListView Grid.Row="0" Padding="10,0" ZIndex="0" />
+        <Border
+            Grid.Row="0"
+            Margin="-1"
+            Stroke="Transparent"
+            StrokeThickness="0"
+            VerticalOptions="End"
+            ZIndex="1"
+        >
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="30,30,0,0" Margin="0" />
+            </Border.StrokeShape>
+            <mdc:NavigationBar HorizontalOptions="Fill" VerticalOptions="Fill">
+                <mdc:NavigationBarItem IconKind="Hail" Text="Stations" />
+            </mdc:NavigationBar>
+        </Border>
+    </Grid>
 </ContentPage>

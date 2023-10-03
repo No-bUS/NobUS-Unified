@@ -17,8 +17,8 @@
 
     <Color x:Key="Secondary">#a83663</Color>
     <Color x:Key="OnSecondary">#F7D2E6</Color> <!-- Light muted mauve -->
-    <Color x:Key="SecondaryContainer">#E2B0C6</Color>
-    <Color x:Key="OnSecondaryContainer">#84143D</Color> <!-- Dark muted mauve -->
+    <Color x:Key="SecondaryContainer">#B8B8B8</Color>
+    <Color x:Key="OnSecondaryContainer">#5E5E5E</Color> <!-- Dark muted mauve -->
 
     <Color x:Key="Tertiary">#205f8a</Color>
     <Color x:Key="OnTertiary">#B0D0E6</Color> <!-- Light muted blue -->

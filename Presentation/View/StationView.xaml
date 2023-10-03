@@ -8,7 +8,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
     x:DataType="viewModel:StationViewModel"
-    BindingContext="{x:Binding Path=.,Source={RelativeSource AncestorType={x:Type viewModel:StationViewModel},AncestorLevel=0}}"
+    BindingContext="{x:Binding Path=., Source={RelativeSource AncestorType={x:Type viewModel:StationViewModel},AncestorLevel=0}}"
     HorizontalOptions="Fill"
     VerticalOptions="Fill"
 >
@@ -40,7 +40,7 @@
                 Grid.Column="1"
                 Grid.Row="0"
                 HorizontalOptions="End"
-                Text="{x:Binding .Distance, StringFormat='{}{0:F2} m'}"
+                Text="{x:Binding Path=.Distance, StringFormat='{}{0:F2} m'}"
                 TextColor="{StaticResource OnSecondaryContainer}"
             />
 
@@ -56,15 +56,17 @@
                 </toolkit:Expander.Header>
                 <ListView
                     x:Name="EtaListView"
-                    HasUnevenRows="True"
+                    HasUnevenRows="False"
                     HorizontalOptions="Start"
+                    RowHeight="{OnPlatform Android={Binding Source={StaticResource BaseI}, Converter={StaticResource MathConverter}, ConverterParameter=(@VALUE+2)}}"
                     SelectionMode="None"
+                    SeparatorVisibility="None"
                     VerticalScrollBarVisibility="Never"
                 >
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="viewModel:GroupedArrivalEventsViewModel">
                             <ViewCell>
-                                <view:GroupedArrivalEventsView ViewModel="{x:Binding .}" />
+                                <view:GroupedArrivalEventsView ViewModel="{x:Binding Path=.}" />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

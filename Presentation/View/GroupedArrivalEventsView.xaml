@@ -6,17 +6,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.GroupedArrivalEventsView"
     x:DataType="viewModel:GroupedArrivalEventsViewModel"
-    BindingContext="{x:Binding .,Source={RelativeSource AncestorType={x:Type viewModel:GroupedArrivalEventsViewModel}, AncestorLevel=1}}"
+    BindingContext="{x:Binding Path=., Source={RelativeSource AncestorType={x:Type viewModel:GroupedArrivalEventsViewModel}, AncestorLevel=1}}"
+    HeightRequest="{OnPlatform WinUI={Binding Source={StaticResource Base}, Converter={StaticResource MathConverter}, ConverterParameter=(@VALUE+2)}}"
 >
-    <Grid ColumnDefinitions="auto,*">
+    <HorizontalStackLayout>
         <Label
             FontSize="{StaticResource Base}"
-            Grid.Column="0"
+            HorizontalTextAlignment="Center"
             Text="{x:Binding Path=.RouteName}"
             TextColor="{StaticResource OnSecondaryContainer}"
+            WidthRequest="{Binding Source={StaticResource Base}, Converter={StaticResource MathConverter}, ConverterParameter=(@VALUE*3)}"
         />
         <CollectionView
-            Grid.Column="1"
             ItemSizingStrategy="MeasureFirstItem"
             ItemsSource="{x:Binding Path=.FirstArrivalEvents}"
             SelectionMode="None"
@@ -29,11 +30,11 @@
                     <Label
                         FlexLayout.Basis="Auto"
                         FontSize="{StaticResource Base}"
-                        Margin="5,0"
                         TextColor="{StaticResource OnSecondaryContainer}"
+                        WidthRequest="{Binding Source={StaticResource Base}, Converter={StaticResource MathConverter}, ConverterParameter={OnPlatform WinUI=(@VALUE*4), Android=(@VALUE*5)}}"
                     >
                         <Label.Text>
-                            <MultiBinding StringFormat="{}{0:0}m {1}s">
+                            <MultiBinding StringFormat="{}{0:0}m{1}s">
                                 <Binding Path="EstimatedArrivalSpan.TotalMinutes" />
                                 <Binding Path="EstimatedArrivalSpan.Seconds" />
                             </MultiBinding>
@@ -42,5 +43,5 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-    </Grid>
+    </HorizontalStackLayout>
 </ContentView>
