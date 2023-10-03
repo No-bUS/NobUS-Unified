@@ -19,7 +19,7 @@ namespace NobUS.DataContract.Reader.OfficialAPI
 
     public record CongestedClient : IClient
     {
-        private static readonly TimeSpan UpdateInterval = TimeSpan.FromMinutes(3);
+        private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(40);
         private readonly Task _backgroundUpdater;
         private readonly SchemaClient _client;
 
@@ -97,7 +97,9 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                 {
                     Stations.Values.Select(InitShuttleJobs),
                     Routes.Values.Select(InitShuttleJobs)
-                }.SelectMany(x => x)
+                }
+                    .SelectMany(x => x)
+                    .ToList()
             );
 
         private Task UpdateVehicleLocations =>
@@ -148,7 +150,7 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                         .Result.ShuttleServiceResult.Shuttles.Where(ss => ss != null)
                         .Where(ss => ss._etas != null)
                         .SelectMany(ss => ss._etas)
-                        .Select(eta => Adapter.AdaptArrivalEvent(station, eta, _shuttleJobs))
+                        .Select(eta => Adapter.AdaptArrivalEvent(station, eta))
                         .ToImmutableList()
             );
 

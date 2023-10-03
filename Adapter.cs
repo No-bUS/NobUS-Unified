@@ -5,17 +5,8 @@ namespace NobUS.DataContract.Reader.OfficialAPI
 {
     internal static class Adapter
     {
-        internal static ArrivalEvent AdaptArrivalEvent(
-            Station station,
-            _etas rawEta,
-            IDictionary<int, ShuttleJob> shuttleJobDictionary
-        ) =>
-            new(
-                station,
-                shuttleJobDictionary[rawEta.Jobid],
-                TimeSpan.FromSeconds(rawEta.Eta_s),
-                DateTime.Now
-            );
+        internal static ArrivalEvent AdaptArrivalEvent(Station station, _etas rawEta) =>
+            new(station, rawEta.Jobid, TimeSpan.FromSeconds(rawEta.Eta_s), DateTime.Now);
 
         internal static MassPoint AdaptMassPoint(Activebus rawMassPoint) =>
             new(
