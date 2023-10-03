@@ -27,7 +27,7 @@ namespace NobUS.Frontend.MAUI.Presentation.View
 
         private async void LoadArrivalEvents(object sender, EventArgs e) =>
             EtaListView.ItemsSource = (await ViewModel.ArrivalEvents)
-                .GroupBy(ae => ae.ShuttleJob.Route.Name)
+                .GroupBy(ae => ae.RouteName)
                 .Select(g => new GroupedArrivalEventsViewModel(g.Key, g.ToList()));
     }
 }
