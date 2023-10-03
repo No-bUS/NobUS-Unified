@@ -29,8 +29,9 @@
     public sealed partial record MassPoint(Coordinate Coordinate, Velocity Velocity);
 
     public sealed partial record ArrivalEvent(
-        Station Station,
+        int StationCode,
         int ShuttleJobId,
+        string RouteName,
         TimeSpan EstimatedArrivalSpan,
         DateTime CurrentTime
     );
