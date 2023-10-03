@@ -145,12 +145,14 @@ namespace NobUS.DataContract.Reader.OfficialAPI
         public async Task<IImmutableList<ArrivalEvent>> GetArrivalEventsAsync(Station station) =>
             await _initShuttleJobsAll.ContinueWith(
                 _ =>
-                    _client
-                        .GetShuttleServiceAsync(station.QueryName())
-                        .Result.ShuttleServiceResult.Shuttles.Where(ss => ss != null)
-                        .Where(ss => ss._etas != null)
-                        .SelectMany(ss => ss._etas)
-                        .Select(eta => Adapter.AdaptArrivalEvent(station, eta))
+                    Utility
+                        .GetRouteNameAndEtasFromShuttles(
+                            _client
+                                .GetShuttleServiceAsync(station.QueryName())
+                                .Result.ShuttleServiceResult.Shuttles
+                        )
+                        .SelectMany(ss => ss._etas
+                            .Select(eta => Adapter.AdaptArrivalEvent(station.Code, ss.RouteName,eta)))
                         .ToImmutableList()
             );
 
