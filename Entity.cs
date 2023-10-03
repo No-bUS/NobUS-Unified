@@ -19,7 +19,12 @@ namespace NobUS.DataContract.Model
             Variant == Type.Twin ? new RouteStation(Id / 10 + 10 - Id % 10, Variant) : null;
     }
 
-    public record Route(string Name, List<RouteStation> Stations, Route.Type Variant)
+    public record Route(
+        string Name,
+        List<RouteStation> Stations,
+        Route.Type Variant,
+        string Operator
+    ) : EntityBase<string>($"{Operator}-{Name}")
     {
         public enum Type
         {
@@ -60,7 +65,7 @@ namespace NobUS.DataContract.Model
         [JsonIgnore]
         public RouteStation[] FromStations => Stations.Where(FilterStations(false)).ToArray();
 
-        protected static Func<RouteStation, bool> FilterStations(
+        private static Func<RouteStation, bool> FilterStations(
             bool isTo,
             bool includeShared = true,
             bool includeTwin = true
@@ -80,7 +85,7 @@ namespace NobUS.DataContract.Model
 
     public record Station(int Code, string Name, string Road, Coordinate Coordinate)
     {
-        public Station? Opposite { get; }
+        public int? Opposite { get; }
     }
 
     public record ShuttleJob(int Id, Route Route, Vehicle Vehicle);
