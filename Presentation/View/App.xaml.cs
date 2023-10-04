@@ -35,6 +35,10 @@ namespace NobUS.Frontend.MAUI.Presentation.View
                 .RegisterType<StationListViewModel>()
                 .As<StationListViewModel>()
                 .SingleInstance();
+            autofacContainerBuilder
+                .RegisterType<RouteListViewModel>()
+                .As<RouteListViewModel>()
+                .SingleInstance();
 
             var container = autofacContainerBuilder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(container));
