@@ -9,30 +9,17 @@ namespace NobUS.Frontend.MAUI
     {
         public static MauiApp CreateMauiApp()
         {
+            var list = new[] { "ExtraBold", "Regular" }
+                .SelectMany(w => new[] { "" }, (w, s) => $"{w}{s}")
+                .ToList();
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
-                .ConfigureFonts(fonts =>
-                {
-                    new[]
-                    {
-                        "Black",
-                        "ExtraBold",
-                        "SemiBold",
-                        "Bold",
-                        "Medium",
-                        "Regular",
-                        "Light",
-                        "ExtraLight",
-                        "Thin",
-                        "ExtraThin"
-                    }
-                        .SelectMany(w => new[] { "Italic", "" }, (w, s) => $"{w}{s}")
-                        .ToList()
-                        .ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
-                })
-                .UseMaterialComponents(new List<string>());
+                .ConfigureFonts(
+                    fonts => list.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"))
+                )
+                .UseMaterialComponents(list.Select(w => $"Poppins-{w}.ttf").ToList());
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
