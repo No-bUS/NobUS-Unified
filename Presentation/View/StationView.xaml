@@ -8,7 +8,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.StationView"
     x:DataType="viewModel:StationViewModel"
-    BindingContext="{x:Binding Path=., Source={RelativeSource AncestorType={x:Type viewModel:StationViewModel},AncestorLevel=0}}"
+    BindingContext="{x:Binding Source={RelativeSource AncestorType={x:Type viewModel:StationViewModel},AncestorLevel=0}}"
     HorizontalOptions="Fill"
     VerticalOptions="Fill"
 >
@@ -40,7 +40,7 @@
                 Grid.Column="1"
                 Grid.Row="0"
                 HorizontalOptions="End"
-                Text="{x:Binding Path=.Distance, StringFormat='{}{0:F2} m'}"
+                Text="{x:Binding Path=Distance, StringFormat='{}{0:F2} m'}"
                 TextColor="{StaticResource OnSecondaryContainer}"
             />
 
@@ -50,7 +50,7 @@
                         FontFamily="ExtraBold"
                         FontSize="{StaticResource Medium}"
                         HorizontalOptions="Start"
-                        Text="{x:Binding Path=.Station.Name}"
+                        Text="{x:Binding Path=Station.Name}"
                         TextColor="{StaticResource OnSecondaryContainer}"
                     />
                 </toolkit:Expander.Header>
@@ -58,7 +58,7 @@
                     x:Name="EtaListView"
                     HasUnevenRows="False"
                     HorizontalOptions="Start"
-                    RowHeight="{OnPlatform Android={Binding Source={StaticResource BaseI}, Converter={StaticResource MathConverter}, ConverterParameter=(@VALUE+2)}}"
+                    RowHeight="{OnPlatform Android={x:Binding Source={StaticResource BaseI}, Converter={StaticResource MathConverter}, ConverterParameter=(@VALUE+2)}}"
                     SelectionMode="None"
                     SeparatorVisibility="None"
                     VerticalScrollBarVisibility="Never"
@@ -66,7 +66,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="viewModel:GroupedArrivalEventsViewModel">
                             <ViewCell>
-                                <view:GroupedArrivalEventsView ViewModel="{x:Binding Path=.}" />
+                                <view:GroupedArrivalEventsView ViewModel="{x:Binding}" />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

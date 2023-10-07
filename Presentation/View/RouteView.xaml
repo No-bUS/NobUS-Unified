@@ -9,7 +9,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.RouteView"
     x:DataType="viewModel:RouteViewModel"
-    BindingContext="{x:Binding Path=., Source={RelativeSource AncestorType={x:Type viewModel:RouteViewModel},AncestorLevel=0}}"
+    BindingContext="{x:Binding Source={RelativeSource AncestorType={x:Type viewModel:RouteViewModel},AncestorLevel=0}}"
 >
         <mdc:Card BackgroundColour="{StaticResource SecondaryContainer}" Elevation="3" Shape="10">
         <Grid Padding="10">
@@ -37,7 +37,7 @@
                         FontFamily="ExtraBold"
                         FontSize="{StaticResource Medium}"
                         HorizontalOptions="Start"
-                        Text="{x:Binding Path=.Route.Name}"
+                        Text="{x:Binding Path=Route.Name}"
                         TextColor="{StaticResource OnSecondaryContainer}"
                     />
                 </toolkit:Expander.Header>
@@ -54,8 +54,8 @@
                         <DataTemplate x:DataType="model:RouteStation">
                             <ViewCell>
                                 <Label
-                                    BindingContext="{x:Binding Path=., Source={RelativeSource AncestorType={x:Type model:RouteStation},AncestorLevel=0}}"
-                                    Text="{x:Binding Path=.Id}"
+                                    BindingContext="{x:Binding Source={RelativeSource AncestorType={x:Type model:RouteStation},AncestorLevel=0}}"
+                                    Text="{x:Binding Path=Id}"
                                 />
                             </ViewCell>
                         </DataTemplate>
