@@ -1,8 +1,8 @@
 ﻿namespace NobUS.Frontend.MAUI.Presentation.View
 {
-    public partial class StationsPage : ContentPage
+    public partial class MainPage : ContentPage
     {
-        public StationsPage()
+        public MainPage()
         {
             InitializeComponent();
         }
