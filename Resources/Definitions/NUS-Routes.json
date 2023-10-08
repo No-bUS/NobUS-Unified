@@ -1,0 +1,416 @@
+[
+    {
+        "Stations": [
+            {
+                "Id": 16009,
+                "Variant": 0
+            },
+            {
+                "Id": 16372,
+                "Variant": 0
+            },
+            {
+                "Id": 16373,
+                "Variant": 0
+            },
+            {
+                "Id": 16319,
+                "Variant": 0
+            },
+            {
+                "Id": 16361,
+                "Variant": 0
+            },
+            {
+                "Id": 16311,
+                "Variant": 0
+            },
+            {
+                "Id": 16321,
+                "Variant": 0
+            },
+            {
+                "Id": 18331,
+                "Variant": 0
+            },
+            {
+                "Id": 18301,
+                "Variant": 0
+            },
+            {
+                "Id": 18311,
+                "Variant": 0
+            },
+            {
+                "Id": 18321,
+                "Variant": 0
+            },
+            {
+                "Id": 16171,
+                "Variant": 0
+            },
+            {
+                "Id": 16181,
+                "Variant": 0
+            },
+            {
+                "Id": 16009,
+                "Variant": 0
+            }
+        ],
+        "Name": "A1",
+        "Operator": "NUS"
+    },
+    {
+        "Stations": [
+            {
+                "Id": 16321,
+                "Variant": 0
+            },
+            {
+                "Id": 18331,
+                "Variant": 0
+            },
+            {
+                "Id": 18301,
+                "Variant": 0
+            },
+            {
+                "Id": 18311,
+                "Variant": 0
+            },
+            {
+                "Id": 18321,
+                "Variant": 0
+            },
+            {
+                "Id": 16161,
+                "Variant": 0
+            },
+            {
+                "Id": 19059,
+                "Variant": 0
+            },
+            {
+                "Id": 18329,
+                "Variant": 0
+            },
+            {
+                "Id": 18319,
+                "Variant": 0
+            },
+            {
+                "Id": 18309,
+                "Variant": 0
+            },
+            {
+                "Id": 18339,
+                "Variant": 0
+            },
+            {
+                "Id": 16329,
+                "Variant": 0
+            }
+        ],
+        "Name": "D2",
+        "Operator": "NUS"
+    },
+    {
+        "Stations": [
+            {
+                "Id": 16009,
+                "Variant": 0
+            },
+            {
+                "Id": 16189,
+                "Variant": 0
+            },
+            {
+                "Id": 16179,
+                "Variant": 0
+            },
+            {
+                "Id": 16161,
+                "Variant": 0
+            },
+            {
+                "Id": 18329,
+                "Variant": 0
+            },
+            {
+                "Id": 18319,
+                "Variant": 0
+            },
+            {
+                "Id": 18309,
+                "Variant": 0
+            },
+            {
+                "Id": 18339,
+                "Variant": 0
+            },
+            {
+                "Id": 16329,
+                "Variant": 0
+            },
+            {
+                "Id": 16319,
+                "Variant": 0
+            },
+            {
+                "Id": 18304,
+                "Variant": 0
+            },
+            {
+                "Id": 16365,
+                "Variant": 0
+            },
+            {
+                "Id": 16319,
+                "Variant": 0
+            },
+            {
+                "Id": 16374,
+                "Variant": 0
+            },
+            {
+                "Id": 16009,
+                "Variant": 0
+            }
+        ],
+        "Name": "A2",
+        "Operator": "NUS"
+    },
+    {
+        "Stations": [
+            {
+                "Id": 16364,
+                "Variant": 0
+            },
+            {
+                "Id": 18304,
+                "Variant": 0
+            },
+            {
+                "Id": 16365,
+                "Variant": 0
+            },
+            {
+                "Id": 16374,
+                "Variant": 0
+            },
+            {
+                "Id": 16189,
+                "Variant": 0
+            },
+            {
+                "Id": 16179,
+                "Variant": 0
+            },
+            {
+                "Id": 16161,
+                "Variant": 0
+            },
+            {
+                "Id": 19059,
+                "Variant": 0
+            },
+            {
+                "Id": 16171,
+                "Variant": 0
+            },
+            {
+                "Id": 16181,
+                "Variant": 0
+            },
+            {
+                "Id": 16372,
+                "Variant": 0
+            },
+            {
+                "Id": 16373,
+                "Variant": 0
+            },
+            {
+                "Id": 16361,
+                "Variant": 0
+            },
+            {
+                "Id": 16364,
+                "Variant": 0
+            }
+        ],
+        "Name": "D1",
+        "Operator": "NUS"
+    },
+    {
+        "Stations": [
+            {
+                "Id": 16391,
+                "Variant": 0
+            },
+            {
+                "Id": 16392,
+                "Variant": 0
+            },
+            {
+                "Id": 41029,
+                "Variant": 0
+            },
+            {
+                "Id": 16391,
+                "Variant": 0
+            }
+        ],
+        "Name": "L",
+        "Operator": "NUS"
+    },
+    {
+        "Stations": [
+            {
+                "Id": 16391,
+                "Variant": 0
+            },
+            {
+                "Id": 16392,
+                "Variant": 0
+            },
+            {
+                "Id": 18331,
+                "Variant": 0
+            },
+            {
+                "Id": 18301,
+                "Variant": 0
+            },
+            {
+                "Id": 18311,
+                "Variant": 0
+            },
+            {
+                "Id": 18321,
+                "Variant": 0
+            },
+            {
+                "Id": 19059,
+                "Variant": 0
+            },
+            {
+                "Id": 16169,
+                "Variant": 0
+            },
+            {
+                "Id": 16371,
+                "Variant": 0
+            },
+            {
+                "Id": 16161,
+                "Variant": 0
+            },
+            {
+                "Id": 16171,
+                "Variant": 0
+            },
+            {
+                "Id": 16181,
+                "Variant": 0
+            },
+            {
+                "Id": 16372,
+                "Variant": 0
+            },
+            {
+                "Id": 16373,
+                "Variant": 0
+            },
+            {
+                "Id": 16361,
+                "Variant": 0
+            },
+            {
+                "Id": 16321,
+                "Variant": 0
+            },
+            {
+                "Id": 41029,
+                "Variant": 0
+            },
+            {
+                "Id": 16391,
+                "Variant": 0
+            }
+        ],
+        "Name": "BTC",
+        "Operator": "NUS"
+    },
+    {
+        "Stations": [
+            {
+                "Id": 16321,
+                "Variant": 0
+            },
+            {
+                "Id": 18331,
+                "Variant": 0
+            },
+            {
+                "Id": 18301,
+                "Variant": 0
+            },
+            {
+                "Id": 18311,
+                "Variant": 0
+            },
+            {
+                "Id": 18321,
+                "Variant": 0
+            },
+            {
+                "Id": 16171,
+                "Variant": 0
+            },
+            {
+                "Id": 16181,
+                "Variant": 0
+            },
+            {
+                "Id": 16141,
+                "Variant": 0
+            },
+            {
+                "Id": 16151,
+                "Variant": 0
+            },
+            {
+                "Id": 16371,
+                "Variant": 0
+            },
+            {
+                "Id": 16161,
+                "Variant": 0
+            },
+            {
+                "Id": 18329,
+                "Variant": 0
+            },
+            {
+                "Id": 18319,
+                "Variant": 0
+            },
+            {
+                "Id": 18309,
+                "Variant": 0
+            },
+            {
+                "Id": 18339,
+                "Variant": 0
+            },
+            {
+                "Id": 16329,
+                "Variant": 0
+            }
+        ],
+        "Name": "K",
+        "Operator": "NUS"
+    }
+]
