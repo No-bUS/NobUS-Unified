@@ -14,7 +14,7 @@
             FontSize="{StaticResource Base}"
             HorizontalTextAlignment="Center"
             Text="{x:Binding Path=RouteName}"
-            TextColor="{StaticResource OnSecondaryContainer}"
+            TextColor="{DynamicResource OnSecondaryContainer}"
             WidthRequest="{x:Binding Source={StaticResource Base}, Converter={StaticResource MathConverter}, ConverterParameter=(@VALUE*3)}"
         />
         <CollectionView
@@ -30,7 +30,7 @@
                     <Label
                         FlexLayout.Basis="Auto"
                         FontSize="{StaticResource Base}"
-                        TextColor="{StaticResource OnSecondaryContainer}"
+                        TextColor="{DynamicResource OnSecondaryContainer}"
                         WidthRequest="{x:Binding Source={StaticResource Base}, Converter={StaticResource MathConverter}, ConverterParameter={OnPlatform WinUI=(@VALUE*4), Android=(@VALUE*5)}}"
                     >
                         <Label.Text>

@@ -12,7 +12,7 @@
     HorizontalOptions="Fill"
     VerticalOptions="Fill"
 >
-    <mdc:Card BackgroundColour="{StaticResource SecondaryContainer}" Elevation="3" Shape="10">
+    <mdc:Card BackgroundColour="{DynamicResource SecondaryContainer}" Elevation="3" Shape="10">
         <Grid Padding="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -27,7 +27,7 @@
                 Grid.Column="0"
                 Grid.Row="0"
                 HorizontalOptions="Start"
-                TextColor="{StaticResource OnSecondaryContainer}"
+                TextColor="{DynamicResource OnSecondaryContainer}"
             >
                 <Label.Text>
                     <MultiBinding StringFormat="{}{0} | {1}">
@@ -41,7 +41,7 @@
                 Grid.Row="0"
                 HorizontalOptions="End"
                 Text="{x:Binding Path=Distance, StringFormat='{}{0:F2} m'}"
-                TextColor="{StaticResource OnSecondaryContainer}"
+                TextColor="{DynamicResource OnSecondaryContainer}"
             />
 
             <toolkit:Expander x:Name="EtaListViewExpander" Grid.Column="0" Grid.Row="1">
@@ -51,7 +51,7 @@
                         FontSize="{StaticResource Medium}"
                         HorizontalOptions="Start"
                         Text="{x:Binding Path=Station.Name}"
-                        TextColor="{StaticResource OnSecondaryContainer}"
+                        TextColor="{DynamicResource OnSecondaryContainer}"
                     />
                 </toolkit:Expander.Header>
                 <ListView

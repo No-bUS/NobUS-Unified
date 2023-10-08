@@ -9,7 +9,7 @@
             FontFamily="ExtraBold"
             FontSize="{StaticResource Large}"
             HorizontalOptions="Center"
-            TextColor="{StaticResource OnSurface}"
+            TextColor="{DynamicResource OnSurface}"
             VerticalOptions="Center"
         >
             <Label.Text>

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
+using MaterialColorUtilities.Maui;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Presentation.ViewModel;
@@ -14,7 +15,7 @@ namespace NobUS.Frontend.MAUI.Presentation.View
         public App()
         {
             InitializeComponent();
-
+            IMaterialColorService.Current.Initialize(Resources);
             MainPage = new AppShell();
 
             var autofacContainerBuilder = new ContainerBuilder();

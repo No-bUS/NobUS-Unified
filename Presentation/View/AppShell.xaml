@@ -4,20 +4,23 @@
     x:Class="NobUS.Frontend.MAUI.Presentation.View.AppShell"
     xmlns:local="clr-namespace:NobUS.Frontend.MAUI.Presentation.View"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    BackgroundColor="{StaticResource Primary}"
+    BackgroundColor="{DynamicResource Surface}"
     FlyoutBehavior="Disabled"
     Shell.FlyoutItemIsVisible="False"
     Shell.TabBarIsVisible="False"
 >
     <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Title="Stations" />
     <Shell.TitleView>
-        <HorizontalStackLayout BackgroundColor="{StaticResource Primary}" HorizontalOptions="Fill">
+        <HorizontalStackLayout
+            BackgroundColor="{DynamicResource SurfaceContainer}"
+            HorizontalOptions="Fill"
+        >
             <Label
                 FontFamily="ExtraBold"
                 FontSize="{StaticResource Large}"
                 Padding="0,5"
                 Text="NobUS"
-                TextColor="{StaticResource OnPrimary}"
+                TextColor="{DynamicResource OnSurface}"
             />    
         </HorizontalStackLayout>
     </Shell.TitleView>

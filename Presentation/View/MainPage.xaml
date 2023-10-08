@@ -5,7 +5,7 @@
     xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="NobUS.Frontend.MAUI.Presentation.View.MainPage"
-    BackgroundColor="{StaticResource Surface}"
+    BackgroundColor="{DynamicResource Surface}"
 >
     <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
 
