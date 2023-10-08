@@ -5,7 +5,7 @@ namespace NobUS.Frontend.MAUI.Service
     internal class LocationProvider : ILocationProvider
     {
         private readonly Task<Location> _locationTask = Geolocation.Default.GetLocationAsync(
-            new GeolocationRequest(GeolocationAccuracy.Default, TimeSpan.FromSeconds(30))
+            new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(30))
         );
 
         private Coordinate _location;
