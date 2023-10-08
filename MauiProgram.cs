@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Material.Components.Maui.Extensions;
+using MaterialColorUtilities.Maui;
+using MauiReactor;
 using Microsoft.Extensions.Logging;
 using NobUS.Frontend.MAUI.Presentation.View;
 
@@ -16,6 +18,10 @@ namespace NobUS.Frontend.MAUI
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+#if DEBUG
+                .EnableMauiReactorHotReload()
+#endif
+                .UseMaterialColors()
                 .ConfigureFonts(
                     fonts => list.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"))
                 )
