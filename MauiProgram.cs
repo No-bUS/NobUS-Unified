@@ -11,7 +11,7 @@ namespace NobUS.Frontend.MAUI
     {
         public static MauiApp CreateMauiApp()
         {
-            var list = new[] { "ExtraBold", "Regular" }
+            var list = new[] { "ExtraBold", "Regular", "SemiBold", "Bold" }
                 .SelectMany(w => new[] { "" }, (w, s) => $"{w}{s}")
                 .ToList();
             var builder = MauiApp.CreateBuilder();
