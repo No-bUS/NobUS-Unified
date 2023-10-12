@@ -19,6 +19,13 @@
                     <local:StationListView Grid.Row="0" Padding="10,0" ZIndex="0" />
                 </mdc:NavigationBarItem.Content>
             </mdc:NavigationBarItem>
+            <mdc:NavigationBarItem IconKind="Home" Text="Home">
+                <MauiReactor:ComponentHost
+                    Component="{x:Type pages:HomePage}"
+                                           Grid.Row="0"
+                                           Padding="10,0"
+                                           ZIndex="0" />
+            </mdc:NavigationBarItem>
             <mdc:NavigationBarItem IconKind="ToolsFlatHead"
                                    Text="Tools">
                 <MauiReactor:ComponentHost Component="{x:Type pages:ToolsPage}"
