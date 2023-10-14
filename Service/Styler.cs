@@ -35,7 +35,7 @@ namespace NobUS.Frontend.MAUI.Service
 
         public static Border ToCard(this Border border, int cornerRadius) =>
             border
-                .StrokeShape(new RoundRectangle().CornerRadius(20))
+                .StrokeShape(new RoundRectangle().CornerRadius(cornerRadius))
                 .StrokeThickness(0)
                 .Stroke(Colors.Transparent)
                 .Margin(-1);
