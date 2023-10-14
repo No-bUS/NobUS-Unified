@@ -3,7 +3,9 @@ using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using static NobUS.Frontend.MAUI.Service.DefinitionLoader;
 using ActivityIndicator = MauiReactor.ActivityIndicator;
+using Grid = Microsoft.Maui.Controls.Grid;
 using ListView = MauiReactor.ListView;
+using SwipeView = MauiReactor.SwipeView;
 using ViewCell = MauiReactor.ViewCell;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
@@ -24,25 +26,55 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
             return this;
         }
 
-        public override VisualNode Render() =>
-            State.HasLocated
-                ? new ListView()
-                    .ItemsSource(
-                        _stations.OrderBy(s => s.Coordinate.DistanceTo(State.Location)),
-                        s =>
-                            new ViewCell()
+        private static SwipeItems SwipeItems =>
+            new SwipeItems(
+                new Microsoft.Maui.Controls.ISwipeItem[]
+                {
+#if WINDOWS
+                    new SwipeItem { Text = "Pin", BackgroundColor = Styler.Scheme.Surface, }
+#else
+                    new SwipeItemView
+                    {
+                        Content = new Grid
+                        {
+                            new Microsoft.Maui.Controls.Label
                             {
-                                new StationCard()
-                                    .Station(s)
-                                    .Distance(s.Coordinate.DistanceTo(State.Location))
+                                Text = "Pin",
+                                FontFamily = "SemiBold",
+                                FontSize = Styles.Sizes.Medium
                             }
-                    )
-                    .SelectionMode(ListViewSelectionMode.None)
-                    .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
-                    .SeparatorVisibility(SeparatorVisibility.None)
-                    .HasUnevenRows(true)
-                    .BackgroundColor(Styler.Scheme.Surface)
-                : new ActivityIndicator().IsRunning(true);
+                        },
+                    }
+#endif
+                }
+            )
+            {
+                Mode = SwipeMode.Execute
+            };
+
+        public override VisualNode Render() =>
+            new ListView()
+                .ItemsSource(
+                    State.HasLocated
+                        ? _stations.OrderBy(s => s.Coordinate.DistanceTo(State.Location)).ToList()
+                        : _stations,
+                    s =>
+                        new ViewCell()
+                        {
+                            new StationCard()
+                                .Station(s)
+                                .Distance(
+                                    State.HasLocated
+                                        ? s.Coordinate.DistanceTo(State.Location)
+                                        : 1.453
+                                )
+                        }
+                )
+                .SelectionMode(ListViewSelectionMode.None)
+                .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
+                .SeparatorVisibility(SeparatorVisibility.None)
+                .HasUnevenRows(true)
+                .BackgroundColor(Styler.Scheme.Surface);
 
         protected override async void OnMounted()
         {
