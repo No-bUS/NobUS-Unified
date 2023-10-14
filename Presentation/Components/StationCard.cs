@@ -7,6 +7,7 @@ using NobUS.Frontend.MAUI.Service;
 using Border = MauiReactor.Border;
 using CollectionView = MauiReactor.CollectionView;
 using Grid = MauiReactor.Grid;
+using HorizontalStackLayout = MauiReactor.HorizontalStackLayout;
 using Label = MauiReactor.Label;
 using VerticalStackLayout = MauiReactor.VerticalStackLayout;
 
@@ -86,8 +87,9 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                                 .SelectionMode(SelectionMode.None)
                                 .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
                                 .ItemsSource(State.ArrivalEvents, RenderGroup)
-                                .BackgroundColor(this.UseScheme().SecondaryContainer)
-                        }.ToCard(20),
+                        }
+                            .BackgroundColor(this.UseScheme().SecondaryContainer)
+                            .ToCard(20),
                 }
                     .BackgroundColor(backgroundColor)
                     .Padding(5)
@@ -98,8 +100,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
 
         private static VisualNode RenderArrivalEvents(ArrivalEvent ae)
         {
-            var timeToWait = ae.CurrentTime + ae.EstimatedArrivalSpan - DateTime.Now;
-            var tier = timeToWait switch
+            var tier = ae.TimeToWait switch
             {
                 var t when t < TimeSpan.FromMinutes(5) => ETATiers.f0t5,
                 var t when t < TimeSpan.FromMinutes(30) => ETATiers.f5t30,
@@ -108,7 +109,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
             };
 
             return new Label()
-                .Text($"{timeToWait.TotalMinutes:0}m{(timeToWait.Seconds > 30 ? "+" : "")}")
+                .Text($"{ae.TimeToWait.TotalMinutes:0}m{(ae.TimeToWait.Seconds > 30 ? "+" : "")}")
                 .TextDecorations(
                     tier switch
                     {
@@ -131,23 +132,23 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
         }
 
         private static VisualNode RenderGroup(IGrouping<string, ArrivalEvent> grouping) =>
-            new Grid("auto", "auto,*")
+            new HorizontalStackLayout
             {
                 new Label(grouping.Key)
-                    .GridColumn(0)
                     .SemiBold()
                     .Base()
                     .TextColor(Styler.Scheme.OnSecondaryContainer),
                 new CollectionView()
-                    .GridColumn(1)
                     .ItemsSource(grouping, RenderArrivalEvents)
                     .ItemSizingStrategy(ItemSizingStrategy.MeasureAllItems)
                     .SelectionMode(SelectionMode.None)
                     .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
                     .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5))
-            }.Padding(10);
+            }
+                .Spacing(5)
+                .Padding(10);
 
-        private async Task<IList<IGrouping<string, ArrivalEvent>>> FetchArrivalEventsAsync(
+        private static async Task<IList<IGrouping<string, ArrivalEvent>>> FetchArrivalEventsAsync(
             Station station
         ) =>
             (await ServiceLocator.Current.GetInstance<IClient>().GetArrivalEventsAsync(station))
