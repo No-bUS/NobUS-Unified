@@ -22,9 +22,12 @@ namespace NobUS.Frontend.MAUI
                 .EnableMauiReactorHotReload()
 #endif
                 .UseMaterialColors()
-                .ConfigureFonts(
-                    fonts => list.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"))
-                )
+                .ConfigureFonts(fonts =>
+                {
+                    list.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
+                    fonts.AddFont("MaterialIcons-Regular.ttf", "MIcon");
+                    fonts.AddFont("MaterialIconsOutlined-Regular.ttf", "MIconOutlined");
+                })
                 .UseMaterialComponents(list.Select(w => $"Poppins-{w}.ttf").ToList());
 #if DEBUG
             builder.Logging.AddDebug();
