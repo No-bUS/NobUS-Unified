@@ -34,5 +34,8 @@
         string RouteName,
         TimeSpan EstimatedArrivalSpan,
         DateTime CurrentTime
-    );
+    )
+    {
+        public TimeSpan TimeToWait => CurrentTime + EstimatedArrivalSpan - DateTime.Now;
+    }
 }
