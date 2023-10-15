@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Presentation;
-using NobUS.Frontend.MAUI.Presentation.View;
 using NobUS.Frontend.MAUI.Repository;
 using NobUS.Frontend.MAUI.Service;
 

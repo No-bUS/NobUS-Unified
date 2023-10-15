@@ -119,11 +119,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <MauiXaml Generator="MSBuild:Compile" Update="Presentation\**\*.xaml" />
-        <MauiXaml Generator="MSBuild:Compile" Update="Resources\**\*.xaml" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Compile Update="Resources\Definitions\Resources.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
