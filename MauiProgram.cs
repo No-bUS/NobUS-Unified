@@ -2,7 +2,6 @@
 using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
 using CommunityToolkit.Maui;
-using Material.Components.Maui.Extensions;
 using MaterialColorUtilities.Maui;
 using MauiReactor;
 using Microsoft.Extensions.Logging;
@@ -61,8 +60,7 @@ namespace NobUS.Frontend.MAUI
                     list.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
                     fonts.AddFont("MaterialIcons-Regular.ttf", "MIcon");
                     fonts.AddFont("MaterialIconsOutlined-Regular.ttf", "MIconOutlined");
-                })
-                .UseMaterialComponents(list.Select(w => $"Poppins-{w}.ttf").ToList());
+                });
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
