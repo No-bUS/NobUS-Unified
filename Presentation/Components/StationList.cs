@@ -1,12 +1,6 @@
-﻿using MauiReactor;
-using NobUS.DataContract.Model;
+﻿using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using static NobUS.Frontend.MAUI.Service.DefinitionLoader;
-using ActivityIndicator = MauiReactor.ActivityIndicator;
-using Grid = Microsoft.Maui.Controls.Grid;
-using ListView = MauiReactor.ListView;
-using SwipeView = MauiReactor.SwipeView;
-using ViewCell = MauiReactor.ViewCell;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {
@@ -31,11 +25,12 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 new Microsoft.Maui.Controls.ISwipeItem[]
                 {
 #if WINDOWS
-                    new SwipeItem { Text = "Pin", BackgroundColor = Styler.Scheme.Surface, }
+
+                    new SwipeItem { Text = "Pin", BackgroundColor = Styler.Scheme.Surface, },
 #else
                     new SwipeItemView
                     {
-                        Content = new Grid
+                        Content = new Microsoft.Maui.Controls.Grid
                         {
                             new Microsoft.Maui.Controls.Label
                             {

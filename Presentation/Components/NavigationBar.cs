@@ -1,12 +1,5 @@
-﻿using MauiReactor;
-using NobUS.Frontend.MAUI.Service;
-using Grid = MauiReactor.Grid;
-using Label = MauiReactor.Label;
-using VerticalStackLayout = MauiReactor.VerticalStackLayout;
-using CollectionView = MauiReactor.CollectionView;
-using Border = MauiReactor.Border;
+﻿using NobUS.Frontend.MAUI.Service;
 using static NobUS.Frontend.MAUI.Service.Styles;
-using ContentView = MauiReactor.ContentView;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {
@@ -33,8 +26,8 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                         .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(8))
                         .ItemsSource(_items, RenderItem)
                         .ItemSizingStrategy(ItemSizingStrategy.MeasureAllItems)
-                        .VerticalOptions(LayoutOptions.Center)
-                        .HorizontalOptions(LayoutOptions.Center)
+                        .VCenter()
+                        .HCenter()
                 }
                     .ToCard(0)
                     .HeightRequest(80)
@@ -57,7 +50,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                             selected ? Styler.Scheme.OnSecondaryContainer : Styler.Scheme.OnSurface
                         )
                         .FontSize(Sizes.Large * 1.2)
-                        .HorizontalOptions(LayoutOptions.Center)
+                        .HCenter()
                 }
                     .HeightRequest(32)
                     .WidthRequest(64)
@@ -70,7 +63,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                     .FontSize(12)
                     .FontFamily(selected ? "SemiBold" : "Regular")
                     .TextColor(Styler.Scheme.OnSurface)
-                    .HorizontalOptions(LayoutOptions.Center),
+                    .HCenter(),
             }
                 .OnTapped(() =>
                 {
@@ -82,8 +75,8 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 .MinimumWidthRequest(48)
                 .Margin(0, 12, 0, 16)
                 .Spacing(4)
-                .HorizontalOptions(LayoutOptions.Start)
-                .VerticalOptions(LayoutOptions.Center);
+                .HStart()
+                .VCenter();
         }
 
         protected override void OnMounted()

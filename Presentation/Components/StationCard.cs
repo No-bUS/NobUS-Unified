@@ -1,15 +1,8 @@
 ﻿using CommonServiceLocator;
 using CommunityToolkit.Maui.Markup;
-using MauiReactor;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Service;
-using Border = MauiReactor.Border;
-using CollectionView = MauiReactor.CollectionView;
-using Grid = MauiReactor.Grid;
-using HorizontalStackLayout = MauiReactor.HorizontalStackLayout;
-using Label = MauiReactor.Label;
-using VerticalStackLayout = MauiReactor.VerticalStackLayout;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {

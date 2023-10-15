@@ -1,12 +1,4 @@
-﻿using MauiReactor;
-using NobUS.Frontend.MAUI.Service;
-using System;
-using ContentPage = MauiReactor.ContentPage;
-using Entry = MauiReactor.Entry;
-using Grid = MauiReactor.Grid;
-using HorizontalStackLayout = MauiReactor.HorizontalStackLayout;
-using Label = MauiReactor.Label;
-using VerticalStackLayout = MauiReactor.VerticalStackLayout;
+﻿using NobUS.Frontend.MAUI.Service;
 
 namespace NobUS.Frontend.MAUI.Presentation.Pages
 {

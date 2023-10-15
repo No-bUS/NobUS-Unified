@@ -1,3 +1,4 @@
+using Microsoft.Maui.Devices.Sensors;
 using NobUS.DataContract.Model;
 
 namespace NobUS.Frontend.MAUI.Service

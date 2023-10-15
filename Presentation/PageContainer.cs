@@ -1,12 +1,6 @@
-﻿using MauiReactor;
-using NobUS.Frontend.MAUI.Service;
+﻿using NobUS.Frontend.MAUI.Service;
 using NobUS.Frontend.MAUI.Presentation.Components;
 using NobUS.Frontend.MAUI.Presentation.Pages;
-using ContentPage = MauiReactor.ContentPage;
-using HorizontalStackLayout = MauiReactor.HorizontalStackLayout;
-using Label = MauiReactor.Label;
-using Grid = MauiReactor.Grid;
-using VerticalStackLayout = MauiReactor.VerticalStackLayout;
 
 namespace NobUS.Frontend.MAUI.Presentation
 {
@@ -27,7 +21,7 @@ namespace NobUS.Frontend.MAUI.Presentation
                         .TextColor(Styler.Scheme.OnSurface)
                         .VCenter()
                         .GridRow(0)
-                        .Padding(10,5)
+                        .Padding(10, 5)
                         .Background(Styler.Scheme.SurfaceContainer),
                     new NavigationBar
                     {

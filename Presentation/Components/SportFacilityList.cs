@@ -1,12 +1,6 @@
-﻿using MauiReactor;
-using NobUS.Frontend.MAUI.Service;
-using Grid = MauiReactor.Grid;
+﻿using NobUS.Frontend.MAUI.Service;
 using NobUS.Extra.Campus.Facility.Sports;
-using Label = MauiReactor.Label;
-using VerticalStackLayout = MauiReactor.VerticalStackLayout;
-using CollectionView = MauiReactor.CollectionView;
-using GraphicsView = MauiReactor.GraphicsView;
-using Border = MauiReactor.Border;
+using Microsoft.Maui.Graphics;
 using Type = NobUS.Extra.Campus.Facility.Sports.Type;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components

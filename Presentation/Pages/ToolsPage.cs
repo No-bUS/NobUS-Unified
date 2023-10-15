@@ -1,6 +1,4 @@
-﻿using MauiReactor;
-using ScrollView = MauiReactor.ScrollView;
-using NobUS.Frontend.MAUI.Presentation.Components;
+﻿using NobUS.Frontend.MAUI.Presentation.Components;
 
 namespace NobUS.Frontend.MAUI.Presentation.Pages
 {
