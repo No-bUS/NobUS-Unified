@@ -12,18 +12,22 @@ namespace NobUS.Frontend.MAUI.Presentation
 {
     internal class PageContainer : Component
     {
-        public override VisualNode Render() =>
-            new ContentPage
+        public override VisualNode Render()
+        {
+#if !WINDOWS
+            CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Styler.Scheme.SurfaceContainer);
+#endif
+            return new ContentPage
             {
                 new Grid("auto,*", "*")
                 {
                     new Label("NobUS")
                         .Large()
-                        .Regular()
+                        .Bold()
                         .TextColor(Styler.Scheme.OnSurface)
                         .VCenter()
                         .GridRow(0)
-                        .Padding(5)
+                        .Padding(10,5)
                         .Background(Styler.Scheme.SurfaceContainer),
                     new NavigationBar
                     {
@@ -40,5 +44,6 @@ namespace NobUS.Frontend.MAUI.Presentation
                     }.GridRow(1)
                 }
             };
+        }
     }
 }

@@ -36,6 +36,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                         .VerticalOptions(LayoutOptions.Center)
                         .HorizontalOptions(LayoutOptions.Center)
                 }
+                    .ToCard(0)
                     .HeightRequest(80)
                     .Background(Styler.Scheme.SurfaceContainer)
                     .GridRow(1),
