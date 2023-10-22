@@ -34,6 +34,14 @@ namespace NobUS.Frontend.MAUI
                             .RegisterType<LocationProvider>()
                             .As<ILocationProvider>()
                             .SingleInstance();
+                        autofacContainerBuilder.RegisterInstance(
+                            new ArrivalEventListener(
+                                async (station) =>
+                                    await ServiceLocator.Current
+                                        .GetInstance<IClient>()
+                                        .GetArrivalEventsAsync(station)
+                            )
+                        );
 
                         var container = autofacContainerBuilder.Build();
                         ServiceLocator.SetLocatorProvider(

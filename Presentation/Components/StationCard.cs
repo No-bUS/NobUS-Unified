@@ -1,24 +1,23 @@
 ﻿using CommonServiceLocator;
 using CommunityToolkit.Maui.Markup;
 using NobUS.DataContract.Model;
-using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
+using System.Collections.ObjectModel;
+using static NobUS.Infrastructure.ArrivalEventListener;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {
     internal class StationCardState
     {
-        public IList<IGrouping<string, ArrivalEvent>> ArrivalEvents { get; set; }
         public bool Expanded { get; set; }
+        public ObservableCollection<ArrivalEventGroup> ArrivalEvents { get; set; }
     }
 
-    internal class StationCard : Component<StationCardState>
+    internal class StationCard : Component<StationCardState>, IDisposable
     {
         private double _distance;
         private Station _station;
-        private Task _refreshTask;
-        private CancellationTokenSource _tokenSource = new();
 
         private enum ETATiers
         {
@@ -70,7 +69,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                     new Label(_station.Name)
                         .Medium()
                         .ExtraBold()
-                        .OnTapped(async () => await LoadAsync())
+                        .OnTapped(Load)
                         .TextColor(textColor),
                     !State.Expanded
                         ? null
@@ -125,15 +124,15 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 .TextColor(Styler.Scheme.OnSecondaryContainer);
         }
 
-        private static VisualNode RenderGroup(IGrouping<string, ArrivalEvent> grouping) =>
+        private static VisualNode RenderGroup(ArrivalEventGroup grouping) =>
             new HorizontalStackLayout
             {
-                new Label(grouping.Key)
+                new Label(grouping.RouteName)
                     .SemiBold()
                     .Base()
                     .TextColor(Styler.Scheme.OnSecondaryContainer),
                 new CollectionView()
-                    .ItemsSource(grouping, RenderArrivalEvents)
+                    .ItemsSource(grouping.Events, RenderArrivalEvents)
                     .ItemSizingStrategy(ItemSizingStrategy.MeasureAllItems)
                     .SelectionMode(SelectionMode.None)
                     .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
@@ -142,51 +141,48 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 .Spacing(5)
                 .Padding(10);
 
-        private static async Task<IList<IGrouping<string, ArrivalEvent>>> FetchArrivalEventsAsync(
-            Station station
-        ) =>
-            (await ServiceLocator.Current.GetInstance<IClient>().GetArrivalEventsAsync(station))
-                .OrderBy(ae => ae.RouteName)
-                .GroupBy(ae => ae.RouteName)
-                .ToList();
-
-        private async Task LoadAsync()
+        private void Load()
         {
             if (State.Expanded)
             {
-                _tokenSource.Cancel();
-                SetState(s => s.Expanded = false);
-                return;
+                SetState(s =>
+                {
+                    s.Expanded = false;
+                    s.ArrivalEvents = null;
+                });
+                Dispose();
             }
-
-            var ae = await FetchArrivalEventsAsync(_station);
-
-            if (ae.Count > 0)
+            else
+            {
                 SetState(s =>
                 {
                     s.Expanded = true;
-                    s.ArrivalEvents = ae;
+                    s.ArrivalEvents = ServiceLocator.Current.GetInstance<ArrivalEventListener>()[
+                        _station,
+                        this
+                    ];
                 });
-
-            // Start the background refresh task
-            _tokenSource = new CancellationTokenSource();
-            _refreshTask = RefreshDataInBackground(_tokenSource.Token);
-        }
-
-        private async Task RefreshDataInBackground(CancellationToken token)
-        {
-            while (!token.IsCancellationRequested)
-            {
-                await Task.Delay(10 * 1000, token);
-                var aes = await FetchArrivalEventsAsync(_station);
-                SetState(s => s.ArrivalEvents = aes);
             }
         }
 
         protected override void OnWillUnmount()
         {
-            _tokenSource.Cancel();
+            Dispose();
             base.OnWillUnmount();
+        }
+
+        public void Dispose()
+        {
+            ServiceLocator.Current.GetInstance<ArrivalEventListener>().Cancel(_station, this);
+            if (State.ArrivalEvents != null)
+            {
+                foreach (var a in State.ArrivalEvents)
+                {
+                    a.Events.Clear();
+                }
+                State.ArrivalEvents.Clear();
+                State.ArrivalEvents = null;
+            }
         }
     }
 }
