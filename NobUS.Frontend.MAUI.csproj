@@ -61,6 +61,10 @@
         <EnableLLVM>true</EnableLLVM>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);CA1416</NoWarn>
+    </PropertyGroup>
+
     <ItemGroup>
         <!-- App Icon -->
         <MauiIcon
