@@ -1,6 +1,6 @@
 ﻿using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
-using static NobUS.Frontend.MAUI.Service.DefinitionLoader;
+using static NobUS.Infrastructure.DefinitionLoader;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {

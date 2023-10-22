@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Markup;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Service;
+using NobUS.Infrastructure;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {

@@ -115,6 +115,7 @@
         <ProjectReference
             Include="..\NobUS.Extra.Campus.Facility.Sports\NobUS.Extra.Campus.Facility.Sports.csproj"
         />
+        <ProjectReference Include="..\NobUS.Infrastructure\NobUS.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

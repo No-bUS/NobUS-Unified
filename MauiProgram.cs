@@ -5,10 +5,10 @@ using CommunityToolkit.Maui;
 using MaterialColorUtilities.Maui;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
-using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Presentation;
 using NobUS.Frontend.MAUI.Service;
+using NobUS.Infrastructure;
 
 namespace NobUS.Frontend.MAUI
 {
