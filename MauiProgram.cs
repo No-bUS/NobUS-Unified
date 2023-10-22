@@ -8,7 +8,6 @@ using Microsoft.Maui.Hosting;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Presentation;
-using NobUS.Frontend.MAUI.Repository;
 using NobUS.Frontend.MAUI.Service;
 
 namespace NobUS.Frontend.MAUI
@@ -34,14 +33,6 @@ namespace NobUS.Frontend.MAUI
                         autofacContainerBuilder
                             .RegisterType<LocationProvider>()
                             .As<ILocationProvider>()
-                            .SingleInstance();
-                        autofacContainerBuilder
-                            .RegisterType<StaticRepository<Station>>()
-                            .As<IRepository<Station>>()
-                            .SingleInstance();
-                        autofacContainerBuilder
-                            .RegisterType<StaticRepository<Route>>()
-                            .As<IRepository<Route>>()
                             .SingleInstance();
 
                         var container = autofacContainerBuilder.Build();
