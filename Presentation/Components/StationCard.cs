@@ -3,7 +3,6 @@ using CommunityToolkit.Maui.Markup;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
-using System.Collections.ObjectModel;
 using static NobUS.Infrastructure.ArrivalEventListener;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
@@ -11,7 +10,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
     internal class StationCardState
     {
         public bool Expanded { get; set; }
-        public ObservableCollection<ArrivalEventGroup> ArrivalEvents { get; set; }
+        public List<ArrivalEventGroup> ArrivalEvents { get; set; }
     }
 
     internal class StationCard : Component<StationCardState>, IDisposable
@@ -75,11 +74,10 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                         ? null
                         : new Border
                         {
-                            new CollectionView()
-                                .ItemSizingStrategy(ItemSizingStrategy.MeasureFirstItem)
-                                .SelectionMode(SelectionMode.None)
-                                .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
-                                .ItemsSource(State.ArrivalEvents, RenderGroup)
+                            new StackLayout { State.ArrivalEvents.Select(RenderGroup) }
+                                .Orientation(Microsoft.Maui.Controls.StackOrientation.Vertical)
+                                .HFill()
+                                .VFill()
                         }
                             .BackgroundColor(this.UseScheme().SecondaryContainer)
                             .ToCard(20),

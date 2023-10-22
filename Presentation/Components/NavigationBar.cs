@@ -5,7 +5,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
 {
     internal class NavigationBarState
     {
-        public NavigationBarItem? SelectedItem { get; set; }
+        public NavigationBarItem SelectedItem { get; set; }
     }
 
     internal class NavigationBar : Component<NavigationBarState>
