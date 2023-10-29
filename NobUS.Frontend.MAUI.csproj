@@ -97,16 +97,16 @@
         <PackageReference Include="Autofac" Version="7.1.0" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
-        <PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
-        <PackageReference Include="CommunityToolkit.Maui.Markup" Version="3.2.0" />
+        <PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
+        <PackageReference Include="CommunityToolkit.Maui.Markup" Version="3.3.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-        <PackageReference Include="Reactor.Maui" Version="1.0.143" />
-        <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.143" />
+        <PackageReference Include="Reactor.Maui" Version="1.0.147" />
+        <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.147" />
         <PackageReference
             Include="Reactor.Maui.ScaffoldGenerator"
             OutputItemType="Analyzer"
             ReferenceOutputAssembly="false"
-            Version="1.0.143"
+            Version="1.0.147"
         />
         <PackageReference Include="MaterialColorUtilities.Maui" Version="0.3.0" />
     </ItemGroup>
