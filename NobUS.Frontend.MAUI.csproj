@@ -58,7 +58,7 @@
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <PublishTrimmed>true</PublishTrimmed>
         <RunAOTCompilation>true</RunAOTCompilation>
-        <EnableLLVM>true</EnableLLVM>
+        <EnableLLVM>false</EnableLLVM>
     </PropertyGroup>
 
     <PropertyGroup>
