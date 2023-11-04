@@ -121,19 +121,4 @@
         />
         <ProjectReference Include="..\NobUS.Infrastructure\NobUS.Infrastructure.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Resources\Definitions\Resources.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Update="Resources\Definitions\Resources.resx">
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-            <Generator>ResXFileCodeGenerator</Generator>
-        </EmbeddedResource>
-    </ItemGroup>
 </Project>
