@@ -155,10 +155,9 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 SetState(s =>
                 {
                     s.Expanded = true;
-                    s.ArrivalEvents = ServiceLocator.Current.GetInstance<ArrivalEventListener>()[
-                        _station,
-                        this
-                    ];
+                    s.ArrivalEvents = ServiceLocator.Current
+                        .GetInstance<ArrivalEventListener>()
+                        .GetArrivalEventGroups(_station, this);
                 });
             }
         }
