@@ -34,21 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NobUS.DataContract.Model\NobUS.DataContract.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resource\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resource\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <ProjectReference Include="..\NobUS.Infrastructure\NobUS.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,22 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
-using Newtonsoft.Json;
 using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI.Client;
-using NobUS.DataContract.Reader.OfficialAPI.Resource;
+using NobUS.Infrastructure;
+using static NobUS.Infrastructure.DefinitionLoader;
 
 namespace NobUS.DataContract.Reader.OfficialAPI
 {
-    [JsonObject]
-    internal record QueryNameMap(string QueryName, int Code);
-
-    internal static class StationExtension
-    {
-        internal static string QueryName(this Station station) =>
-            CongestedClient.QueryNameMapping.GetValueOrDefault(station.Code, "UTOWN");
-    }
-
     public record CongestedClient : IClient
     {
         private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(40);
@@ -29,21 +19,6 @@ namespace NobUS.DataContract.Reader.OfficialAPI
         private readonly Task _initVehicles;
 
         private readonly ConcurrentDictionary<int, ShuttleJob> _shuttleJobs = new();
-
-        internal static readonly ReadOnlyDictionary<int, string> QueryNameMapping = JsonConvert
-            .DeserializeObject<QueryNameMap[]>(Resources.NUS_Mapping)!
-            .ToDictionary(m => m.Code, m => m.QueryName)
-            .AsReadOnly();
-        private static readonly ReadOnlyDictionary<string, Station> Stations = JsonConvert
-            .DeserializeObject<Station[]>(Resources.NUS_Stations)!
-            .Concat(JsonConvert.DeserializeObject<Station[]>(Resources.Public_Stations)!)
-            .Where(s => QueryNameMapping.ContainsKey(s.Code))
-            .ToDictionary(s => s.Name)
-            .AsReadOnly();
-        private static readonly ReadOnlyDictionary<string, Route> Routes = JsonConvert
-            .DeserializeObject<Route[]>(Resources.NUS_Routes)!
-            .ToDictionary(r => r.Name)
-            .AsReadOnly();
 
         private readonly ConcurrentDictionary<string, Vehicle> _vehicles = new();
 
@@ -151,8 +126,13 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                                 .GetShuttleServiceAsync(station.QueryName())
                                 .Result.ShuttleServiceResult.Shuttles
                         )
-                        .SelectMany(ss => ss._etas
-                            .Select(eta => Adapter.AdaptArrivalEvent(station.Code, ss.RouteName,eta)))
+                        .SelectMany(
+                            ss =>
+                                ss._etas.Select(
+                                    eta =>
+                                        Adapter.AdaptArrivalEvent(station.Code, ss.RouteName, eta)
+                                )
+                        )
                         .ToImmutableList()
             );
 
