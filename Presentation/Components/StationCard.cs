@@ -17,6 +17,8 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
     {
         private double _distance;
         private Station _station;
+        private readonly ArrivalEventListener arrivalEventListener =
+            ServiceLocator.Current.GetInstance<ArrivalEventListener>();
 
         private enum ETATiers
         {
@@ -155,9 +157,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 SetState(s =>
                 {
                     s.Expanded = true;
-                    s.ArrivalEvents = ServiceLocator.Current
-                        .GetInstance<ArrivalEventListener>()
-                        .GetArrivalEventGroups(_station, this);
+                    s.ArrivalEvents = arrivalEventListener.GetArrivalEventGroups(_station, this);
                 });
             }
         }
@@ -170,7 +170,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
 
         public void Dispose()
         {
-            ServiceLocator.Current.GetInstance<ArrivalEventListener>().Cancel(_station, this);
+            arrivalEventListener.Cancel(_station, this);
             if (State.ArrivalEvents != null)
             {
                 foreach (var a in State.ArrivalEvents)
