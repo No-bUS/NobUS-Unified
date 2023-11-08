@@ -367,3 +367,6 @@ FodyWeavers.xsd
 
 # Fonts
 Resources/Fonts/*.[to]tf
+
+# Published
+dist
