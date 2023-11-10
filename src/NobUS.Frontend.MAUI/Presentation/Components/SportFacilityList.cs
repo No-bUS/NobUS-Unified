@@ -1,5 +1,4 @@
-﻿using NobUS.Frontend.MAUI.Service;
-using NobUS.Extra.Campus.Facility.Sports;
+﻿using NobUS.Extra.Campus.Facility.Sports;
 using Microsoft.Maui.Graphics;
 using Type = NobUS.Extra.Campus.Facility.Sports.Type;
 

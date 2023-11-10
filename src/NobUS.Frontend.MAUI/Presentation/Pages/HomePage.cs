@@ -1,6 +1,4 @@
-﻿using NobUS.Frontend.MAUI.Service;
-
-namespace NobUS.Frontend.MAUI.Presentation.Pages
+﻿namespace NobUS.Frontend.MAUI.Presentation.Pages
 {
     internal class HomePage : Component
     {

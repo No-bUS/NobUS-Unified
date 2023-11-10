@@ -1,5 +1,4 @@
-﻿using NobUS.Frontend.MAUI.Service;
-using static NobUS.Frontend.MAUI.Service.Styles;
+﻿using static NobUS.Frontend.MAUI.Presentation.Styles;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {

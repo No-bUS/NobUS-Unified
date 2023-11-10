@@ -1,12 +1,11 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using MaterialColorUtilities.Maui;
 using MaterialColorUtilities.Schemes;
-using MauiReactor;
 using MauiReactor.Shapes;
 using Border = MauiReactor.Border;
 using Label = MauiReactor.Label;
 
-namespace NobUS.Frontend.MAUI.Service
+namespace NobUS.Frontend.MAUI.Presentation
 {
     internal static class Styler
     {

@@ -1,4 +1,4 @@
-﻿namespace NobUS.Frontend.MAUI.Service
+﻿namespace NobUS.Frontend.MAUI.Presentation
 {
     internal enum MaterialIcons
     {

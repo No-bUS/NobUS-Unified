@@ -1,7 +1,6 @@
 ﻿using CommonServiceLocator;
 using CommunityToolkit.Maui.Markup;
 using NobUS.DataContract.Model;
-using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
 using static NobUS.Infrastructure.ArrivalEventListener;
 
