@@ -12,6 +12,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\NobUS.DataContract.Model\NobUS.DataContract.Model.csproj" />
-        <ProjectReference Include="..\NobUS.Resource\NobUS.Resources.csproj" />
+        <ProjectReference Include="..\NobUS.Resources\NobUS.Resources.csproj" />
     </ItemGroup>
 </Project>
