@@ -29,6 +29,7 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+[Oo]ut/
 [Ll]og/
 [Ll]ogs/
 
@@ -399,3 +400,9 @@ FodyWeavers.xsd
 
 # Resx codegen
 *.Designer.cs
+
+# Fonts
+*.[to]tf
+
+# Published
+dist
