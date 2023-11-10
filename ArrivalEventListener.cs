@@ -1,6 +1,7 @@
 ﻿using NobUS.DataContract.Model;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
+using static NobUS.Infrastructure.DefinitionLoader;
 using System.Collections.ObjectModel;
 
 namespace NobUS.Infrastructure
@@ -28,32 +29,25 @@ namespace NobUS.Infrastructure
             _source = source;
         }
 
-        public List<ArrivalEventGroup> this[Station station, object subscriber]
+        public List<ArrivalEventGroup> GetArrivalEventGroups(Station station, object subscriber)
         {
-            get
+            var queryName = station.QueryName();
+            if (!_dataDict.TryGetValue(queryName, out var stationData))
             {
-                var queryName = station.QueryName();
-                if (!_dataDict.TryGetValue(queryName, out var stationData))
-                {
-                    var events = Task.Run(async () => await _source(station)).Result;
-                    var groupedEvents = events
-                        .Where(e => e.TimeToWait >= TimeSpan.Zero)
-                        .GroupBy(e => e.RouteName)
-                        .Select(g => new ArrivalEventGroup() { RouteName = g.Key, Events = new(g) })
-                        .ToList();
-
-                    stationData = new StationData(
-                        groupedEvents,
-                        new(),
-                        events.ToDictionary(e => e.ShuttleJobId),
-                        new()
-                    );
-                    _dataDict[queryName] = stationData;
-                    StartBackgroundTask(station, queryName, stationData.Cts.Token);
-                }
-                stationData.Subscribers.Add(new WeakReference(subscriber));
-                return stationData.EventGroups;
+                stationData = new StationData(
+                    Routes.Values
+                        .Where(r => r.ToStations.Select(s => s.Id).Contains(station.Code))
+                        .Select(r => new ArrivalEventGroup { RouteName = r.Name, Events = new() })
+                        .ToList(),
+                    new(),
+                    new(),
+                    new()
+                );
+                _dataDict[queryName] = stationData;
+                StartBackgroundTask(station, queryName, stationData.Cts.Token);
             }
+            stationData.Subscribers.Add(new WeakReference(subscriber));
+            return stationData.EventGroups;
         }
 
         public void Cancel(Station station, object subscriber)
@@ -73,7 +67,6 @@ namespace NobUS.Infrastructure
                 {
                     while (!token.IsCancellationRequested && _dataDict.ContainsKey(queryName))
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(10), token);
                         var events = await _source(station);
                         var groupedEvents = events
                             .Where(e => e.TimeToWait >= TimeSpan.Zero)
@@ -134,7 +127,7 @@ namespace NobUS.Infrastructure
                                 }
                             }
                         }
-
+                        await Task.Delay(TimeSpan.FromSeconds(10), token);
                         CleanUpIfNoSubscribers(queryName);
                     }
                 },
