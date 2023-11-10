@@ -1,4 +1,5 @@
 ﻿using NobUS.DataContract.Model;
+using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 
@@ -15,12 +16,12 @@ namespace NobUS.Infrastructure
         public record StationData(
             List<ArrivalEventGroup> EventGroups,
             CancellationTokenSource Cts,
-            Dictionary<int, ArrivalEvent> Lookup,
+            ConcurrentDictionary<int, ArrivalEvent> Lookup,
             List<WeakReference> Subscribers
         );
 
         private readonly Func<Station, Task<IImmutableList<ArrivalEvent>>> _source;
-        private readonly Dictionary<string, StationData> _dataDict = new();
+        private readonly ConcurrentDictionary<string, StationData> _dataDict = new();
 
         public ArrivalEventListener(Func<Station, Task<IImmutableList<ArrivalEvent>>> source)
         {
@@ -104,7 +105,7 @@ namespace NobUS.Infrastructure
                                 )
                                 {
                                     groupItem.Events.Add(e);
-                                    _dataDict[queryName].Lookup[e.ShuttleJobId] = e;
+                                    _dataDict[queryName].Lookup.TryAdd(e.ShuttleJobId, e);
                                 }
                                 else
                                 {
@@ -116,12 +117,19 @@ namespace NobUS.Infrastructure
                                         {
                                             groupItem.Events[index] = e;
                                         }
-                                        _dataDict[queryName].Lookup[e.ShuttleJobId] = e;
+                                        _dataDict[queryName].Lookup.TryUpdate(
+                                            e.ShuttleJobId,
+                                            e,
+                                            existingEvent
+                                        );
                                     }
                                     if (e.TimeToWait < TimeSpan.Zero)
                                     {
                                         groupItem.Events.Remove(e);
-                                        _dataDict[queryName].Lookup.Remove(e.ShuttleJobId);
+                                        _dataDict[queryName].Lookup.TryRemove(
+                                            e.ShuttleJobId,
+                                            out var _
+                                        );
                                     }
                                 }
                             }
@@ -145,7 +153,7 @@ namespace NobUS.Infrastructure
                 if (!stationData.Subscribers.Any(wr => wr.IsAlive))
                 {
                     stationData.Cts.Cancel();
-                    _dataDict.Remove(queryName);
+                    _dataDict.Remove(queryName, out var _);
                 }
             }
         }
