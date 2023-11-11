@@ -2,8 +2,8 @@
 
 namespace NobUS.Frontend.MAUI.Service
 {
-    internal interface ILocationProvider
+    internal interface ILocationProvider : IDisposable
     {
-        Task<Coordinate> GetLocationAsync();
+        public Coordinate Location { get; }
     }
 }
