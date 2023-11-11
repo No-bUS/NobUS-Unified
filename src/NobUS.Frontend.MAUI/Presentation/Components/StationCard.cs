@@ -1,7 +1,9 @@
 ﻿using CommonServiceLocator;
 using CommunityToolkit.Maui.Markup;
 using NobUS.DataContract.Model;
+using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
+using ReactiveUI;
 using static NobUS.Infrastructure.ArrivalEventListener;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
@@ -14,10 +16,13 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
 
     internal class StationCard : Component<StationCardState>, IDisposable
     {
-        private double _distance;
+        private double _distance = 1.453;
         private Station _station;
         private readonly ArrivalEventListener arrivalEventListener =
             ServiceLocator.Current.GetInstance<ArrivalEventListener>();
+        private readonly ILocationProvider locationProvider =
+            ServiceLocator.Current.GetInstance<ILocationProvider>();
+        private IDisposable locationSubscription;
 
         private enum ETATiers
         {
@@ -167,9 +172,19 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
             base.OnWillUnmount();
         }
 
+        protected override void OnMounted()
+        {
+            locationSubscription = locationProvider
+                .WhenAnyValue(x => x.Location)
+                .WhereNotNull()
+                .Subscribe(loc => _distance = _station.Coordinate.DistanceTo(loc));
+            base.OnMounted();
+        }
+
         public void Dispose()
         {
             arrivalEventListener.Cancel(_station, this);
+            locationSubscription?.Dispose();
             if (State.ArrivalEvents != null)
             {
                 foreach (var a in State.ArrivalEvents)

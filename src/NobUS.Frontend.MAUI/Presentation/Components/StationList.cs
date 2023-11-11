@@ -1,14 +1,23 @@
-﻿using NobUS.DataContract.Model;
+﻿using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Maui.Markup;
+using DynamicData;
+using Microsoft.Maui.Dispatching;
+using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
+using ReactiveUI;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using static NobUS.Infrastructure.DefinitionLoader;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {
-    internal class State
+    internal class StationList : Component
     {
-        public bool HasLocated { get; set; }
-        public Coordinate Location { get; set; }
-    }
+        private ObservableCollection<Station> _stations = GetAllStations.ToObservableCollection();
+        private readonly ILocationProvider _locationProvider =
+            CommonServiceLocator.ServiceLocator.Current.GetInstance<ILocationProvider>();
+        private readonly IDispatcher dispatcher = Dispatcher.GetForCurrentThread();
+        private IDisposable _locationSubscription;
 
     internal class StationList : Component<State>
     {
@@ -16,12 +25,12 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
 
         public StationList Stations(IList<Station> stations)
         {
-            _stations = stations;
+            _stations = stations.ToObservableCollection();
             return this;
         }
 
         private static SwipeItems SwipeItems =>
-            new SwipeItems(
+            new(
                 new Microsoft.Maui.Controls.ISwipeItem[]
                 {
 #if WINDOWS
@@ -50,19 +59,11 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
         public override VisualNode Render() =>
             new ListView()
                 .ItemsSource(
-                    State.HasLocated
-                        ? _stations.OrderBy(s => s.Coordinate.DistanceTo(State.Location)).ToList()
-                        : _stations,
+                    _stations,
                     s =>
                         new ViewCell()
                         {
-                            new StationCard()
-                                .Station(s)
-                                .Distance(
-                                    State.HasLocated
-                                        ? s.Coordinate.DistanceTo(State.Location)
-                                        : 1.453
-                                )
+                            new StationCard().Station(s).Invoke(c => cardRefs.Add(new(c)))
                         }
                 )
                 .SelectionMode(ListViewSelectionMode.None)
@@ -71,16 +72,20 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 .HasUnevenRows(true)
                 .BackgroundColor(Styler.Scheme.Surface);
 
-        protected override async void OnMounted()
+        protected override void OnMounted()
         {
-            var loc = await CommonServiceLocator.ServiceLocator.Current
-                .GetInstance<ILocationProvider>()
-                .GetLocationAsync();
-            SetState(s =>
+            _locationSubscription = _locationProvider
+                .WhenAnyValue(x => x.Location)
+                .WhereNotNull()
+                .Subscribe(loc =>
             {
-                s.HasLocated = true;
-                s.Location = loc;
+                    dispatcher.Dispatch(() =>
+                    {
+                        var sorted = _stations.OrderBy(s => s.Coordinate.DistanceTo(loc)).ToList();
+                        _stations.Clear();
+                        _stations.AddRange(sorted);
             });
+                });
             base.OnMounted();
         }
     }
