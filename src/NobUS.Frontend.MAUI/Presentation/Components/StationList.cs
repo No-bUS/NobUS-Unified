@@ -19,9 +19,8 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
         private readonly IDispatcher dispatcher = Dispatcher.GetForCurrentThread();
         private IDisposable _locationSubscription;
 
-    internal class StationList : Component<State>
-    {
-        private IList<Station> _stations = GetAllStations.ToList();
+        private readonly List<WeakReference<StationCard>> cardRefs = new();
+        private WeakReference<ListView>? listViewRef;
 
         public StationList Stations(IList<Station> stations)
         {
@@ -34,7 +33,6 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 new Microsoft.Maui.Controls.ISwipeItem[]
                 {
 #if WINDOWS
-
                     new SwipeItem { Text = "Pin", BackgroundColor = Styler.Scheme.Surface, },
 #else
                     new SwipeItemView
@@ -70,7 +68,8 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
                 .SeparatorVisibility(SeparatorVisibility.None)
                 .HasUnevenRows(true)
-                .BackgroundColor(Styler.Scheme.Surface);
+                .BackgroundColor(Styler.Scheme.Surface)
+                .Invoke(lv => listViewRef = new(lv));
 
         protected override void OnMounted()
         {
@@ -78,15 +77,36 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 .WhenAnyValue(x => x.Location)
                 .WhereNotNull()
                 .Subscribe(loc =>
-            {
+                {
                     dispatcher.Dispatch(() =>
                     {
                         var sorted = _stations.OrderBy(s => s.Coordinate.DistanceTo(loc)).ToList();
                         _stations.Clear();
                         _stations.AddRange(sorted);
-            });
+                    });
                 });
             base.OnMounted();
+        }
+
+        protected override void OnWillUnmount()
+        {
+            Task.Run(() =>
+            {
+                foreach (var card in cardRefs)
+                {
+                    if (card.TryGetTarget(out var c))
+                    {
+                        c.Dispose();
+                    }
+                }
+
+                if (listViewRef != null && listViewRef.TryGetTarget(out var l))
+                {
+                    l.ItemsSource(Array.Empty<int>());
+                }
+                _locationSubscription.Dispose();
+            });
+            base.OnWillUnmount();
         }
     }
 }

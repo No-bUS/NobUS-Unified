@@ -23,6 +23,7 @@ namespace NobUS.Infrastructure
 
         private readonly Func<Station, Task<IImmutableList<ArrivalEvent>>> _source;
         private readonly ConcurrentDictionary<string, StationData> _dataDict = new();
+        private readonly ConcurrentDictionary<string, Task> _taskDict = new();
 
         public ArrivalEventListener(Func<Station, Task<IImmutableList<ArrivalEvent>>> source)
         {
@@ -44,7 +45,11 @@ namespace NobUS.Infrastructure
                     new()
                 );
                 _dataDict[queryName] = stationData;
-                StartBackgroundTask(station, queryName, stationData.Cts.Token);
+                _taskDict[queryName] = StartBackgroundTask(
+                    station,
+                    queryName,
+                    stationData.Cts.Token
+                );
             }
             stationData.Subscribers.Add(new WeakReference(subscriber));
             return stationData.EventGroups;
@@ -60,8 +65,11 @@ namespace NobUS.Infrastructure
             }
         }
 
-        private void StartBackgroundTask(Station station, string queryName, CancellationToken token)
-        {
+        private Task StartBackgroundTask(
+            Station station,
+            string queryName,
+            CancellationToken token
+        ) =>
             Task.Run(
                 async () =>
                 {
@@ -133,7 +141,6 @@ namespace NobUS.Infrastructure
                 },
                 token
             );
-        }
 
         private void CleanUpIfNoSubscribers(string queryName)
         {
@@ -148,6 +155,15 @@ namespace NobUS.Infrastructure
                     stationData.Cts.Cancel();
                     _dataDict.Remove(queryName, out var _);
                 }
+            }
+
+            if (_taskDict.TryGetValue(queryName, out var task))
+            {
+                if (task.IsCompleted)
+                {
+                    task.Dispose();
+                }
+                _taskDict.Remove(queryName, out var _);
             }
         }
 
