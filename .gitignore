@@ -406,3 +406,7 @@ FodyWeavers.xsd
 
 # Published
 dist
+
+# Node project file (prettier purpose)
+package.json
+pnpm-lock.yaml
