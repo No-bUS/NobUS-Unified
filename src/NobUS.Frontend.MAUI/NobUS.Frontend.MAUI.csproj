@@ -99,7 +99,15 @@
         <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
         <PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
         <PackageReference Include="CommunityToolkit.Maui.Markup" Version="3.3.0" />
+        <PackageReference Include="Fody" Version="6.8.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets
+            >runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+        <PackageReference Include="ReactiveUI" Version="19.5.1" />
+        <PackageReference Include="ReactiveUI.Fody" Version="19.5.1" />
+        <PackageReference Include="ReactiveUI.Maui" Version="19.5.1" />
         <PackageReference Include="Reactor.Maui" Version="1.0.148" />
         <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.148" />
         <PackageReference
@@ -109,6 +117,8 @@
             Version="1.0.148"
         />
         <PackageReference Include="MaterialColorUtilities.Maui" Version="0.3.0" />
+        <PackageReference Include="System.Reactive" Version="6.0.0" />
+        <PackageReference Include="System.Reactive.Linq" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
