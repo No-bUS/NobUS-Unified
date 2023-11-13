@@ -11,16 +11,12 @@ using static NobUS.Infrastructure.DefinitionLoader;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
 {
-    internal class StationList : Component
+    internal class StationList : DisposableComponent
     {
         private ObservableCollection<Station> _stations = GetAllStations.ToObservableCollection();
         private readonly ILocationProvider _locationProvider =
             CommonServiceLocator.ServiceLocator.Current.GetInstance<ILocationProvider>();
         private readonly IDispatcher dispatcher = Dispatcher.GetForCurrentThread();
-        private IDisposable _locationSubscription;
-
-        private readonly List<WeakReference<StationCard>> cardRefs = new();
-        private WeakReference<ListView>? listViewRef;
 
         public StationList Stations(IList<Station> stations)
         {
@@ -58,22 +54,17 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
             new ListView()
                 .ItemsSource(
                     _stations,
-                    s =>
-                        new ViewCell()
-                        {
-                            new StationCard().Station(s).Invoke(c => cardRefs.Add(new(c)))
-                        }
+                    s => new ViewCell() { new StationCard().Station(s).Invoke(RegisterResource) }
                 )
                 .SelectionMode(ListViewSelectionMode.None)
                 .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
                 .SeparatorVisibility(SeparatorVisibility.None)
                 .HasUnevenRows(true)
-                .BackgroundColor(Styler.Scheme.Surface)
-                .Invoke(lv => listViewRef = new(lv));
+                .BackgroundColor(Styler.Scheme.Surface);
 
         protected override void OnMounted()
         {
-            _locationSubscription = _locationProvider
+            _locationProvider
                 .WhenAnyValue(x => x.Location)
                 .WhereNotNull()
                 .Subscribe(loc =>
@@ -84,29 +75,9 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                         _stations.Clear();
                         _stations.AddRange(sorted);
                     });
-                });
+                })
+                .Invoke(RegisterResource);
             base.OnMounted();
-        }
-
-        protected override void OnWillUnmount()
-        {
-            Task.Run(() =>
-            {
-                foreach (var card in cardRefs)
-                {
-                    if (card.TryGetTarget(out var c))
-                    {
-                        c.Dispose();
-                    }
-                }
-
-                if (listViewRef != null && listViewRef.TryGetTarget(out var l))
-                {
-                    l.ItemsSource(Array.Empty<int>());
-                }
-                _locationSubscription.Dispose();
-            });
-            base.OnWillUnmount();
         }
     }
 }

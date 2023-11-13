@@ -14,7 +14,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
         public List<ArrivalEventGroup> ArrivalEvents { get; set; }
     }
 
-    internal class StationCard : Component<StationCardState>, IDisposable
+    internal class StationCard : DisposableComponent<StationCardState>
     {
         private double _distance = 1.453;
         private Station _station;
@@ -22,7 +22,6 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
             ServiceLocator.Current.GetInstance<ArrivalEventListener>();
         private readonly ILocationProvider locationProvider =
             ServiceLocator.Current.GetInstance<ILocationProvider>();
-        private IDisposable locationSubscription;
 
         private enum ETATiers
         {
@@ -166,34 +165,14 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
             }
         }
 
-        protected override void OnWillUnmount()
-        {
-            Dispose();
-            base.OnWillUnmount();
-        }
-
         protected override void OnMounted()
         {
-            locationSubscription = locationProvider
+            locationProvider
                 .WhenAnyValue(x => x.Location)
                 .WhereNotNull()
-                .Subscribe(loc => _distance = _station.Coordinate.DistanceTo(loc));
+                .Subscribe(loc => _distance = _station.Coordinate.DistanceTo(loc))
+                .Invoke(RegisterResource);
             base.OnMounted();
-        }
-
-        public void Dispose()
-        {
-            arrivalEventListener.Cancel(_station, this);
-            locationSubscription?.Dispose();
-            if (State.ArrivalEvents != null)
-            {
-                foreach (var a in State.ArrivalEvents)
-                {
-                    a.Events.Clear();
-                }
-                State.ArrivalEvents.Clear();
-                State.ArrivalEvents = null;
-            }
         }
     }
 }
