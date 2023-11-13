@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Presentation;
+using NobUS.Frontend.MAUI.Presentation.Components;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
 
@@ -21,7 +22,7 @@ namespace NobUS.Frontend.MAUI
                 .ToList();
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiReactorApp<PageContainer>(
+                .UseMauiReactorApp<NavigationShell>(
                     (app) =>
                     {
                         IMaterialColorService.Current.Initialize(app.Resources);
