@@ -34,3 +34,4 @@ global using SeparatorVisibility = Microsoft.Maui.Controls.SeparatorVisibility;
 global using TextDecorations = Microsoft.Maui.TextDecorations;
 global using FontAttributes = Microsoft.Maui.Controls.FontAttributes;
 global using ClearButtonVisibility = Microsoft.Maui.ClearButtonVisibility;
+global using FontImageSource = Microsoft.Maui.Controls.FontImageSource;

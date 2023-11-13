@@ -2236,4 +2236,12 @@
         ZoomOut = 0xe900,
         ZoomOutMap = 0xe56b
     }
+
+    internal static class MaterialIconsExtension
+    {
+        public static string ToGlyph(this MaterialIcons icon) => char.ConvertFromUtf32((int)icon);
+
+        public static FontImageSource ToFontImageSource(this MaterialIcons icon) =>
+            new() { Glyph = icon.ToGlyph(), FontFamily = "MIcon" };
+    }
 }
