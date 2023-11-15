@@ -3,15 +3,15 @@ task Clean {
   | ForEach-Object { Get-ChildItem -Recurse -Filter $_ -Directory }
   | ForEach-Object -ThrottleLimit 9999 -Parallel {
     $emptyFolder = New-Item -Path $_.Parent -Name "$($_.Name)$(Get-Random).empty" -ItemType Directory
-    exec { Robocopy.exe $emptyFolder $_ /MIR | Out-Null }
+    & Robocopy.exe $emptyFolder $_ /MIR | Out-Null
     Remove-Item -Path $emptyFolder,$_ -Recurse -Force
   }
 }
 
 task Format {
   exec { dotnet csharpier . }
-  exec { prettier '**\*.{csproj,xml,xaml}' -w }
-  exec { prettier '**\*.{csproj,xml,xaml}' -w }
+  exec { pnpm exec prettier '**\*.{csproj,xml,xaml}' -w }
+  exec { pnpm exec prettier '**\*.{csproj,xml,xaml}' -w }
 }
 
 task BuildAndroid {
@@ -22,7 +22,7 @@ task BuildAndroid {
 
 task MoveApk {
   $apkPath = Resolve-Path "./src/NobUS.Frontend.MAUI/bin/release/net[0-9].0-android/*/publish/*-Signed.apk"
-  Move-Item -Path $apkPath -Destination "./artifacts/NobUS.apk"
+  Move-Item -Path $apkPath -Destination "./artifacts/NobUS.apk" -Force
 }
 
 task InstallApk {
