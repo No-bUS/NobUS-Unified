@@ -2,17 +2,18 @@
 
     <PropertyGroup>
         <!--suppress MsbuildTargetFrameworkTagInspection -->
-        <TargetFrameworks>net7.0-android</TargetFrameworks>
+        <TargetFrameworks>net8.0-android</TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-            $(TargetFrameworks);net7.0-windows10.0.19041.0
+            $(TargetFrameworks);net8.0-windows10.0.19041.0
         </TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-            $(TargetFrameworks);net7.0-ios;net7.0-maccatalyst
+            $(TargetFrameworks);net8.0-ios;net8.0-maccatalyst
         </TargetFrameworks>
 
         <OutputType>Exe</OutputType>
         <RootNamespace>NobUS.Frontend.MAUI</RootNamespace>
         <UseMaui>true</UseMaui>
+        <MauiVersion>8.0.3</MauiVersion>
         <SingleProject>true</SingleProject>
         <ImplicitUsings>disable</ImplicitUsings>
 
@@ -59,6 +60,8 @@
         <PublishTrimmed>true</PublishTrimmed>
         <RunAOTCompilation>true</RunAOTCompilation>
         <EnableLLVM>false</EnableLLVM>
+        <AndroidStripILAfterAOT>true</AndroidStripILAfterAOT>
+        <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -104,7 +107,10 @@
             <IncludeAssets
             >runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+        <PackageReference
+            Include="Microsoft.Extensions.Logging.Debug"
+            Version="8.0.0-rc.2.23479.6"
+        />
         <PackageReference Include="ReactiveUI" Version="19.5.1" />
         <PackageReference Include="ReactiveUI.Fody" Version="19.5.1" />
         <PackageReference Include="ReactiveUI.Maui" Version="19.5.1" />
@@ -119,6 +125,11 @@
         <PackageReference Include="MaterialColorUtilities.Maui" Version="0.3.0" />
         <PackageReference Include="System.Reactive" Version="6.0.0" />
         <PackageReference Include="System.Reactive.Linq" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+        <PackageReference
+            Include="Microsoft.Maui.Controls.Compatibility"
+            Version="$(MauiVersion)"
+        />
     </ItemGroup>
 
     <ItemGroup>
