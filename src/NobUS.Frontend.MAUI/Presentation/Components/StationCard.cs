@@ -79,10 +79,10 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                         ? null
                         : new Border
                         {
-                            new StackLayout { State.ArrivalEvents.Select(RenderGroup) }
-                                .Orientation(Microsoft.Maui.Controls.StackOrientation.Vertical)
+                            new VerticalStackLayout { State.ArrivalEvents.Select(RenderGroup) }
                                 .HFill()
                                 .VFill()
+                                .Margin(5)
                         }
                             .BackgroundColor(this.UseScheme().SecondaryContainer)
                             .ToCard(20),
@@ -124,6 +124,8 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                 )
                 .Regular()
                 .Base()
+                .VStart()
+                .HeightRequest(Styles.Sizes.Base * 1.5)
                 .TextColor(Styler.Scheme.OnSecondaryContainer);
         }
 
@@ -142,7 +144,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components
                     .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5))
             }
                 .Spacing(5)
-                .Padding(10);
+                .HeightRequest(Styles.Sizes.Base * 2);
 
         private void Load()
         {
