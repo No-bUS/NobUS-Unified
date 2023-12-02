@@ -14,6 +14,7 @@
         <RootNamespace>NobUS.Frontend.MAUI</RootNamespace>
         <UseMaui>true</UseMaui>
         <MauiVersion>8.0.3</MauiVersion>
+        <MauiReactorVersion>2.0.6-beta</MauiReactorVersion>
         <SingleProject>true</SingleProject>
         <ImplicitUsings>disable</ImplicitUsings>
 
@@ -114,13 +115,13 @@
         <PackageReference Include="ReactiveUI" Version="19.5.1" />
         <PackageReference Include="ReactiveUI.Fody" Version="19.5.1" />
         <PackageReference Include="ReactiveUI.Maui" Version="19.5.1" />
-        <PackageReference Include="Reactor.Maui" Version="1.0.148" />
-        <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.148" />
+        <PackageReference Include="Reactor.Maui" Version="$(MauiReactorVersion)" />
+        <PackageReference Include="Reactor.Maui.Canvas" Version="$(MauiReactorVersion)" />
         <PackageReference
             Include="Reactor.Maui.ScaffoldGenerator"
             OutputItemType="Analyzer"
             ReferenceOutputAssembly="false"
-            Version="1.0.148"
+            Version="$(MauiReactorVersion)"
         />
         <PackageReference Include="MaterialColorUtilities.Maui" Version="0.3.0" />
         <PackageReference Include="System.Reactive" Version="6.0.0" />
