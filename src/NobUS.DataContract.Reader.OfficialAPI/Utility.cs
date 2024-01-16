@@ -20,7 +20,8 @@ namespace NobUS.DataContract.Reader.OfficialAPI
             shuttles
                 .Where(ss => ss != null)
                 .Where(ss => ss._etas != null)
-                .Where(ss => ss._etas.Any())
+                .Where(ss => ss.Busstopcode[^2..] != "-E")
+                .Where(ss => ss._etas.Count != 0)
                 .SelectMany(ss => ss._etas)
                 .Where(x => x != null)
                 .Distinct();
@@ -32,7 +33,8 @@ namespace NobUS.DataContract.Reader.OfficialAPI
             shuttles
                 .Where(ss => ss != null)
                 .Where(ss => ss._etas != null)
-                .Where(ss => ss._etas.Any())
+                .Where(ss => ss.Busstopcode[^2..] != "-E")
+                .Where(ss => ss._etas.Count != 0)
                 .Select(ss => (ss.Name, ss._etas));
     }
 }
