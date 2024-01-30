@@ -48,19 +48,17 @@ namespace NobUS.DataContract.Reader.OfficialAPI
         private Task InitVehicles =>
             Task.Run(
                 () =>
-                    Stations.Values
-                        .Select(
-                            s =>
-                                _client
-                                    .GetShuttleServiceAsync(s.QueryName())
-                                    .Result.ShuttleServiceResult.Shuttles
+                    Stations
+                        .Values.Select(s =>
+                            _client
+                                .GetShuttleServiceAsync(s.QueryName())
+                                .Result.ShuttleServiceResult.Shuttles
                         )
                         .Select(Utility.GetEtasFromShuttles)
                         .Select(etas => etas.Select(eta => eta.Plate))
-                        .Select(
-                            p =>
-                                p.Where(key => !_vehicles.ContainsKey(key))
-                                    .Select(plate => new Vehicle(null, plate))
+                        .Select(p =>
+                            p.Where(key => !_vehicles.ContainsKey(key))
+                                .Select(plate => new Vehicle(null, plate))
                         )
                         .Select(x => x.Select(vehicle => _vehicles.TryAdd(vehicle.Plate, vehicle)))
                         .ToList()
@@ -78,28 +76,25 @@ namespace NobUS.DataContract.Reader.OfficialAPI
             );
 
         private Task UpdateVehicleLocations =>
-            _initVehicles.ContinueWith(
-                _ =>
-                    Routes.Values
-                        .Select(
-                            r =>
-                                _client
-                                    .GetActiveBusAsync(r.Name)
-                                    .Result.ActiveBusResult.Activebus.Select(
-                                        b =>
-                                            _vehicles.AddOrUpdate(
-                                                b.Vehplate,
-                                                key => new Vehicle(Adapter.AdaptMassPoint(b), key),
-                                                (_, value) =>
-                                                    value with
-                                                    {
-                                                        MassPoint = Adapter.AdaptMassPoint(b)
-                                                    }
-                                            )
-                                    )
-                                    .ToList()
-                        )
-                        .ToList()
+            _initVehicles.ContinueWith(_ =>
+                Routes
+                    .Values.Select(r =>
+                        _client
+                            .GetActiveBusAsync(r.Name)
+                            .Result.ActiveBusResult.Activebus.Select(b =>
+                                _vehicles.AddOrUpdate(
+                                    b.Vehplate,
+                                    key => new Vehicle(Adapter.AdaptMassPoint(b), key),
+                                    (_, value) =>
+                                        value with
+                                        {
+                                            MassPoint = Adapter.AdaptMassPoint(b)
+                                        }
+                                )
+                            )
+                            .ToList()
+                    )
+                    .ToList()
             );
 
         public async Task<IImmutableList<Station>> GetStationsAsync() =>
@@ -118,22 +113,19 @@ namespace NobUS.DataContract.Reader.OfficialAPI
             await Task.FromResult(route.Stations.ToImmutableList());
 
         public async Task<IImmutableList<ArrivalEvent>> GetArrivalEventsAsync(Station station) =>
-            await _initShuttleJobsAll.ContinueWith(
-                _ =>
-                    Utility
-                        .GetRouteNameAndEtasFromShuttles(
-                            _client
-                                .GetShuttleServiceAsync(station.QueryName())
-                                .Result.ShuttleServiceResult.Shuttles
+            await _initShuttleJobsAll.ContinueWith(_ =>
+                Utility
+                    .GetRouteNameAndEtasFromShuttles(
+                        _client
+                            .GetShuttleServiceAsync(station.QueryName())
+                            .Result.ShuttleServiceResult.Shuttles
+                    )
+                    .SelectMany(ss =>
+                        ss._etas.Select(eta =>
+                            Adapter.AdaptArrivalEvent(station.Code, ss.RouteName, eta)
                         )
-                        .SelectMany(
-                            ss =>
-                                ss._etas.Select(
-                                    eta =>
-                                        Adapter.AdaptArrivalEvent(station.Code, ss.RouteName, eta)
-                                )
-                        )
-                        .ToImmutableList()
+                    )
+                    .ToImmutableList()
             );
 
         private Task InitShuttleJobs(Station station) =>
@@ -145,27 +137,23 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                                 .GetShuttleServiceAsync(station.QueryName())
                                 .Result.ShuttleServiceResult.Shuttles
                         )
-                        .Select(
-                            x =>
-                                x._etas
-                                    .Select(
-                                        e =>
-                                            _shuttleJobs.AddOrUpdate(
-                                                e.Jobid,
-                                                k =>
-                                                    new ShuttleJob(
-                                                        k,
-                                                        Routes[x.RouteName],
-                                                        _vehicles.AddOrUpdate(
-                                                            e.Plate,
-                                                            key => new Vehicle(null, key),
-                                                            (_, oldValue) => oldValue
-                                                        )
-                                                    ),
-                                                (_, oldValue) => oldValue
-                                            )
-                                    )
-                                    .ToList()
+                        .Select(x =>
+                            x._etas.Select(e =>
+                                _shuttleJobs.AddOrUpdate(
+                                    e.Jobid,
+                                    k => new ShuttleJob(
+                                        k,
+                                        Routes[x.RouteName],
+                                        _vehicles.AddOrUpdate(
+                                            e.Plate,
+                                            key => new Vehicle(null, key),
+                                            (_, oldValue) => oldValue
+                                        )
+                                    ),
+                                    (_, oldValue) => oldValue
+                                )
+                            )
+                                .ToList()
                         )
                         .ToList()
             );
@@ -175,26 +163,25 @@ namespace NobUS.DataContract.Reader.OfficialAPI
                 () =>
                     _client
                         .GetActiveBusAsync(route.Name)
-                        .Result.ActiveBusResult.Activebus.Select(
-                            x =>
-                                (
-                                    _vehicles.AddOrUpdate(
-                                        x.Vehplate,
-                                        key => new Vehicle(Adapter.AdaptMassPoint(x), key),
-                                        (_, value) =>
-                                            value with
-                                            {
-                                                MassPoint = Adapter.AdaptMassPoint(x)
-                                            }
-                                    ),
-                                    _shuttleJobs.Any(s => s.Value.Vehicle.Plate == x.Vehplate)
-                                )
+                        .Result.ActiveBusResult.Activebus.Select(x =>
+                            (
+                                _vehicles.AddOrUpdate(
+                                    x.Vehplate,
+                                    key => new Vehicle(Adapter.AdaptMassPoint(x), key),
+                                    (_, value) =>
+                                        value with
+                                        {
+                                            MassPoint = Adapter.AdaptMassPoint(x)
+                                        }
+                                ),
+                                _shuttleJobs.Any(s => s.Value.Vehicle.Plate == x.Vehplate)
+                            )
                         )
                         .Where(t => t.Item2)
                         .Select(x =>
                         {
-                            var (shuttleJobId, shuttleJob) = _shuttleJobs.First(
-                                s => s.Value.Vehicle.Plate == x.Item1.Plate
+                            var (shuttleJobId, shuttleJob) = _shuttleJobs.First(s =>
+                                s.Value.Vehicle.Plate == x.Item1.Plate
                             );
                             return _shuttleJobs.TryUpdate(
                                 shuttleJobId,

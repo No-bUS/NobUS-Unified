@@ -18,8 +18,8 @@ namespace NobUS.Frontend.MAUI.Service
         {
             _cancellationToken = _cancellationTokenSource.Token;
             _backgroundTask = BackgroundTask();
-            LocationTask.ContinueWith(
-                t => Location = new Coordinate(t.Result.Longitude, t.Result.Latitude)
+            LocationTask.ContinueWith(t =>
+                Location = new Coordinate(t.Result.Longitude, t.Result.Latitude)
             );
         }
 

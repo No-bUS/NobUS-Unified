@@ -1,5 +1,5 @@
-﻿using NobUS.Extra.Campus.Facility.Sports;
-using Microsoft.Maui.Graphics;
+﻿using Microsoft.Maui.Graphics;
+using NobUS.Extra.Campus.Facility.Sports;
 using Type = NobUS.Extra.Campus.Facility.Sports.Type;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components

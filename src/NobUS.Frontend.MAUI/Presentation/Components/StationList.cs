@@ -1,12 +1,12 @@
-﻿using CommunityToolkit.Maui.Core.Extensions;
+﻿using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Markup;
 using DynamicData;
 using Microsoft.Maui.Dispatching;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using ReactiveUI;
-using System.Collections.ObjectModel;
-using System.Reactive.Linq;
 using static NobUS.Infrastructure.DefinitionLoader;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components
