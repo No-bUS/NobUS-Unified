@@ -1,8 +1,8 @@
-﻿using NobUS.DataContract.Model;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
-using static NobUS.Infrastructure.DefinitionLoader;
 using System.Collections.ObjectModel;
+using NobUS.DataContract.Model;
+using static NobUS.Infrastructure.DefinitionLoader;
 
 namespace NobUS.Infrastructure
 {
@@ -36,8 +36,8 @@ namespace NobUS.Infrastructure
             if (!_dataDict.TryGetValue(queryName, out var stationData))
             {
                 stationData = new StationData(
-                    Routes.Values
-                        .Where(r => r.ToStations.Select(s => s.Id).Contains(station.Code))
+                    Routes
+                        .Values.Where(r => r.ToStations.Select(s => s.Id).Contains(station.Code))
                         .Select(r => new ArrivalEventGroup { RouteName = r.Name, Events = new() })
                         .ToList(),
                     new(),
@@ -83,9 +83,8 @@ namespace NobUS.Infrastructure
 
                         foreach (var group in groupedEvents)
                         {
-                            var groupItem = _dataDict[queryName].EventGroups.FirstOrDefault(
-                                eg => eg.RouteName == group.Key
-                            );
+                            var groupItem = _dataDict[queryName]
+                                .EventGroups.FirstOrDefault(eg => eg.RouteName == group.Key);
                             if (groupItem == null)
                             {
                                 groupItem = new ArrivalEventGroup()
@@ -99,10 +98,8 @@ namespace NobUS.Infrastructure
                             foreach (var e in group)
                             {
                                 if (
-                                    !_dataDict[queryName].Lookup.TryGetValue(
-                                        e.ShuttleJobId,
-                                        out var existingEvent
-                                    )
+                                    !_dataDict[queryName]
+                                        .Lookup.TryGetValue(e.ShuttleJobId, out var existingEvent)
                                 )
                                 {
                                     groupItem.Events.Add(e);
@@ -118,19 +115,14 @@ namespace NobUS.Infrastructure
                                         {
                                             groupItem.Events[index] = e;
                                         }
-                                        _dataDict[queryName].Lookup.TryUpdate(
-                                            e.ShuttleJobId,
-                                            e,
-                                            existingEvent
-                                        );
+                                        _dataDict[queryName]
+                                            .Lookup.TryUpdate(e.ShuttleJobId, e, existingEvent);
                                     }
                                     if (e.TimeToWait < TimeSpan.Zero)
                                     {
                                         groupItem.Events.Remove(e);
-                                        _dataDict[queryName].Lookup.TryRemove(
-                                            e.ShuttleJobId,
-                                            out var _
-                                        );
+                                        _dataDict[queryName]
+                                            .Lookup.TryRemove(e.ShuttleJobId, out var _);
                                     }
                                 }
                             }

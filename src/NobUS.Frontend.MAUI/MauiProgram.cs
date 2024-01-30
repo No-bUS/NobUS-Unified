@@ -38,8 +38,8 @@ namespace NobUS.Frontend.MAUI
                             .RegisterInstance(
                                 new ArrivalEventListener(
                                     async (station) =>
-                                        await ServiceLocator.Current
-                                            .GetInstance<IClient>()
+                                        await ServiceLocator
+                                            .Current.GetInstance<IClient>()
                                             .GetArrivalEventsAsync(station)
                                 )
                             )
