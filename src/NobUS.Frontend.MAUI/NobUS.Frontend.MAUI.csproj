@@ -12,7 +12,7 @@
         <OutputType>Exe</OutputType>
         <RootNamespace>NobUS.Frontend.MAUI</RootNamespace>
         <UseMaui>true</UseMaui>
-        <MauiVersion>8.0.40</MauiVersion>
+        <MauiVersion>9.0.0-preview</MauiVersion>
         <MauiReactorVersion>2.0.39</MauiReactorVersion>
         <SingleProject>true</SingleProject>
         <ImplicitUsings>disable</ImplicitUsings>
