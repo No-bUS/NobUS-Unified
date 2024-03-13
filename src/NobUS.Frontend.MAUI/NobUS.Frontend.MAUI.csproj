@@ -13,8 +13,8 @@
         <OutputType>Exe</OutputType>
         <RootNamespace>NobUS.Frontend.MAUI</RootNamespace>
         <UseMaui>true</UseMaui>
-        <MauiVersion>8.0.3</MauiVersion>
-        <MauiReactorVersion>2.0.6-beta</MauiReactorVersion>
+        <MauiVersion>8.0.10</MauiVersion>
+        <MauiReactorVersion>2.0.32</MauiReactorVersion>
         <SingleProject>true</SingleProject>
         <ImplicitUsings>disable</ImplicitUsings>
 
@@ -98,11 +98,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="7.1.0" />
+        <PackageReference Include="Autofac" Version="8.0.0" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
-        <PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
-        <PackageReference Include="CommunityToolkit.Maui.Markup" Version="3.3.0" />
+        <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
+        <PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.0.0" />
         <PackageReference Include="Fody" Version="6.8.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets
@@ -112,16 +112,16 @@
             Include="Microsoft.Extensions.Logging.Debug"
             Version="8.0.0-rc.2.23479.6"
         />
-        <PackageReference Include="ReactiveUI" Version="19.5.1" />
-        <PackageReference Include="ReactiveUI.Fody" Version="19.5.1" />
-        <PackageReference Include="ReactiveUI.Maui" Version="19.5.1" />
+        <PackageReference Include="ReactiveUI" Version="19.5.41" />
+        <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
+        <PackageReference Include="ReactiveUI.Maui" Version="19.5.41" />
         <PackageReference Include="Reactor.Maui" Version="$(MauiReactorVersion)" />
         <PackageReference Include="Reactor.Maui.Canvas" Version="$(MauiReactorVersion)" />
         <PackageReference
             Include="Reactor.Maui.ScaffoldGenerator"
             OutputItemType="Analyzer"
             ReferenceOutputAssembly="false"
-            Version="$(MauiReactorVersion)"
+            Version="2.0.15-beta"
         />
         <PackageReference Include="MaterialColorUtilities.Maui" Version="0.3.0" />
         <PackageReference Include="System.Reactive" Version="6.0.0" />
