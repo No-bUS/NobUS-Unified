@@ -51,11 +51,22 @@ namespace NobUS.Extra.Campus.Facility.Sports
                     var rawName = e.SelectSingleNode("./span").InnerText;
                     var type = rawName switch
                     {
-                        string s when s.ToLower().Contains("swimming pool") => Type.Pool,
-                        string s when s.ToLower().Contains("gym") => Type.Gym,
+                        string s
+                            when s.Contains(
+                                "swimming pool",
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                            => Type.Pool,
+                        string s when s.Contains("gym", StringComparison.CurrentCultureIgnoreCase)
+                            => Type.Gym,
                         _ => Type.Other
                     };
-                    return new Facility(rawName.Split('-')[0], numString[1], numString[0], type);
+                    return new Facility(
+                        rawName.Split('-')[0].Trim(),
+                        numString[1],
+                        numString[0],
+                        type
+                    );
                 });
 
             return s.ToArray();
