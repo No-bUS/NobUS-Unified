@@ -22,6 +22,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Folder", "Solution
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NobUS.Daemon", "NobUS.Daemon", "{6B750F6C-969C-4B9B-893E-933303C9ABBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NobUS.Daemon.SportsWatcher", "src\NobUS.Daemon.SportsWatcher\NobUS.Daemon.SportsWatcher.csproj", "{30B19E07-82B8-4718-8FA0-8474A83D8030}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,9 +58,16 @@ Global
 		{A590C598-0EE5-4193-9F1F-C4B77082BAE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A590C598-0EE5-4193-9F1F-C4B77082BAE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A590C598-0EE5-4193-9F1F-C4B77082BAE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30B19E07-82B8-4718-8FA0-8474A83D8030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30B19E07-82B8-4718-8FA0-8474A83D8030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30B19E07-82B8-4718-8FA0-8474A83D8030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30B19E07-82B8-4718-8FA0-8474A83D8030}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{30B19E07-82B8-4718-8FA0-8474A83D8030} = {6B750F6C-969C-4B9B-893E-933303C9ABBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
