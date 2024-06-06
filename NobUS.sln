@@ -13,7 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Infrastructure", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Extra.Campus.Facility.Sports", "src\NobUS.Extra.Campus.Facility.Sports\NobUS.Extra.Campus.Facility.Sports.csproj", "{20C8638B-BEBF-47DB-B2BD-3F8B1A5CA6FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NobUS.Resources", "src\NobUS.Resources\NobUS.Resources.csproj", "{A590C598-0EE5-4193-9F1F-C4B77082BAE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Resources", "src\NobUS.Resources\NobUS.Resources.csproj", "{A590C598-0EE5-4193-9F1F-C4B77082BAE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Folder", "Solution Folder", "{A67A82AF-00C5-437C-A066-A09A01F8B219}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

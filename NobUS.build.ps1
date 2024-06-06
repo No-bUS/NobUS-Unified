@@ -15,9 +15,8 @@ task Format {
 }
 
 task BuildAndroid {
-  Set-Location -Path "./src/NobUS.Frontend.MAUI/"
-  $targetName = Select-String -Path "NobUS.Frontend.MAUI.csproj" -Pattern "net[0-9]\.0-android" | Select-Object -ExpandProperty Line | Select-String -Pattern "net[0-9]\.0-android" -AllMatches | Select-Object -ExpandProperty Matches | Select-Object -ExpandProperty Value
-  exec { dotnet publish -f $targetName -c release -r android-arm64 -p:AndroidSdkDirectory=$env:ANDROID_HOME }
+  $targetName = Select-String -Path "Directory.Build.props" -Pattern "net[0-9]\.0" | Select-Object -ExpandProperty Line | Select-String -Pattern "net[0-9]\.0" -AllMatches | Select-Object -ExpandProperty Matches | Select-Object -ExpandProperty Value
+  exec { dotnet publish "./src/NobUS.Frontend.MAUI/NobUS.Frontend.MAUI.csproj" -f "$($targetName)-android" -p:TargetFrameworkIdentifier=".NETCoreApp" -c release -r android-arm64 -p:AndroidSdkDirectory=$env:ANDROID_HOME -v diag }
 }
 
 task MoveApk {
