@@ -6,3 +6,4 @@ printWidth: 100
 xmlQuoteAttributes: "double"
 xmlSelfClosingSpace: true
 xmlSortAttributesByKey: true
+xmlWhitespaceSensitivity: "ignore"
