@@ -1,0 +1,34 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+        <MauiVersion>8.0.80</MauiVersion>
+        <MauiReactorVersion>2.0.45</MauiReactorVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageVersion Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.8" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageVersion Include="NSwag.ApiDescription.Client" Version="14.1.0" />
+        <PackageVersion Include="HtmlAgilityPack" Version="1.11.64" />
+        <PackageVersion Include="Autofac" Version="8.0.0" />
+        <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
+        <PackageVersion Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
+        <PackageVersion Include="CommunityToolkit.Maui" Version="9.0.3" />
+        <PackageVersion Include="CommunityToolkit.Maui.Markup" Version="4.1.0" />
+        <PackageVersion Include="Fody" Version="6.8.1" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+        <PackageVersion Include="ReactiveUI" Version="20.1.1" />
+        <PackageVersion Include="ReactiveUI.Fody" Version="19.5.41" />
+        <PackageVersion Include="ReactiveUI.Maui" Version="20.1.1" />
+        <PackageVersion Include="Reactor.Maui" Version="$(MauiReactorVersion)" />
+        <PackageVersion Include="Reactor.Maui.Canvas" Version="$(MauiReactorVersion)" />
+        <PackageVersion Include="Reactor.Maui.ScaffoldGenerator" Version="2.0.15-beta" />
+        <PackageVersion Include="MaterialColorUtilities.Maui" Version="0.3.0" />
+        <PackageVersion Include="System.Reactive" Version="6.0.1" />
+        <PackageVersion Include="System.Reactive.Linq" Version="6.0.1" />
+        <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+        <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+        <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+</Project>
