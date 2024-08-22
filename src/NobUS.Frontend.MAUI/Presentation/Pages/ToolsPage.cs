@@ -1,12 +1,8 @@
 ﻿using NobUS.Frontend.MAUI.Presentation.Components;
 
-namespace NobUS.Frontend.MAUI.Presentation.Pages
+namespace NobUS.Frontend.MAUI.Presentation.Pages;
+
+internal class ToolsPage : Component
 {
-    internal class ToolsPage : Component
-    {
-        public override VisualNode Render()
-        {
-            return new ScrollView { new SportFacilityList() };
-        }
-    }
+    public override VisualNode Render() => new ScrollView { new SportFacilityList() };
 }
