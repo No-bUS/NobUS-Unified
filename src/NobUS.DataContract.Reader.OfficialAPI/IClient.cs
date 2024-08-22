@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
+using System.Threading.Tasks;
 using NobUS.DataContract.Model;
 
 namespace NobUS.DataContract.Reader.OfficialAPI;

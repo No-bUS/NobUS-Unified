@@ -1,4 +1,5 @@
-﻿using NobUS.DataContract.Model;
+﻿using System;
+using NobUS.DataContract.Model;
 using NobUS.DataContract.Reader.OfficialAPI.Client;
 
 namespace NobUS.DataContract.Reader.OfficialAPI;

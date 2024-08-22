@@ -1,4 +1,6 @@
-﻿namespace NobUS.DataContract.Model;
+﻿using System;
+
+namespace NobUS.DataContract.Model;
 
 public sealed partial record Coordinate(double Longitude, double Latitude)
 {
