@@ -15,16 +15,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Extra.Campus.Facility
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Resources", "src\NobUS.Resources\NobUS.Resources.csproj", "{A590C598-0EE5-4193-9F1F-C4B77082BAE7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Folder", "Solution Folder", "{A67A82AF-00C5-437C-A066-A09A01F8B219}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{A67A82AF-00C5-437C-A066-A09A01F8B219}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NobUS.Daemon", "NobUS.Daemon", "{6B750F6C-969C-4B9B-893E-933303C9ABBF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "daemon", "daemon", "{6B750F6C-969C-4B9B-893E-933303C9ABBF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NobUS.Daemon.SportsWatcher", "src\NobUS.Daemon.SportsWatcher\NobUS.Daemon.SportsWatcher.csproj", "{30B19E07-82B8-4718-8FA0-8474A83D8030}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{85F065CF-172C-4B8D-B17E-F33AB70C3E07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "remote-io", "remote-io", "{A89569BC-FF3A-4931-8B3F-2ED1F84E6B7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "local-data", "local-data", "{975B782E-4818-4EF0-BCA7-5FD8B0E9C92D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +73,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{0085CD04-CC64-4054-A6D1-7ADD6F6ECB98} = {85F065CF-172C-4B8D-B17E-F33AB70C3E07}
+		{16A3A746-A91F-41E7-8172-1DFFF9FAA706} = {A89569BC-FF3A-4931-8B3F-2ED1F84E6B7B}
+		{C2A67059-3C59-43BB-82EA-3B2B7E2462FF} = {975B782E-4818-4EF0-BCA7-5FD8B0E9C92D}
+		{20C8638B-BEBF-47DB-B2BD-3F8B1A5CA6FA} = {A89569BC-FF3A-4931-8B3F-2ED1F84E6B7B}
+		{A590C598-0EE5-4193-9F1F-C4B77082BAE7} = {975B782E-4818-4EF0-BCA7-5FD8B0E9C92D}
 		{30B19E07-82B8-4718-8FA0-8474A83D8030} = {6B750F6C-969C-4B9B-893E-933303C9ABBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
