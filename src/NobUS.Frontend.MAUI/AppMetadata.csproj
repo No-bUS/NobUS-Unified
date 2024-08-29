@@ -1,0 +1,17 @@
+﻿<Project Sdk="">
+    <PropertyGroup>
+        <!-- Display Name -->
+        <ApplicationTitle>NobUS.Frontend.MAUI</ApplicationTitle>
+
+        <!-- App Identifier -->
+        <ApplicationId>com.companyname.nobus.frontend.maui</ApplicationId>
+        <ApplicationIdGuid>a3f37464-f1ae-448c-8efb-615412cb413f</ApplicationIdGuid>
+
+        <!-- Versions -->
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>1</ApplicationVersion>
+
+        <!-- Language -->
+        <DefaultLanguage>en</DefaultLanguage>
+    </PropertyGroup>
+</Project>
