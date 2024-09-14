@@ -27,12 +27,12 @@ internal class PageContainer : Component
                     new NavigationBarItem(
                         "Stations",
                         MaterialIcons.PinDrop,
-                        () => new StationList()
+                        static () => new StationList()
                     ),
                     new NavigationBarItem(
                         "Sports",
                         MaterialIcons.FitnessCenter,
-                        () => new ToolsPage()
+                        static () => new ToolsPage()
                     ),
                 }.GridRow(1)
             }

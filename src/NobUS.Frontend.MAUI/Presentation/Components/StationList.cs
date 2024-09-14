@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Markup;
 using DynamicData;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Dispatching;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
@@ -11,12 +12,13 @@ using static NobUS.Infrastructure.DefinitionLoader;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components;
 
-internal class StationList : DisposableComponent
+internal partial class StationList : DisposableComponent
 {
     private ObservableCollection<Station> _stations = GetAllStations.ToObservableCollection();
-    private readonly ILocationProvider _locationProvider =
-        CommonServiceLocator.ServiceLocator.Current.GetInstance<ILocationProvider>();
-    private readonly IDispatcher dispatcher = Dispatcher.GetForCurrentThread();
+    private readonly IDispatcher dispatcher = Dispatcher.GetForCurrentThread()!;
+
+    [Inject]
+    private ILocationProvider locationProvider;
 
     public StationList Stations(IList<Station> stations)
     {
@@ -64,7 +66,7 @@ internal class StationList : DisposableComponent
 
     protected override void OnMounted()
     {
-        _locationProvider
+        locationProvider
             .WhenAnyValue(x => x.Location)
             .WhereNotNull()
             .Subscribe(loc =>

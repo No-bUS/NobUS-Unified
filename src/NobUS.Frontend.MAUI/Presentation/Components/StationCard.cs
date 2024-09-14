@@ -1,5 +1,4 @@
-﻿using CommonServiceLocator;
-using CommunityToolkit.Maui.Markup;
+﻿using CommunityToolkit.Maui.Markup;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
@@ -14,14 +13,16 @@ internal class StationCardState
     public List<ArrivalEventGroup> ArrivalEvents { get; set; }
 }
 
-internal class StationCard : DisposableComponent<StationCardState>
+internal partial class StationCard : DisposableComponent<StationCardState>
 {
     private double _distance = 1.453;
     private Station _station;
-    private readonly ArrivalEventListener arrivalEventListener =
-        ServiceLocator.Current.GetInstance<ArrivalEventListener>();
-    private readonly ILocationProvider locationProvider =
-        ServiceLocator.Current.GetInstance<ILocationProvider>();
+
+    [Inject]
+    private ILocationProvider locationProvider;
+
+    [Inject]
+    private ArrivalEventListener arrivalEventListener;
 
     private enum ETATiers
     {

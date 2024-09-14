@@ -1,8 +1,6 @@
-﻿using Autofac;
-using Autofac.Extras.CommonServiceLocator;
-using CommonServiceLocator;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
 using MaterialColorUtilities.Maui;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
 using NobUS.DataContract.Reader.OfficialAPI;
@@ -14,41 +12,16 @@ namespace NobUS.Frontend.MAUI;
 
 public static class MauiProgram
 {
+    private static readonly string[] stringArray = [""];
+    private static readonly string[] sourceArray = ["ExtraBold", "Regular", "SemiBold", "Bold"];
+
     public static MauiApp CreateMauiApp()
     {
-        var list = new[] { "ExtraBold", "Regular", "SemiBold", "Bold" }
-            .SelectMany(w => new[] { "" }, (w, s) => $"{w}{s}")
-            .ToList();
+        var list = sourceArray.SelectMany(w => stringArray, (w, s) => $"{w}{s}").ToList();
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiReactorApp<PageContainer>(
-                (app) =>
-                {
-                    IMaterialColorService.Current.Initialize(app.Resources);
-                    var autofacContainerBuilder = new ContainerBuilder();
-                    autofacContainerBuilder
-                        .RegisterType<CongestedClient>()
-                        .As<IClient>()
-                        .SingleInstance();
-                    autofacContainerBuilder
-                        .RegisterType<LocationProvider>()
-                        .As<ILocationProvider>()
-                        .SingleInstance();
-                    autofacContainerBuilder
-                        .RegisterInstance(
-                            new ArrivalEventListener(
-                                async (station) =>
-                                    await ServiceLocator
-                                        .Current.GetInstance<IClient>()
-                                        .GetArrivalEventsAsync(station)
-                            )
-                        )
-                        .As<ArrivalEventListener>()
-                        .SingleInstance();
-
-                    var container = autofacContainerBuilder.Build();
-                    ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(container));
-                }
+                (app) => IMaterialColorService.Current.Initialize(app.Resources)
             )
             .UseMauiCommunityToolkit()
 #if DEBUG
@@ -64,6 +37,13 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+        builder
+            .Services.AddScoped<IClient, CongestedClient>()
+            .AddScoped<ILocationProvider, LocationProvider>()
+            .AddScoped(provider => new ArrivalEventListener(
+                async (station) =>
+                    await provider.GetRequiredService<IClient>().GetArrivalEventsAsync(station)
+            ));
 
         return builder.Build();
     }
