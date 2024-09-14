@@ -31,9 +31,6 @@
 
         <!-- General -->
         <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-        <PackageVersion Include="Autofac" Version="8.1.0" />
-        <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-        <PackageVersion Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
         <PackageVersion Include="Fody" Version="6.8.1" />
         <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
         <PackageVersion Include="PublishAotCompressed" Version="1.0.3" />

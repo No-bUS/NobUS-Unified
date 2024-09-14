@@ -31,9 +31,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac" />
-        <PackageReference Include="Autofac.Extensions.DependencyInjection" />
-        <PackageReference Include="Autofac.Extras.CommonServiceLocator" />
         <PackageReference Include="CommunityToolkit.Maui" />
         <PackageReference Include="CommunityToolkit.Maui.Markup" />
         <PackageReference Include="Fody">
