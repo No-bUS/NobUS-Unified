@@ -16,9 +16,10 @@
         <RootNamespace>NobUS.Frontend.MAUI</RootNamespace>
         <UseMaui>true</UseMaui>
         <SingleProject>true</SingleProject>
+        <SelfContained>true</SelfContained>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' and $(IsAndroid)">
         <PublishTrimmed>true</PublishTrimmed>
         <RunAOTCompilation>true</RunAOTCompilation>
         <EnableLLVM>false</EnableLLVM>
