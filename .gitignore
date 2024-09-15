@@ -397,6 +397,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.idea/
 
 # Resx codegen
 *.Designer.cs
