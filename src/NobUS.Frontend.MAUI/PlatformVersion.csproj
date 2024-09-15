@@ -1,29 +1,35 @@
 ﻿<Project Sdk="">
     <PropertyGroup>
-        <SupportedOSPlatformVersion
-            Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'"
-        >
-            11.0
-        </SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion
+        <IsIOS Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+            true
+        </IsIOS>
+        <IsMacCatalyst
             Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'"
         >
-            13.1
-        </SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion
+            true
+        </IsMacCatalyst>
+        <IsAndroid
             Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"
         >
-            29.0
-        </SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion
+            true
+        </IsAndroid>
+        <IsWindows
             Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"
         >
+            true
+        </IsWindows>
+        <IsIOS Condition="!Exists('$(IsIOS)')">false</IsIOS>
+        <IsMacCatalyst Condition="!Exists('$(IsMacCatalyst)')">false</IsMacCatalyst>
+        <IsAndroid Condition="!Exists('$(IsAndroid)')">false</IsAndroid>
+        <IsWindows Condition="!Exists('$(IsWindows)')">false</IsWindows>
+    </PropertyGroup>
+    <PropertyGroup>
+        <SupportedOSPlatformVersion Condition="$(IsIOS)">11.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$(IsMacCatalyst)">13.1</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$(IsAndroid)">29.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$(IsWindows)">
             10.0.17763.0
         </SupportedOSPlatformVersion>
-        <TargetPlatformMinVersion
-            Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"
-        >
-            10.0.17763.0
-        </TargetPlatformMinVersion>
+        <TargetPlatformMinVersion Condition="$(IsWindows)">10.0.17763.0</TargetPlatformMinVersion>
     </PropertyGroup>
 </Project>
