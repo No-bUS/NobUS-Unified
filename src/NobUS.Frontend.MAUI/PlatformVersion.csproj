@@ -1,27 +1,14 @@
 ﻿<Project Sdk="">
     <PropertyGroup>
-        <IsIOS Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
-            true
-        </IsIOS>
-        <IsMacCatalyst
-            Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'"
-        >
-            true
-        </IsMacCatalyst>
-        <IsAndroid
-            Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"
-        >
-            true
-        </IsAndroid>
-        <IsWindows
-            Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"
-        >
-            true
-        </IsWindows>
-        <IsIOS Condition="!Exists('$(IsIOS)')">false</IsIOS>
-        <IsMacCatalyst Condition="!Exists('$(IsMacCatalyst)')">false</IsMacCatalyst>
-        <IsAndroid Condition="!Exists('$(IsAndroid)')">false</IsAndroid>
-        <IsWindows Condition="!Exists('$(IsWindows)')">false</IsWindows>
+        <IsIOS Condition="$(TargetFramework.Contains('ios'))">true</IsIOS>
+        <IsMacCatalyst Condition="$(TargetFramework.Contains('maccatalyst'))">true</IsMacCatalyst>
+        <IsAndroid Condition="$(TargetFramework.Contains('android'))">true</IsAndroid>
+        <IsWindows Condition="$(TargetFramework.Contains('windows'))">true</IsWindows>
+        <!-- Defaults to FALSE -->
+        <IsIOS Condition="$(IsIOS.Trim()) == ''">false</IsIOS>
+        <IsMacCatalyst Condition="$(IsMacCatalyst.Trim()) == ''">false</IsMacCatalyst>
+        <IsAndroid Condition="$(IsAndroid.Trim()) == ''">false</IsAndroid>
+        <IsWindows Condition="$(IsWindows.Trim()) == ''">false</IsWindows>
     </PropertyGroup>
     <PropertyGroup>
         <SupportedOSPlatformVersion Condition="$(IsIOS)">11.0</SupportedOSPlatformVersion>
