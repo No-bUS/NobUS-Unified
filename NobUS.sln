@@ -17,6 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Resources", "src\NobU
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{A67A82AF-00C5-437C-A066-A09A01F8B219}"
 	ProjectSection(SolutionItems) = preProject
+		.prettierrc.yaml = .prettierrc.yaml
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		NuGet.config = NuGet.config
