@@ -3,6 +3,7 @@ using MaterialColorUtilities.Maui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
+using MoreLinq;
 using NobUS.DataContract.Reader.OfficialAPI;
 using NobUS.Frontend.MAUI.Presentation;
 using NobUS.Frontend.MAUI.Service;
@@ -12,12 +13,11 @@ namespace NobUS.Frontend.MAUI;
 
 public static class MauiProgram
 {
-    private static readonly string[] stringArray = [""];
-    private static readonly string[] sourceArray = ["ExtraBold", "Regular", "SemiBold", "Bold"];
+    private static readonly string[] poppinsVariants = ["ExtraBold", "Regular", "SemiBold", "Bold"];
+    private static readonly string[] miconFontVariants = ["Regular", "Outlined", "Round", "Sharp"];
 
     public static MauiApp CreateMauiApp()
     {
-        var list = sourceArray.SelectMany(w => stringArray, (w, s) => $"{w}{s}").ToList();
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiReactorApp<PageContainer>(
@@ -30,9 +30,10 @@ public static class MauiProgram
             .UseMaterialColors()
             .ConfigureFonts(fonts =>
             {
-                list.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
-                fonts.AddFont("MaterialIcons-Regular.ttf", "MIcon");
-                fonts.AddFont("MaterialIconsOutlined-Regular.ttf", "MIconOutlined");
+                poppinsVariants.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
+                miconFontVariants.ForEach(w =>
+                    fonts.AddFont($"MaterialIcons-{w}.ttf", $"MIcon-{w}")
+                );
             });
 #if DEBUG
         builder.Logging.AddDebug();

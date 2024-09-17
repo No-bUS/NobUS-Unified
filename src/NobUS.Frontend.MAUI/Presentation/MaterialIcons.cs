@@ -2242,5 +2242,5 @@ internal static class MaterialIconsExtension
     public static string ToGlyph(this MaterialIcons icon) => char.ConvertFromUtf32((int)icon);
 
     public static FontImageSource ToFontImageSource(this MaterialIcons icon) =>
-        new() { Glyph = icon.ToGlyph(), FontFamily = "MIcon" };
+        new() { Glyph = icon.ToGlyph(), FontFamily = "MIcon-Regular" };
 }

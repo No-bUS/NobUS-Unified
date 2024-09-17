@@ -44,7 +44,7 @@ internal class NavigationBar : Component<NavigationBarState>
             {
                 new Label()
                     .Text(char.ConvertFromUtf32((int)item.Icon))
-                    .FontFamily("MIcon")
+                    .FontFamily("MIcon-Regular")
                     .TextColor(
                         selected ? Styler.Scheme.OnSecondaryContainer : Styler.Scheme.OnSurface
                     )
