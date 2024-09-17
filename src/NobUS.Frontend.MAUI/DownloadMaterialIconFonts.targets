@@ -1,0 +1,93 @@
+<Project Sdk="">
+    <Target BeforeTargets="PrepareResources" Name="DownloadMaterialIcons">
+        <PropertyGroup>
+            <MaterialIconsFamilies>
+                Material+Icons,Material+Icons+Outlined,Material+Icons+Round,Material+Icons+Sharp
+            </MaterialIconsFamilies>
+            <MaterialIconsUrl>
+                https://fonts.googleapis.com/icon?family=$(MaterialIconsFamilies)
+            </MaterialIconsUrl>
+            <MaterialIconsDirectory>
+                $(MSBuildThisFileDirectory)Resources\Fonts
+            </MaterialIconsDirectory>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <MaterialIconFamily Include="$(MaterialIconsFamilies.Split(','))" />
+        </ItemGroup>
+
+        <MakeDir Directories="$(MaterialIconsDirectory)" />
+
+        <DownloadMaterialIconFont
+            DestinationDirectory="$(MaterialIconsDirectory.Trim())"
+            IconFamilies="@(MaterialIconFamily)"
+        />
+    </Target>
+
+    <UsingTask
+        AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll"
+        TaskFactory="RoslynCodeTaskFactory"
+        TaskName="DownloadMaterialIconFont"
+    >
+        <ParameterGroup>
+            <IconFamilies ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+            <DestinationDirectory ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Net.Http" />
+            <Using Namespace="System.Text.RegularExpressions" />
+            <Using Namespace="Microsoft.Build.Framework" />
+            <Code Language="cs" Type="Fragment">
+              <![CDATA[
+                var debugMessages = new StringBuilder();
+                var client = new HttpClient();
+
+                void DownloadFont(ITaskItem family)
+                {
+                    var css = client.GetStringAsync($"https://fonts.googleapis.com/icon?family={family.ItemSpec}").Result;
+
+                    var match = Regex.Match(css, @"src:\s*url\((.*?)\)\s*format\(['""](\w+)['""]\)");
+                    if (!match.Success)
+                    {
+                        throw new Exception($"Could not find font URL for {family.ItemSpec}" +
+                            $"\nCSS content for {family.ItemSpec}:\n{css}" +
+                            $"\nDebug messages:\n{debugMessages.ToString()}");
+                    }
+
+                    var fontUrl = match.Groups[1].Value;
+                    var format = match.Groups[2].Value switch
+                    {
+                        "opentype" => "otf",
+                        "truetype" => "ttf",
+                        "woff2" => throw new Exception($"Font is woff2.\n{debugMessages.ToString()}"),
+                        _ => throw new Exception($"Unknown font format: {match.Groups[2].Value}.\n{debugMessages.ToString()}")
+                    };
+
+                    var fileName = family.ItemSpec.Count(c => c == '+') == 1 
+                        ? $"{family.ItemSpec.Replace('+', '-')}-Regular.{format}" 
+                        : $"{family.ItemSpec.Replace('+', '-')}.{format}";
+                    var filePath = Path.Combine(DestinationDirectory, fileName);
+
+                    var fontResponse = client.GetAsync(fontUrl).Result;
+                    if (!fontResponse.IsSuccessStatusCode)
+                        throw new Exception($"Failed to download {fileName}. Status code: {fontResponse.StatusCode}" +
+                            $"\nDebug messages:\n{debugMessages.ToString()}");
+
+                    var fs = new FileStream(filePath, FileMode.Create);
+                    fontResponse.Content.CopyToAsync(fs).Wait();
+                    debugMessages.AppendLine($"Downloaded {fileName} to {filePath}");
+                    Log.LogMessage(MessageImportance.High, $"Successfully downloaded: {fileName}");
+                }
+
+                foreach (var family in IconFamilies)
+                {
+                    try { DownloadFont(family); }
+                    catch (Exception ex) {
+                        throw new Exception(ex.Message + $"\nDebug messages:\n{debugMessages.ToString()}");
+                    }
+                }
+              ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+</Project>
