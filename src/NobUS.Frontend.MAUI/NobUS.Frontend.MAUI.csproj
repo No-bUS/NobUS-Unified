@@ -1,25 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project=".\build-configs\TargetFramework.csproj" />
-    <Import Project=".\build-configs\PlatformVersion.csproj" />
-    <Import Project=".\build-configs\AppMetadata.csproj" />
-    <Import Project=".\build-configs\AppAssets.csproj" />
-    <Import Project=".\build-configs\DownloadMaterialIconFonts.targets" />
-
-    <ItemGroup>
-        <None Include=".\build-configs\AppMetadata.csproj" />
-        <None Include=".\build-configs\PlatformVersion.csproj" />
-        <None Include=".\build-configs\TargetFramework.csproj" />
-        <None Include=".\build-configs\AppAssets.csproj" />
-        <None Include=".\build-configs\DownloadMaterialIconFonts.targets" />
-    </ItemGroup>
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <RootNamespace>NobUS.Frontend.MAUI</RootNamespace>
         <UseMaui>true</UseMaui>
         <SingleProject>true</SingleProject>
         <SelfContained>true</SelfContained>
+        <BuildConfigs>build-configs\*.csproj;build-configs\*.targets</BuildConfigs>
     </PropertyGroup>
+
+    <Import Project="$(BuildConfigs)" />
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release' and $(IsAndroid)">
         <PublishTrimmed>true</PublishTrimmed>
@@ -70,5 +59,9 @@
             Include="..\NobUS.Extra.Campus.Facility.Sports\NobUS.Extra.Campus.Facility.Sports.csproj"
         />
         <ProjectReference Include="..\NobUS.Infrastructure\NobUS.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(BuildConfigs)" />
     </ItemGroup>
 </Project>
