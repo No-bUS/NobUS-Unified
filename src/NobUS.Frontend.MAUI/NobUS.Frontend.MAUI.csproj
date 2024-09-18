@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project=".\TargetFramework.csproj" />
-    <Import Project=".\PlatformVersion.csproj" />
-    <Import Project=".\AppMetadata.csproj" />
-    <Import Project=".\AppAssets.csproj" />
-    <Import Project=".\DownloadMaterialIconFonts.targets" />
+    <Import Project=".\build-configs\TargetFramework.csproj" />
+    <Import Project=".\build-configs\PlatformVersion.csproj" />
+    <Import Project=".\build-configs\AppMetadata.csproj" />
+    <Import Project=".\build-configs\AppAssets.csproj" />
+    <Import Project=".\build-configs\DownloadMaterialIconFonts.targets" />
 
     <ItemGroup>
-        <None Include=".\AppMetadata.csproj" />
-        <None Include=".\PlatformVersion.csproj" />
-        <None Include=".\TargetFramework.csproj" />
-        <None Include=".\AppAssets.csproj" />
-        <None Include=".\DownloadMaterialIconFonts.targets" />
+        <None Include=".\build-configs\AppMetadata.csproj" />
+        <None Include=".\build-configs\PlatformVersion.csproj" />
+        <None Include=".\build-configs\TargetFramework.csproj" />
+        <None Include=".\build-configs\AppAssets.csproj" />
+        <None Include=".\build-configs\DownloadMaterialIconFonts.targets" />
     </ItemGroup>
 
     <PropertyGroup>

@@ -1,5 +1,5 @@
 <Project Sdk="">
-    <Target BeforeTargets="PrepareResources" Name="DownloadMaterialIcons">
+    <Target Name="DownloadMaterialIcons">
         <PropertyGroup>
             <MaterialIconsFamilies>
                 Material+Icons,Material+Icons+Outlined,Material+Icons+Round,Material+Icons+Sharp
@@ -8,7 +8,7 @@
                 https://fonts.googleapis.com/icon?family=$(MaterialIconsFamilies)
             </MaterialIconsUrl>
             <MaterialIconsDirectory>
-                $(MSBuildThisFileDirectory)Resources\Fonts
+                $(MSBuildThisFileDirectory)..\Resources\Fonts
             </MaterialIconsDirectory>
         </PropertyGroup>
 
@@ -39,7 +39,7 @@
             <Using Namespace="Microsoft.Build.Framework" />
             <Code Language="cs" Type="Fragment">
               <![CDATA[
-                var debugMessages = new StringBuilder();
+                var debugMessages = new StringBuilder($"Downloading Material Icons to {DestinationDirectory}");
                 var client = new HttpClient();
 
                 void DownloadFont(ITaskItem family)
