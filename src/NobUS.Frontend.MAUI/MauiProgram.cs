@@ -32,7 +32,7 @@ public static class MauiProgram
             {
                 poppinsVariants.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
                 miconFontVariants.ForEach(w =>
-                    fonts.AddFont($"MaterialIcons-{w}.ttf", $"MIcon-{w}")
+                    fonts.AddFont($"Material-Icons-{w}.otf", $"MIcon-{w}")
                 );
             });
 #if DEBUG
