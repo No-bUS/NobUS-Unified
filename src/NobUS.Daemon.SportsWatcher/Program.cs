@@ -1,19 +1,19 @@
 ﻿using System;
 using System.CommandLine;
+using System.CommandLine.Builder;
+using System.CommandLine.Parsing;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using NobUS.Extra.Campus.Facility.Sports;
 using Spectre.Console;
 
 namespace NobUS.Daemon.SportsWatcher;
 
 class Program
 {
-    static async Task<int> Main(string[] args)
+    static Program()
     {
-        var rootCmd = RootCommand;
-        rootCmd.SetHandler(
+        RootCommand.SetHandler(
             async (FileInfo outputFile, double interval) =>
             {
                 while (true)
@@ -21,7 +21,7 @@ class Program
                     var sb = new StringBuilder(200);
                     var table = EmptyTable;
 
-                    var facilities = await Parser.GetAllAsync();
+                    var facilities = await Extra.Campus.Facility.Sports.Parser.GetAllAsync();
                     var timeString = GetTimeString();
 
                     foreach (var facility in facilities)
@@ -48,8 +48,10 @@ class Program
             OutputFile,
             Interval
         );
-        return await rootCmd.InvokeAsync(args);
     }
+
+    static async Task<int> Main(string[] args) =>
+        await new CommandLineBuilder(RootCommand).UseDefaults().Build().InvokeAsync(args);
 
     private static string GetTimeString() => $"{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
 
