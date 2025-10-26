@@ -127,10 +127,10 @@ internal partial class StationCard : DisposableComponent<StationCardState>
             }
                 .Spacing(6)
                 .BackgroundColor(backgroundColor)
-                .Padding(18, 16),
+                .Padding(16, 14),
         }
-            .ToCard(28)
-            .Margin(4, 8);
+            .ToCard(26)
+            .Margin(0, 6);
     }
 
     private static VisualNode RenderArrivalEvents(ArrivalEvent ae)
