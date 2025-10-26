@@ -1,0 +1,29 @@
+name: Format
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  csharpier:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 RC2 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.100-rc.2.25502.107
+
+      - name: Install CSharpier
+        run: dotnet tool install --global csharpier
+
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Check formatting
+        run: csharpier check .
