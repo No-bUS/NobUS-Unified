@@ -24,9 +24,6 @@
     <NoWarn>$(NoWarn);CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Resources\Fonts\Material-Icons-Regular.otf" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" />
     <PackageReference Include="CommunityToolkit.Maui.Markup" />
     <PackageReference Include="Fody">
