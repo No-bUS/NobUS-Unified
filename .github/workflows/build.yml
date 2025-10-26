@@ -38,24 +38,24 @@ jobs:
 
       - name: Install MAUI workloads (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet workload install maui-android --skip-manifest-update --source https://api.nuget.org/v3/index.json
+        run: dotnet workload install maui-android --skip-manifest-update
 
       - name: Install MAUI workloads (Windows/macOS)
         if: matrix.os != 'ubuntu-latest'
-        run: dotnet workload install maui maui-android --skip-manifest-update --source https://api.nuget.org/v3/index.json
+        run: dotnet workload install maui maui-android --skip-manifest-update
 
       - name: Restore dependencies
         run: dotnet restore NobUS.sln
 
       - name: Build solution
-        run: dotnet build NobUS.sln -c Release --no-restore
+        run: dotnet build NobUS.sln
 
       - name: Run tests (if present)
         shell: bash
         run: |
           set -euo pipefail
           if find . -name '*Test*.csproj' | grep -q .; then
-            dotnet test NobUS.sln -c Release --no-build
+            dotnet test NobUS.sln --no-build
           else
             echo "No test projects found. Skipping dotnet test."
           fi
