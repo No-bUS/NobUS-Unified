@@ -26,4 +26,4 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Check formatting
-        run: csharpier --check .
+        run: csharpier check .
