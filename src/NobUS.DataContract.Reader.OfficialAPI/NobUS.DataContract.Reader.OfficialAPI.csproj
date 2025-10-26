@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
+    <NswagToolManifest>$(MSBuildProjectDirectory)$(DirectorySeparatorChar)..$(DirectorySeparatorChar)..$(DirectorySeparatorChar)dotnet-tools.json</NswagToolManifest>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
@@ -13,15 +14,15 @@
   <ItemGroup>
     <None Remove="Client/SchemaClient.g.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Client/SchemaClient.g.cs" Condition="Exists('Client/SchemaClient.g.cs')" />
-  </ItemGroup>
   <Target Name="GenerateSchemaClient"
           Inputs="schema.nswag;Resource/Schema.yaml"
           Outputs="Client/SchemaClient.g.cs"
           BeforeTargets="CoreCompile">
     <MakeDir Directories="Client" />
-    <Exec Command="dotnet tool restore" WorkingDirectory="$(MSBuildProjectDirectory)" />
-    <Exec Command="dotnet tool run nswag run &quot;$(MSBuildProjectDirectory)/schema.nswag&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Exec Command="dotnet tool restore --tool-manifest &quot;$(NswagToolManifest)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Exec Command="dotnet tool run --tool-manifest &quot;$(NswagToolManifest)&quot; nswag run &quot;$(MSBuildProjectDirectory)$(DirectorySeparatorChar)schema.nswag&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <ItemGroup Condition="Exists('Client/SchemaClient.g.cs')">
+      <Compile Include="Client/SchemaClient.g.cs" />
+    </ItemGroup>
   </Target>
 </Project>
