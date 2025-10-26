@@ -4,7 +4,9 @@ using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Markup;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
+using Microsoft.Maui.Graphics;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using ReactiveUI;
@@ -62,7 +64,19 @@ internal partial class StationList : DisposableComponent
             .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
             .SeparatorVisibility(SeparatorVisibility.None)
             .HasUnevenRows(true)
-            .BackgroundColor(Styler.Scheme.Surface);
+            .BackgroundColor(Colors.Transparent)
+            .Margin(24, 0, 24, 120)
+            .RowHeight(-1)
+            .Header(
+                new Grid
+                {
+                    new Label("Nearby bus stops")
+                        .FontFamily("ExtraBold")
+                        .FontSize(22)
+                        .TextColor(Styler.Scheme.OnSurface)
+                        .Margin(0, 24, 0, 12),
+                }
+            );
 
     protected override void OnMounted()
     {
