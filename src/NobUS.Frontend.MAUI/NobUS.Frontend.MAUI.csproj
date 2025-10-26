@@ -62,4 +62,9 @@
   <ItemGroup>
     <None Include="$(BuildConfigs)" />
   </ItemGroup>
+  <ItemGroup>
+    <MauiIcon Update="Resources/AppIcon/appicon.svg">
+      <ForegroundFile>Resources/AppIcon/appiconfg.svg</ForegroundFile>
+    </MauiIcon>
+  </ItemGroup>
 </Project>

@@ -24,9 +24,6 @@ public static class MauiProgram
                 (app) => IMaterialColorService.Current.Initialize(app.Resources)
             )
             .UseMauiCommunityToolkit()
-#if DEBUG
-            .EnableMauiReactorHotReload()
-#endif
             .UseMaterialColors()
             .ConfigureFonts(fonts =>
             {

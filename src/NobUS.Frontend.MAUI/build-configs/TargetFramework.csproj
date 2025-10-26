@@ -3,12 +3,10 @@
     <!--suppress MsbuildTargetFrameworkTagInspection -->
     <TargetFrameworks>$(DotNetMajorVersion)-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-            $(TargetFrameworks);$(DotNetMajorVersion)-windows10.0.19041.0
-        </TargetFrameworks
-    >
+      $(TargetFrameworks);$(DotNetMajorVersion)-windows10.0.19041.0
+    </TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-            $(TargetFrameworks);$(DotNetMajorVersion)-ios;$(DotNetMajorVersion)-maccatalyst
-        </TargetFrameworks
-    >
+      $(TargetFrameworks);$(DotNetMajorVersion)-ios;$(DotNetMajorVersion)-maccatalyst
+    </TargetFrameworks>
   </PropertyGroup>
 </Project>
