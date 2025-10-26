@@ -14,7 +14,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 
 internal partial class StationList : DisposableComponent
 {
-    private ObservableCollection<Station> _stations = GetAllStations.ToObservableCollection();
+    private ObservableCollection<Station> _stations = [.. GetAllStations];
     private readonly IDispatcher dispatcher = Dispatcher.GetForCurrentThread()!;
 
     [Inject]
@@ -22,7 +22,7 @@ internal partial class StationList : DisposableComponent
 
     public StationList Stations(IList<Station> stations)
     {
-        _stations = stations.ToObservableCollection();
+        _stations = [.. stations];
         return this;
     }
 
