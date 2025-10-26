@@ -54,13 +54,6 @@ jobs:
           path: build/publish/NobUS.Frontend.MAUI/**/*.apk
           if-no-files-found: error
 
-      - name: Upload SportsWatcher DLL
-        uses: actions/upload-artifact@v4
-        with:
-          name: NobUS-SportsWatcher-dll
-          path: build/publish/NobUS.Daemon.SportsWatcher/**/NobUS.Daemon.SportsWatcher.dll
-          if-no-files-found: error
-
       - name: Upload SportsWatcher EXE
         uses: actions/upload-artifact@v4
         with:
