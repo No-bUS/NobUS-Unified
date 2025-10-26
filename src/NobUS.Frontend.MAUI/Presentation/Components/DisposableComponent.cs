@@ -1,4 +1,9 @@
-﻿namespace NobUS.Frontend.MAUI.Presentation.Components;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace NobUS.Frontend.MAUI.Presentation.Components;
 
 internal abstract class DisposableComponent : Component, IDisposable
 {
@@ -6,15 +11,15 @@ internal abstract class DisposableComponent : Component, IDisposable
 
     public void Dispose() =>
         Task.Run(() =>
-            _disposables
-                .Select(cr =>
+        {
+            foreach (var disposable in _disposables.ToList())
+            {
+                if (disposable.TryGetTarget(out var target))
                 {
-                    cr.TryGetTarget(out var c);
-                    return c;
-                })
-                .ToList()
-                .ForEach(c => c.Dispose())
-        );
+                    target.Dispose();
+                }
+            }
+        });
 
     protected internal void RegisterResource(IDisposable resource) =>
         _disposables.Add(new(resource));
@@ -33,15 +38,15 @@ internal abstract class DisposableComponent<T> : Component<T>, IDisposable
 
     public void Dispose() =>
         Task.Run(() =>
-            _disposables
-                .Select(cr =>
+        {
+            foreach (var disposable in _disposables.ToList())
+            {
+                if (disposable.TryGetTarget(out var target))
                 {
-                    cr.TryGetTarget(out var c);
-                    return c;
-                })
-                .ToList()
-                .ForEach(c => c.Dispose())
-        );
+                    target.Dispose();
+                }
+            }
+        });
 
     protected internal void RegisterResource(IDisposable resource) =>
         _disposables.Add(new(resource));

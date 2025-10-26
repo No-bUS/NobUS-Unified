@@ -1,5 +1,8 @@
-﻿using CommunityToolkit.Maui.Markup;
+﻿using System;
+using CommunityToolkit.Maui.Markup;
+using Microsoft.Maui.Graphics;
 using NobUS.DataContract.Model;
+using NobUS.Frontend.MAUI.Presentation;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
 using ReactiveUI;
@@ -10,7 +13,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 internal class StationCardState
 {
     public bool Expanded { get; set; }
-    public List<ArrivalEventGroup> ArrivalEvents { get; set; }
+    public List<ArrivalEventGroup>? ArrivalEvents { get; set; }
 }
 
 internal partial class StationCard : DisposableComponent<StationCardState>
@@ -49,44 +52,85 @@ internal partial class StationCard : DisposableComponent<StationCardState>
         Color textColor = State.Expanded ? this.UseScheme().OnSecondary : Styler.Scheme.OnSurface;
         Color backgroundColor = State.Expanded
             ? this.UseScheme().Secondary
-            : Styler.Scheme.SurfaceContainer;
+            : Styler.Scheme.SurfaceContainerHigh;
+
+        string distanceLabel = _distance < 1 ? $"{_distance * 1000:0} m" : $"{_distance:0.0} km";
+
         return new Border
         {
             new VerticalStackLayout
             {
                 new Grid("auto", "*,auto")
                 {
-                    new Label($"{_station.Code} | {_station.Road}")
-                        .GridColumn(0)
-                        .Regular()
-                        .Small()
-                        .HorizontalOptions(LayoutOptions.Start)
-                        .TextColor(textColor),
-                    new Label($"{_distance * 1000:F2}m")
-                        .Regular()
-                        .Small()
+                    new HorizontalStackLayout
+                    {
+                        new Label(char.ConvertFromUtf32((int)MaterialIcons.Route))
+                            .FontFamily("MIcon-Regular")
+                            .FontSize(16)
+                            .TextColor(textColor)
+                            .Opacity(0.75f),
+                        new Label($"{_station.Code} • {_station.Road}")
+                            .FontFamily("SemiBold")
+                            .FontSize(12)
+                            .TextColor(textColor)
+                            .Opacity(0.9f),
+                    }
+                        .Spacing(6)
+                        .GridColumn(0),
+                    new Border
+                    {
+                        new HorizontalStackLayout
+                        {
+                            new Label(char.ConvertFromUtf32((int)MaterialIcons.Place))
+                                .FontFamily("MIcon-Regular")
+                                .FontSize(14)
+                                .TextColor(textColor)
+                                .Opacity(0.85f),
+                            new Label(distanceLabel)
+                                .FontFamily("SemiBold")
+                                .FontSize(12)
+                                .TextColor(textColor),
+                        }
+                            .Spacing(4)
+                            .Padding(0, 0, 2, 0),
+                    }
+                        .Padding(10, 4)
+                        .BackgroundColor(textColor.WithAlpha(0.12f))
                         .GridColumn(1)
-                        .HorizontalOptions(LayoutOptions.End)
-                        .TextColor(textColor),
-                },
-                new Label(_station.Name).Medium().ExtraBold().OnTapped(Load).TextColor(textColor),
+                        .HorizontalOptions(LayoutOptions.End),
+                }
+                    .ColumnSpacing(12)
+                    .OnTapped(Load),
+                new Label(_station.Name)
+                    .FontFamily("ExtraBold")
+                    .FontSize(18)
+                    .TextColor(textColor)
+                    .LineBreakMode(Microsoft.Maui.LineBreakMode.TailTruncation)
+                    .Margin(0, 8, 0, 0)
+                    .OnTapped(Load),
                 !State.Expanded
                     ? null
                     : new Border
                     {
-                        new VerticalStackLayout { State.ArrivalEvents.Select(RenderGroup) }
-                            .HFill()
-                            .VFill()
-                            .Margin(5),
+                        new VerticalStackLayout
+                        {
+                            (State.ArrivalEvents ?? new List<ArrivalEventGroup>()).Select(
+                                RenderGroup
+                            ),
+                        }
+                            .Spacing(10)
+                            .Margin(4, 8)
+                            .HFill(),
                     }
                         .BackgroundColor(this.UseScheme().SecondaryContainer)
-                        .ToCard(20),
+                        .Padding(12, 10),
             }
+                .Spacing(6)
                 .BackgroundColor(backgroundColor)
-                .Padding(5),
+                .Padding(18, 16),
         }
-            .ToCard(20)
-            .Margin(1, 5);
+            .ToCard(28)
+            .Margin(4, 8);
     }
 
     private static VisualNode RenderArrivalEvents(ArrivalEvent ae)
@@ -125,21 +169,24 @@ internal partial class StationCard : DisposableComponent<StationCardState>
     }
 
     private static VisualNode RenderGroup(ArrivalEventGroup grouping) =>
-        new HorizontalStackLayout
+        new VerticalStackLayout
         {
-            new Label(grouping.RouteName)
-                .SemiBold()
-                .Base()
-                .TextColor(Styler.Scheme.OnSecondaryContainer),
+            new Border
+            {
+                new Label(grouping.RouteName)
+                    .SemiBold()
+                    .TextColor(Styler.Scheme.OnSecondary)
+                    .FontSize(13)
+                    .Margin(6, 2),
+            }.Background(Styler.Scheme.SecondaryContainer),
             new CollectionView()
                 .ItemsSource(grouping.Events, RenderArrivalEvents)
                 .ItemSizingStrategy(ItemSizingStrategy.MeasureAllItems)
                 .SelectionMode(SelectionMode.None)
                 .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
-                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5)),
-        }
-            .Spacing(5)
-            .HeightRequest(Styles.Sizes.Base * 2);
+                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(6))
+                .Margin(0, 6, 0, 0),
+        }.Spacing(6);
 
     private void Load()
     {
