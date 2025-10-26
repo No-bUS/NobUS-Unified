@@ -1,0 +1,44 @@
+{
+  "runtime": "Net100",
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "Resource/Schema.yaml"
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpClient": {
+      "className": "SchemaClient",
+      "namespace": "NobUS.DataContract.Reader.OfficialAPI.Client",
+      "clientBaseClass": null,
+      "configurationClass": null,
+      "generateClientInterfaces": false,
+      "injectHttpClient": true,
+      "disposeHttpClient": false,
+      "protectedMethods": [],
+      "generateOptionalParameters": true,
+      "generateJsonMethods": true,
+      "enforceFlagEnums": false,
+      "parameterDateTimeFormat": "o",
+      "generateUpdateJsonSerializerSettingsMethod": true,
+      "useBaseUrl": true,
+      "generateSyncMethods": false,
+      "clientClassAccessModifier": "public",
+      "typeAccessModifier": "public",
+      "generateContractsOutput": false,
+      "contractsNamespace": null,
+      "generateDtoTypes": true,
+      "generateOptionalPropertiesAsNullable": true,
+      "requiredPropertiesMustBeDefined": true,
+      "output": "Client/SchemaClient.g.cs",
+      "useNewtonsoftJson": true,
+      "jsonLibrary": "NewtonsoftJson",
+      "generateDefaultValues": true,
+      "inlineNamedDictionaries": false,
+      "inlineNamedAny": false,
+      "generateCustomHeaders": true,
+      "generateClientClasses": true,
+      "classStyle": "Poco",
+      "propertyNameGeneratorType": "Default"
+    }
+  }
+}

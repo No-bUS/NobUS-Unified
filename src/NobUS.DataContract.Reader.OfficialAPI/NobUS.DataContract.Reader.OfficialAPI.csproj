@@ -3,32 +3,25 @@
     <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <OpenApiReference
-      ClassName="SchemaClient"
-      CodeGenerator="NSwagCSharp"
-      Include="Resource\Schema.yaml"
-      Namespace="NobUS.DataContract.Reader.OfficialAPI.Client"
-    />
-    <None Remove="Resource\Schema.yaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>
-                runtime; build; native; contentfiles; analyzers; buildtransitive
-            </IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="NSwag.ApiDescription.Client">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>
-                runtime; build; native; contentfiles; analyzers; buildtransitive
-            </IncludeAssets>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NobUS.DataContract.Model\NobUS.DataContract.Model.csproj" />
     <ProjectReference Include="..\NobUS.Infrastructure\NobUS.Infrastructure.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Client/SchemaClient.g.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Client/SchemaClient.g.cs" Condition="Exists('Client/SchemaClient.g.cs')" />
+  </ItemGroup>
+  <Target Name="GenerateSchemaClient"
+          Inputs="schema.nswag;Resource/Schema.yaml"
+          Outputs="Client/SchemaClient.g.cs"
+          BeforeTargets="CoreCompile">
+    <MakeDir Directories="Client" />
+    <Exec Command="dotnet tool restore" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Exec Command="dotnet tool run nswag run &quot;$(MSBuildProjectDirectory)/schema.nswag&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
 </Project>

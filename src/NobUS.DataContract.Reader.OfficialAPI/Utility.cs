@@ -24,10 +24,11 @@ internal static class Utility
         shuttles
             .Where(ss => ss != null)
             .Where(ss => ss._etas != null)
-            .Where(ss => ss.Busstopcode[^2..] != "-E")
+            .Where(ss => ss.Busstopcode != null && ss.Busstopcode.Length >= 2 && ss.Busstopcode[^2..] != "-E")
             .Where(ss => ss._etas.Count != 0)
             .SelectMany(ss => ss._etas)
             .Where(x => x != null)
+            .Where(x => x.Jobid.HasValue)
             .Distinct();
 
     public static IEnumerable<(
@@ -37,7 +38,14 @@ internal static class Utility
         shuttles
             .Where(ss => ss != null)
             .Where(ss => ss._etas != null)
-            .Where(ss => ss.Busstopcode[^2..] != "-E")
+            .Where(ss => ss.Busstopcode != null && ss.Busstopcode.Length >= 2 && ss.Busstopcode[^2..] != "-E")
             .Where(ss => ss._etas.Count != 0)
-            .Select(ss => (ss.Name, ss._etas));
+            .Select(ss =>
+                (
+                    ss.Name,
+                    (ICollection<_etas>)ss._etas
+                        .Where(eta => eta != null && eta.Jobid.HasValue)
+                        .ToList()
+                )
+            );
 }
