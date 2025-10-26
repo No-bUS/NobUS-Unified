@@ -12,9 +12,6 @@
     <ProjectReference Include="..\NobUS.DataContract.Model\NobUS.DataContract.Model.csproj" />
     <ProjectReference Include="..\NobUS.Infrastructure\NobUS.Infrastructure.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Client/SchemaClient.g.cs" />
-  </ItemGroup>
   <Target
     Name="GenerateSchemaClient"
     Inputs="schema.nswag;Resource/Schema.yaml"
@@ -31,6 +28,7 @@
       WorkingDirectory="$(NswagToolManifestDirectory)"
     />
     <ItemGroup Condition="Exists('Client/SchemaClient.g.cs')">
+      <None Remove="Client/SchemaClient.g.cs" />
       <Compile Include="Client/SchemaClient.g.cs" />
     </ItemGroup>
   </Target>
