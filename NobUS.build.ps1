@@ -1,10 +1,10 @@
 task Clean {
-  @("obj","bin")
+  @("obj", "bin")
   | ForEach-Object { Get-ChildItem -Recurse -Filter $_ -Directory }
   | ForEach-Object -ThrottleLimit 9999 -Parallel {
     $emptyFolder = New-Item -Path $_.Parent -Name "$($_.Name)$(Get-Random).empty" -ItemType Directory
     & Robocopy.exe $emptyFolder $_ /MIR | Out-Null
-    Remove-Item -Path $emptyFolder,$_ -Recurse -Force
+    Remove-Item -Path $emptyFolder, $_ -Recurse -Force
   }
 }
 
@@ -26,5 +26,5 @@ task InstallApk {
   exec { adb install -r "./artifacts/NobUS.apk" }
 }
 
-task ProduceApk BuildAndroid,MoveApk
-task DeployApk ProduceApk,InstallApk
+task ProduceApk BuildAndroid, MoveApk
+task DeployApk ProduceApk, InstallApk
