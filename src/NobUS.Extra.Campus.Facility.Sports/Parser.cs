@@ -59,8 +59,10 @@ public static class Parser
                 continue;
             }
 
-            var splits = numbers
-                .Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var splits = numbers.Split(
+                '/',
+                StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries
+            );
 
             if (
                 splits.Length != 2
@@ -74,15 +76,12 @@ public static class Parser
             string trimmedName = rawName.Split('-')[0].Trim();
             string classes = node.GetAttributeValue("class", string.Empty);
 
-            Type facilityType = classes.Contains("swimbox", StringComparison.OrdinalIgnoreCase)
-                ? Type.Pool
-                : classes.Contains("gymbox", StringComparison.OrdinalIgnoreCase)
-                    ? Type.Gym
-                    : rawName.Contains("pool", StringComparison.OrdinalIgnoreCase)
-                        ? Type.Pool
-                        : rawName.Contains("gym", StringComparison.OrdinalIgnoreCase)
-                            ? Type.Gym
-                            : Type.Other;
+            Type facilityType =
+                classes.Contains("swimbox", StringComparison.OrdinalIgnoreCase) ? Type.Pool
+                : classes.Contains("gymbox", StringComparison.OrdinalIgnoreCase) ? Type.Gym
+                : rawName.Contains("pool", StringComparison.OrdinalIgnoreCase) ? Type.Pool
+                : rawName.Contains("gym", StringComparison.OrdinalIgnoreCase) ? Type.Gym
+                : Type.Other;
 
             facilities.Add(new Facility(trimmedName, capacity, load, facilityType));
         }
@@ -90,6 +89,5 @@ public static class Parser
         return facilities.ToArray();
     }
 
-    public static async Task<Facility[]> GetAllAsync() =>
-        Parse(await FetchAsync());
+    public static async Task<Facility[]> GetAllAsync() => Parse(await FetchAsync());
 }

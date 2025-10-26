@@ -56,10 +56,7 @@ internal class PageContainer : Component
                         {
                             GradientStops =
                             {
-                                new Microsoft.Maui.Controls.GradientStop(
-                                    Styler.Scheme.Primary,
-                                    0f
-                                ),
+                                new Microsoft.Maui.Controls.GradientStop(Styler.Scheme.Primary, 0f),
                                 new Microsoft.Maui.Controls.GradientStop(
                                     Styler.Scheme.Secondary,
                                     1f

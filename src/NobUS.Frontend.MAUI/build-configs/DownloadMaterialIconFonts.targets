@@ -2,8 +2,8 @@
   <Target
     Name="DownloadMaterialIcons"
     BeforeTargets="PrepareForBuild"
-    Inputs="@(MaterialIconFont->'%(SourceUrl)')"
-    Outputs="@(MaterialIconFont->'$(MaterialIconsDirectory)\\%(Identity)')"
+    Inputs="@(MaterialIconFont-&gt;'%(SourceUrl)')"
+    Outputs="@(MaterialIconFont-&gt;'$(MaterialIconsDirectory)\\%(Identity)')"
   >
     <PropertyGroup>
       <MaterialIconsDirectory>$(MSBuildThisFileDirectory)..\Resources\Fonts</MaterialIconsDirectory>

@@ -197,11 +197,11 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                         .FontFamily("Regular")
                         .Margin(0, 16, 0, 0),
                 }.RowSpacing(16),
-        }
-            .Padding(20)
-            .StrokeThickness(0)
-            .Stroke(Colors.Transparent)
-            .Background(
+            }
+                .Padding(20)
+                .StrokeThickness(0)
+                .Stroke(Colors.Transparent)
+                .Background(
                     new Microsoft.Maui.Controls.LinearGradientBrush
                     {
                         GradientStops =
