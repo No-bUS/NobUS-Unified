@@ -9,9 +9,7 @@ task Clean {
 }
 
 task Format {
-  exec { dotnet csharpier . }
-  exec { pnpm exec prettier '**\*.{csproj,xml,xaml}' -w }
-  exec { pnpm exec prettier '**\*.{csproj,xml,xaml}' -w }
+  exec { csharpier format . }
 }
 
 task BuildAndroid {
