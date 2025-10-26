@@ -26,7 +26,7 @@ internal class NavigationBar : Component<NavigationBarState>
                     .ItemsSource(_items, RenderItem)
                     .ItemSizingStrategy(ItemSizingStrategy.MeasureAllItems)
                     .VCenter()
-                    .HCenter()
+                    .HCenter(),
             }
                 .ToCard(0)
                 .HeightRequest(80)
@@ -49,7 +49,7 @@ internal class NavigationBar : Component<NavigationBarState>
                         selected ? Styler.Scheme.OnSecondaryContainer : Styler.Scheme.OnSurface
                     )
                     .FontSize(Sizes.Large * 1.2)
-                    .HCenter()
+                    .HCenter(),
             }
                 .HeightRequest(32)
                 .WidthRequest(64)

@@ -26,7 +26,7 @@ internal class SportFacilityList : Component<SportFacilityListState>
                         {
                             Progress = f.Occupancy,
                             Name = f.Name,
-                            Type = f.Type
+                            Type = f.Type,
                         }
                     )
                     .Margin(0, 0, 0, _ringSize / 10)
@@ -41,8 +41,8 @@ internal class SportFacilityList : Component<SportFacilityListState>
                     .Regular()
                     .TextColor(Styler.Scheme.OnSurface)
                     .SemiBold()
-                    .GridRow(2)
-            }.WidthRequest(100)
+                    .GridRow(2),
+            }.WidthRequest(100),
         }
             .ToCard(20)
             .Padding(20)
@@ -59,7 +59,7 @@ internal class SportFacilityList : Component<SportFacilityListState>
                 .Margin(0, 0, 0, 5),
             new CollectionView()
                 .ItemsSource(State.Facilities.Where(f => f.Type == t), RenderFacility)
-                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5))
+                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5)),
         };
 
     public override VisualNode Render() =>
@@ -72,7 +72,7 @@ internal class SportFacilityList : Component<SportFacilityListState>
                         .Where(t => State.Facilities.Where(f => f.Type == t).Any()),
                     RenderType
                 )
-                .ItemsLayout(new VerticalLinearItemsLayout().ItemSpacing(5))
+                .ItemsLayout(new VerticalLinearItemsLayout().ItemSpacing(5)),
         }
             .ToCard(20)
             .Padding(20)

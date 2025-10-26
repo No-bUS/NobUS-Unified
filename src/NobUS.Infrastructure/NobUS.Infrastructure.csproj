@@ -1,15 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
-        <OutputType>Library</OutputType>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\NobUS.DataContract.Model\NobUS.DataContract.Model.csproj" />
-        <ProjectReference Include="..\NobUS.Resources\NobUS.Resources.csproj" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NobUS.DataContract.Model\NobUS.DataContract.Model.csproj" />
+    <ProjectReference Include="..\NobUS.Resources\NobUS.Resources.csproj" />
+  </ItemGroup>
 </Project>

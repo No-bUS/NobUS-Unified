@@ -14,7 +14,7 @@ public record RouteStation(int Id, RouteStation.Type Variant) : EntityBase<int>(
         To,
         From,
         Both,
-        Twin
+        Twin,
     }
 
     [JsonIgnore]
@@ -29,7 +29,7 @@ public record Route(string Name, List<RouteStation> Stations, Route.Type Variant
     {
         Loop,
         Bidirectional,
-        Unidirectional
+        Unidirectional,
     }
 
     [JsonIgnore]
@@ -38,27 +38,26 @@ public record Route(string Name, List<RouteStation> Stations, Route.Type Variant
         {
             Type.Loop or Type.Unidirectional => Stations[0],
             Type.Bidirectional => Stations.Find(x => FilterStations(true).Invoke(x))!,
-            _ => throw new NotImplementedException()
+            _ => throw new NotImplementedException(),
         };
 
     [JsonIgnore]
     public RouteStation[] ToStations =>
         Variant switch
         {
-            Type.Bidirectional
-            or Type.Unidirectional
-                => Stations.Where(FilterStations(true)).ToArray(),
-            Type.Loop
-                => Stations
-                    .Where(FilterStations(true))
-                    .Concat(
-                        Stations
-                            .Where(FilterStations(false))
-                            .Reverse()
-                            .Select(x => x.Variant is RouteStation.Type.Twin ? x.Opposite! : x)
-                    )
-                    .ToArray(),
-            _ => throw new NotImplementedException()
+            Type.Bidirectional or Type.Unidirectional => Stations
+                .Where(FilterStations(true))
+                .ToArray(),
+            Type.Loop => Stations
+                .Where(FilterStations(true))
+                .Concat(
+                    Stations
+                        .Where(FilterStations(false))
+                        .Reverse()
+                        .Select(x => x.Variant is RouteStation.Type.Twin ? x.Opposite! : x)
+                )
+                .ToArray(),
+            _ => throw new NotImplementedException(),
         };
 
     [JsonIgnore]
@@ -77,7 +76,7 @@ public record Route(string Name, List<RouteStation> Stations, Route.Type Variant
                 RouteStation.Type.From => !isTo,
                 RouteStation.Type.Twin => includeTwin,
                 RouteStation.Type.Both => includeShared,
-                _ => throw new NotImplementedException()
+                _ => throw new NotImplementedException(),
             };
         };
 }

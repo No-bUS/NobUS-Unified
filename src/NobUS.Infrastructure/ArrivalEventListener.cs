@@ -87,7 +87,7 @@ public class ArrivalEventListener : IDisposable
                             groupItem = new ArrivalEventGroup()
                             {
                                 RouteName = group.Key,
-                                Events = new(group)
+                                Events = new(group),
                             };
                             _dataDict[queryName].EventGroups.Add(groupItem);
                         }

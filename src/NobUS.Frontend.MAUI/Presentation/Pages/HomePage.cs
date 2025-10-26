@@ -19,7 +19,7 @@ internal class HomePage : Component
                                 < 15 => "🍽Good afternoon",
                                 < 18 => "💪Keep up the good work",
                                 < 21 => "🌆Good evening",
-                                _ => "😴Sweet dreams"
+                                _ => "😴Sweet dreams",
                             }
                         )
                         .Large()
@@ -48,8 +48,8 @@ internal class HomePage : Component
                             .ClearButtonVisibility(ClearButtonVisibility.WhileEditing)
                             .IsSpellCheckEnabled(false)
                             .VerticalOptions(LayoutOptions.Center),
-                    }.RowSpacing(10)
+                    }.RowSpacing(10),
                 },
-            }.Spacing(40)
+            }.Spacing(40),
         };
 }

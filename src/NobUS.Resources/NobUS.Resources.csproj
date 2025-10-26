@@ -1,20 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <Compile Update="Definitions\StationsNRoutes.Designer.cs">
-            <DependentUpon>StationsNRoutes.resx</DependentUpon>
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Update="Definitions\StationsNRoutes.resx">
-            <LastGenOutput>StationsNRoutes.Designer.cs</LastGenOutput>
-            <Generator>PublicResXFileCodeGenerator</Generator>
-        </EmbeddedResource>
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Definitions\StationsNRoutes.Designer.cs">
+      <DependentUpon>StationsNRoutes.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Definitions\StationsNRoutes.resx">
+      <LastGenOutput>StationsNRoutes.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

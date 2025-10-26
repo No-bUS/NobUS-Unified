@@ -5,16 +5,15 @@ internal abstract class DisposableComponent : Component, IDisposable
     protected internal readonly List<WeakReference<IDisposable>> _disposables = new();
 
     public void Dispose() =>
-        Task.Run(
-            () =>
-                _disposables
-                    .Select(cr =>
-                    {
-                        cr.TryGetTarget(out var c);
-                        return c;
-                    })
-                    .ToList()
-                    .ForEach(c => c.Dispose())
+        Task.Run(() =>
+            _disposables
+                .Select(cr =>
+                {
+                    cr.TryGetTarget(out var c);
+                    return c;
+                })
+                .ToList()
+                .ForEach(c => c.Dispose())
         );
 
     protected internal void RegisterResource(IDisposable resource) =>
@@ -33,16 +32,15 @@ internal abstract class DisposableComponent<T> : Component<T>, IDisposable
     protected internal readonly List<WeakReference<IDisposable>> _disposables = new();
 
     public void Dispose() =>
-        Task.Run(
-            () =>
-                _disposables
-                    .Select(cr =>
-                    {
-                        cr.TryGetTarget(out var c);
-                        return c;
-                    })
-                    .ToList()
-                    .ForEach(c => c.Dispose())
+        Task.Run(() =>
+            _disposables
+                .Select(cr =>
+                {
+                    cr.TryGetTarget(out var c);
+                    return c;
+                })
+                .ToList()
+                .ForEach(c => c.Dispose())
         );
 
     protected internal void RegisterResource(IDisposable resource) =>

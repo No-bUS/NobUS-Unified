@@ -2234,7 +2234,7 @@ internal enum MaterialIcons
     ZoomIn = 0xe8ff,
     ZoomInMap = 0xeb2d,
     ZoomOut = 0xe900,
-    ZoomOutMap = 0xe56b
+    ZoomOutMap = 0xe56b,
 }
 
 internal static class MaterialIconsExtension

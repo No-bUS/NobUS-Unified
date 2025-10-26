@@ -77,13 +77,13 @@ internal partial class StationCard : DisposableComponent<StationCardState>
                         new VerticalStackLayout { State.ArrivalEvents.Select(RenderGroup) }
                             .HFill()
                             .VFill()
-                            .Margin(5)
+                            .Margin(5),
                     }
                         .BackgroundColor(this.UseScheme().SecondaryContainer)
                         .ToCard(20),
             }
                 .BackgroundColor(backgroundColor)
-                .Padding(5)
+                .Padding(5),
         }
             .ToCard(20)
             .Margin(1, 5);
@@ -96,7 +96,7 @@ internal partial class StationCard : DisposableComponent<StationCardState>
             var t when t < TimeSpan.FromMinutes(5) => ETATiers.f0t5,
             var t when t < TimeSpan.FromMinutes(30) => ETATiers.f5t30,
             var t when t < TimeSpan.FromMinutes(60) => ETATiers.f30t60,
-            _ => ETATiers.f60
+            _ => ETATiers.f60,
         };
 
         return new Label()
@@ -106,7 +106,7 @@ internal partial class StationCard : DisposableComponent<StationCardState>
                 {
                     ETATiers.f0t5 => TextDecorations.Underline,
                     ETATiers.f60 => TextDecorations.Strikethrough,
-                    _ => TextDecorations.None
+                    _ => TextDecorations.None,
                 }
             )
             .FontAttributes(
@@ -114,7 +114,7 @@ internal partial class StationCard : DisposableComponent<StationCardState>
                 {
                     ETATiers.f30t60 => FontAttributes.Italic,
                     ETATiers.f60 => FontAttributes.Italic,
-                    _ => FontAttributes.None
+                    _ => FontAttributes.None,
                 }
             )
             .Regular()
@@ -136,7 +136,7 @@ internal partial class StationCard : DisposableComponent<StationCardState>
                 .ItemSizingStrategy(ItemSizingStrategy.MeasureAllItems)
                 .SelectionMode(SelectionMode.None)
                 .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
-                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5))
+                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5)),
         }
             .Spacing(5)
             .HeightRequest(Styles.Sizes.Base * 2);

@@ -1,7 +1,7 @@
 ﻿<maui:MauiWinUIApplication
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:local="using:NobUS.Frontend.MAUI.WinUI"
-    xmlns:maui="using:Microsoft.Maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="NobUS.Frontend.MAUI.WinUI.App"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:local="using:NobUS.Frontend.MAUI.WinUI"
+  xmlns:maui="using:Microsoft.Maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="NobUS.Frontend.MAUI.WinUI.App"
 />

@@ -34,8 +34,8 @@ internal class PageContainer : Component
                         MaterialIcons.FitnessCenter,
                         static () => new ToolsPage()
                     ),
-                }.GridRow(1)
-            }
+                }.GridRow(1),
+            },
         };
     }
 }

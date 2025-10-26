@@ -1,44 +1,40 @@
 <Project Sdk="">
-    <Target Name="DownloadMaterialIcons">
-        <PropertyGroup>
-            <MaterialIconsFamilies>
+  <Target Name="DownloadMaterialIcons">
+    <PropertyGroup>
+      <MaterialIconsFamilies>
                 Material+Icons,Material+Icons+Outlined,Material+Icons+Round,Material+Icons+Sharp
             </MaterialIconsFamilies>
-            <MaterialIconsUrl>
+      <MaterialIconsUrl>
                 https://fonts.googleapis.com/icon?family=$(MaterialIconsFamilies)
             </MaterialIconsUrl>
-            <MaterialIconsDirectory>
+      <MaterialIconsDirectory>
                 $(MSBuildThisFileDirectory)..\Resources\Fonts
             </MaterialIconsDirectory>
-        </PropertyGroup>
-
-        <ItemGroup>
-            <MaterialIconFamily Include="$(MaterialIconsFamilies.Split(','))" />
-        </ItemGroup>
-
-        <MakeDir Directories="$(MaterialIconsDirectory)" />
-
-        <DownloadMaterialIconFont
-            DestinationDirectory="$(MaterialIconsDirectory.Trim())"
-            IconFamilies="@(MaterialIconFamily)"
-        />
-    </Target>
-
-    <UsingTask
-        AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll"
-        TaskFactory="RoslynCodeTaskFactory"
-        TaskName="DownloadMaterialIconFont"
-    >
-        <ParameterGroup>
-            <IconFamilies ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
-            <DestinationDirectory ParameterType="System.String" Required="true" />
-        </ParameterGroup>
-        <Task>
-            <Using Namespace="System.Net.Http" />
-            <Using Namespace="System.Text.RegularExpressions" />
-            <Using Namespace="Microsoft.Build.Framework" />
-            <Code Language="cs" Type="Fragment">
-              <![CDATA[
+    </PropertyGroup>
+    <ItemGroup>
+      <MaterialIconFamily Include="$(MaterialIconsFamilies.Split(','))" />
+    </ItemGroup>
+    <MakeDir Directories="$(MaterialIconsDirectory)" />
+    <DownloadMaterialIconFont
+      DestinationDirectory="$(MaterialIconsDirectory.Trim())"
+      IconFamilies="@(MaterialIconFamily)"
+    />
+  </Target>
+  <UsingTask
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll"
+    TaskFactory="RoslynCodeTaskFactory"
+    TaskName="DownloadMaterialIconFont"
+  >
+    <ParameterGroup>
+      <IconFamilies ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <DestinationDirectory ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.Net.Http" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Code Language="cs" Type="Fragment">
+        <![CDATA[
                 var debugMessages = new StringBuilder($"Downloading Material Icons to {DestinationDirectory}");
                 var client = new HttpClient();
 
@@ -87,7 +83,7 @@
                     }
                 }
               ]]>
-            </Code>
-        </Task>
-    </UsingTask>
+      </Code>
+    </Task>
+  </UsingTask>
 </Project>

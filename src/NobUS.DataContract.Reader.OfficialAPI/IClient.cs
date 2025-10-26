@@ -18,20 +18,18 @@ public interface IClient
         where TResult : class =>
         Type.GetTypeCode(typeof(TResult)) switch
         {
-            TypeCode.Object
-                => typeof(TResult) switch
-                {
-                    { } t when t == typeof(Station)
-                        => (IImmutableList<TResult>)await GetStationsAsync(),
-                    { } t when t == typeof(Route)
-                        => (IImmutableList<TResult>)await GetRoutesAsync(),
-                    { } t when t == typeof(Vehicle)
-                        => (IImmutableList<TResult>)await GetVehiclesAsync(),
-                    { } t when t == typeof(ShuttleJob)
-                        => (IImmutableList<TResult>)await GetShuttleJobsAsync(),
-                    _ => ImmutableList<TResult>.Empty
-                },
-            _ => ImmutableList<TResult>.Empty
+            TypeCode.Object => typeof(TResult) switch
+            {
+                { } t when t == typeof(Station) => (IImmutableList<TResult>)
+                    await GetStationsAsync(),
+                { } t when t == typeof(Route) => (IImmutableList<TResult>)await GetRoutesAsync(),
+                { } t when t == typeof(Vehicle) => (IImmutableList<TResult>)
+                    await GetVehiclesAsync(),
+                { } t when t == typeof(ShuttleJob) => (IImmutableList<TResult>)
+                    await GetShuttleJobsAsync(),
+                _ => ImmutableList<TResult>.Empty,
+            },
+            _ => ImmutableList<TResult>.Empty,
         };
 
     async Task<IImmutableList<TResult>> GetAsync<TResult, TQuery>(TQuery query)
@@ -39,15 +37,14 @@ public interface IClient
         where TQuery : class =>
         Type.GetTypeCode(typeof(TResult)) switch
         {
-            TypeCode.Object
-                => typeof(TResult) switch
-                {
-                    { } t when t == typeof(ArrivalEvent) && query is Station station
-                        => (IImmutableList<TResult>)await GetArrivalEventsAsync(station),
-                    { } t when t == typeof(Station) && query is Route route
-                        => (IImmutableList<TResult>)await GetStationsAsync(route),
-                    _ => ImmutableList<TResult>.Empty
-                },
-            _ => ImmutableList<TResult>.Empty
+            TypeCode.Object => typeof(TResult) switch
+            {
+                { } t when t == typeof(ArrivalEvent) && query is Station station =>
+                    (IImmutableList<TResult>)await GetArrivalEventsAsync(station),
+                { } t when t == typeof(Station) && query is Route route => (IImmutableList<TResult>)
+                    await GetStationsAsync(route),
+                _ => ImmutableList<TResult>.Empty,
+            },
+            _ => ImmutableList<TResult>.Empty,
         };
 }

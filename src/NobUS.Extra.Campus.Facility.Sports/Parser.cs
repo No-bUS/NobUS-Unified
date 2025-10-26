@@ -14,7 +14,7 @@ public enum Type
 {
     Gym,
     Pool,
-    Other
+    Other,
 }
 
 public static class Parser
@@ -56,7 +56,7 @@ public static class Parser
                 {
                     string s when s.ToLower().Contains("swimming pool") => Type.Pool,
                     string s when s.ToLower().Contains("gym") => Type.Gym,
-                    _ => Type.Other
+                    _ => Type.Other,
                 };
                 return new Facility(rawName.Split('-')[0], numString[1], numString[0], type);
             });

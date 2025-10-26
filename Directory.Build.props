@@ -1,10 +1,10 @@
 <Project>
-    <PropertyGroup>
-        <DotNetMajorVersion>net8.0</DotNetMajorVersion>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <LangVersion>latest</LangVersion>
-        <Nullable>enable</Nullable>
-        <UseArtifactsOutput>true</UseArtifactsOutput>
-        <ArtifactsPath>$(MSBuildThisFileDirectory)build</ArtifactsPath>
-    </PropertyGroup>
+  <PropertyGroup>
+    <DotNetMajorVersion>net8.0</DotNetMajorVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)build</ArtifactsPath>
+  </PropertyGroup>
 </Project>

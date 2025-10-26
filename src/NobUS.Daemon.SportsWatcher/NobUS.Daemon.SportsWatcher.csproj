@@ -1,28 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
-        <TrimMode>link</TrimMode>
-        <PublishAot>true</PublishAot>
-        <StripSymbols>true</StripSymbols>
-        <PublishTrimmed>true</PublishTrimmed>
-        <PublishSelfContained>true</PublishSelfContained>
-        <PublishLzmaCompressed>true</PublishLzmaCompressed>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="PublishAotCompressed" />
-        <PackageReference Include="System.CommandLine" />
-        <PackageReference Include="Spectre.Console" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference
-            Include="..\NobUS.Extra.Campus.Facility.Sports\NobUS.Extra.Campus.Facility.Sports.csproj"
-        />
-    </ItemGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(DotNetMajorVersion)</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
+    <TrimMode>link</TrimMode>
+    <PublishAot>true</PublishAot>
+    <StripSymbols>true</StripSymbols>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishSelfContained>true</PublishSelfContained>
+    <PublishLzmaCompressed>true</PublishLzmaCompressed>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="PublishAotCompressed" />
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="Spectre.Console" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NobUS.Extra.Campus.Facility.Sports\NobUS.Extra.Campus.Facility.Sports.csproj" />
+  </ItemGroup>
 </Project>

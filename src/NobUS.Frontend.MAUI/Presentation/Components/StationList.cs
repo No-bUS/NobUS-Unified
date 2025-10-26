@@ -31,7 +31,7 @@ internal partial class StationList : DisposableComponent
             new Microsoft.Maui.Controls.ISwipeItem[]
             {
 #if WINDOWS
-                new SwipeItem { Text = "Pin", BackgroundColor = Styler.Scheme.Surface, },
+                new SwipeItem { Text = "Pin", BackgroundColor = Styler.Scheme.Surface },
 #else
                 new SwipeItemView
                 {
@@ -41,15 +41,15 @@ internal partial class StationList : DisposableComponent
                         {
                             Text = "Pin",
                             FontFamily = "SemiBold",
-                            FontSize = Styles.Sizes.Medium
-                        }
+                            FontSize = Styles.Sizes.Medium,
+                        },
                     },
                 }
 #endif
             }
         )
         {
-            Mode = SwipeMode.Execute
+            Mode = SwipeMode.Execute,
         };
 
     public override VisualNode Render() =>

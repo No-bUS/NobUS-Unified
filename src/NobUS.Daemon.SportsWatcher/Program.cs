@@ -63,20 +63,21 @@ class Program
             .AddColumn("Load")
             .AddColumn("Occupancy");
 
-    private static readonly Option<FileInfo> OutputFile =
-        new(
-            aliases: ["--output", "-o"],
-            description: "The file to write the output to.",
-            getDefaultValue: () => new FileInfo($"Sports-{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.csv")
-        );
+    private static readonly Option<FileInfo> OutputFile = new(
+        aliases: ["--output", "-o"],
+        description: "The file to write the output to.",
+        getDefaultValue: () => new FileInfo($"Sports-{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.csv")
+    );
 
-    private static readonly Option<double> Interval =
-        new(
-            aliases: ["--interval", "-i"],
-            description: "The interval in seconds to check the capacity.",
-            getDefaultValue: () => 60
-        );
+    private static readonly Option<double> Interval = new(
+        aliases: ["--interval", "-i"],
+        description: "The interval in seconds to check the capacity.",
+        getDefaultValue: () => 60
+    );
 
-    private static readonly RootCommand RootCommand =
-        new("Logs NUS sport facility capacity info.") { OutputFile, Interval };
+    private static readonly RootCommand RootCommand = new("Logs NUS sport facility capacity info.")
+    {
+        OutputFile,
+        Interval,
+    };
 }
