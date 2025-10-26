@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
@@ -36,33 +37,59 @@ public static class Parser
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var swimmingPools = doc.DocumentNode.SelectSingleNode(
-            "/html/div[2]/div/div/div[3]/section/div/div/div[1]"
-        );
-        var gyms = doc.DocumentNode.SelectSingleNode(
-            "/html/div[2]/div/div/div[3]/section/div/div/div[2]"
-        );
-        var s = swimmingPools
-            .SelectNodes("./div[@class=\"swimbox\"]")
-            .Concat(gyms.SelectNodes("./div[@class=\"gymbox\"]"))
-            .Select(e =>
-            {
-                var numString = e.SelectSingleNode("./b")
-                    .InnerText.Split('/')
-                    .Select(s => int.Parse(s))
-                    .ToList();
-                var rawName = e.SelectSingleNode("./span").InnerText;
-                var type = rawName switch
-                {
-                    string s when s.ToLower().Contains("swimming pool") => Type.Pool,
-                    string s when s.ToLower().Contains("gym") => Type.Gym,
-                    _ => Type.Other,
-                };
-                return new Facility(rawName.Split('-')[0], numString[1], numString[0], type);
-            });
 
-        return s.ToArray();
+        var nodes = doc.DocumentNode.SelectNodes(
+            "//div[contains(@class,'swimbox') or contains(@class,'gymbox')]"
+        );
+
+        if (nodes is null || nodes.Count == 0)
+        {
+            return Array.Empty<Facility>();
+        }
+
+        var facilities = new List<Facility>();
+
+        foreach (var node in nodes)
+        {
+            var rawName = node.SelectSingleNode("./span")?.InnerText;
+            var numbers = node.SelectSingleNode("./b")?.InnerText;
+
+            if (string.IsNullOrWhiteSpace(rawName) || string.IsNullOrWhiteSpace(numbers))
+            {
+                continue;
+            }
+
+            var splits = numbers
+                .Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            if (
+                splits.Length != 2
+                || !int.TryParse(splits[0], out int load)
+                || !int.TryParse(splits[1], out int capacity)
+            )
+            {
+                continue;
+            }
+
+            string trimmedName = rawName.Split('-')[0].Trim();
+            string classes = node.GetAttributeValue("class", string.Empty);
+
+            Type facilityType = classes.Contains("swimbox", StringComparison.OrdinalIgnoreCase)
+                ? Type.Pool
+                : classes.Contains("gymbox", StringComparison.OrdinalIgnoreCase)
+                    ? Type.Gym
+                    : rawName.Contains("pool", StringComparison.OrdinalIgnoreCase)
+                        ? Type.Pool
+                        : rawName.Contains("gym", StringComparison.OrdinalIgnoreCase)
+                            ? Type.Gym
+                            : Type.Other;
+
+            facilities.Add(new Facility(trimmedName, capacity, load, facilityType));
+        }
+
+        return facilities.ToArray();
     }
 
-    public static async Task<Facility[]> GetAllAsync() => Parse(await FetchAsync());
+    public static async Task<Facility[]> GetAllAsync() =>
+        Parse(await FetchAsync());
 }

@@ -64,16 +64,16 @@ internal partial class StationList : DisposableComponent
             .SeparatorVisibility(SeparatorVisibility.None)
             .HasUnevenRows(true)
             .BackgroundColor(Colors.Transparent)
-            .Margin(24, 0, 24, 120)
+            .Margin(20, 0, 20, 80)
             .RowHeight(-1)
             .Header(
                 new Grid
                 {
                     new Label("Nearby bus stops")
                         .FontFamily("ExtraBold")
-                        .FontSize(22)
+                        .FontSize(20)
                         .TextColor(Styler.Scheme.OnSurface)
-                        .Margin(0, 24, 0, 12),
+                        .Margin(0, 16, 0, 8),
                 }
             );
 

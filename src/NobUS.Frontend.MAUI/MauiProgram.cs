@@ -13,8 +13,21 @@ namespace NobUS.Frontend.MAUI;
 
 public static class MauiProgram
 {
-    private static readonly string[] poppinsVariants = ["ExtraBold", "Regular", "SemiBold", "Bold"];
-    private static readonly string[] miconFontVariants = ["Regular", "Outlined", "Round", "Sharp"];
+    private static readonly (string File, string Alias)[] poppinsFonts =
+    [
+        ("Poppins-Regular.ttf", "Regular"),
+        ("Poppins-SemiBold.ttf", "SemiBold"),
+        ("Poppins-Bold.ttf", "Bold"),
+        ("Poppins-ExtraBold.ttf", "ExtraBold"),
+    ];
+
+    private static readonly (string File, string Alias)[] materialIconFonts =
+    [
+        ("MaterialIcons-Regular.ttf", "MIcon-Regular"),
+        ("MaterialIconsOutlined-Regular.otf", "MIcon-Outlined"),
+        ("MaterialIconsRound-Regular.otf", "MIcon-Round"),
+        ("MaterialIconsSharp-Regular.otf", "MIcon-Sharp"),
+    ];
 
     public static MauiApp CreateMauiApp()
     {
@@ -27,10 +40,8 @@ public static class MauiProgram
             .UseMaterialColors()
             .ConfigureFonts(fonts =>
             {
-                poppinsVariants.ForEach(w => fonts.AddFont($"Poppins-{w}.ttf", $"{w}"));
-                miconFontVariants.ForEach(w =>
-                    fonts.AddFont($"Material-Icons-{w}.otf", $"MIcon-{w}")
-                );
+                poppinsFonts.ForEach(font => fonts.AddFont(font.File, font.Alias));
+                materialIconFonts.ForEach(font => fonts.AddFont(font.File, font.Alias));
             });
 #if DEBUG
         builder.Logging.AddDebug();

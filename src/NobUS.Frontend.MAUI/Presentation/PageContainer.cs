@@ -35,34 +35,37 @@ internal class PageContainer : Component
                     {
                         new Label("NobUS")
                             .FontFamily("ExtraBold")
-                            .FontSize(32)
+                            .FontSize(30)
                             .TextColor(Styler.Scheme.OnPrimary),
                         new Label($"{greeting} ✨")
                             .FontFamily("SemiBold")
-                            .FontSize(16)
+                            .FontSize(15)
                             .TextColor(Styler.Scheme.OnPrimary)
                             .Opacity(0.9f),
                         new Label("Your realtime campus companion")
                             .FontFamily("Regular")
-                            .FontSize(14)
+                            .FontSize(13)
                             .TextColor(Styler.Scheme.OnPrimary)
-                            .Opacity(0.75f)
-                            .Margin(0, 6, 0, 0),
-                    }.Spacing(4),
+                            .Opacity(0.78f)
+                            .Margin(0, 4, 0, 0),
+                    }.Spacing(2),
                 }
-                    .Padding(32, 52, 32, 56)
+                    .Padding(24, 28, 24, 36)
                     .Background(
                         new Microsoft.Maui.Controls.LinearGradientBrush
                         {
                             GradientStops =
                             {
-                                new Microsoft.Maui.Controls.GradientStop(Styler.Scheme.Primary, 0f),
+                                new Microsoft.Maui.Controls.GradientStop(
+                                    Styler.Scheme.Primary,
+                                    0f
+                                ),
                                 new Microsoft.Maui.Controls.GradientStop(
                                     Styler.Scheme.Secondary,
                                     1f
                                 ),
                             },
-                            EndPoint = new Point(1, 1),
+                            EndPoint = new Point(0.9, 1),
                         }
                     )
                     .StrokeThickness(0)
@@ -84,7 +87,7 @@ internal class PageContainer : Component
                         ),
                     },
                 }
-                    .Margin(0, -24, 0, 0)
+                    .Margin(0, -16, 0, 0)
                     .GridRow(1),
             },
         }.Background(Styler.Scheme.Surface);

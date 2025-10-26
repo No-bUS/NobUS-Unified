@@ -1,23 +1,32 @@
 <Project Sdk="">
-  <Target Name="DownloadMaterialIcons">
+  <Target
+    Name="DownloadMaterialIcons"
+    BeforeTargets="PrepareForBuild"
+    Inputs="@(MaterialIconFont->'%(SourceUrl)')"
+    Outputs="@(MaterialIconFont->'$(MaterialIconsDirectory)\\%(Identity)')"
+  >
     <PropertyGroup>
-      <MaterialIconsFamilies>
-                Material+Icons,Material+Icons+Outlined,Material+Icons+Round,Material+Icons+Sharp
-            </MaterialIconsFamilies>
-      <MaterialIconsUrl>
-                https://fonts.googleapis.com/icon?family=$(MaterialIconsFamilies)
-            </MaterialIconsUrl>
-      <MaterialIconsDirectory>
-                $(MSBuildThisFileDirectory)..\Resources\Fonts
-            </MaterialIconsDirectory>
+      <MaterialIconsDirectory>$(MSBuildThisFileDirectory)..\Resources\Fonts</MaterialIconsDirectory>
+      <MaterialIconsRepositoryBase>https://raw.githubusercontent.com/google/material-design-icons/master/font</MaterialIconsRepositoryBase>
     </PropertyGroup>
     <ItemGroup>
-      <MaterialIconFamily Include="$(MaterialIconsFamilies.Split(','))" />
+      <MaterialIconFont Include="MaterialIcons-Regular.ttf">
+        <SourceUrl>$(MaterialIconsRepositoryBase)/MaterialIcons-Regular.ttf</SourceUrl>
+      </MaterialIconFont>
+      <MaterialIconFont Include="MaterialIconsOutlined-Regular.otf">
+        <SourceUrl>$(MaterialIconsRepositoryBase)/MaterialIconsOutlined-Regular.otf</SourceUrl>
+      </MaterialIconFont>
+      <MaterialIconFont Include="MaterialIconsRound-Regular.otf">
+        <SourceUrl>$(MaterialIconsRepositoryBase)/MaterialIconsRound-Regular.otf</SourceUrl>
+      </MaterialIconFont>
+      <MaterialIconFont Include="MaterialIconsSharp-Regular.otf">
+        <SourceUrl>$(MaterialIconsRepositoryBase)/MaterialIconsSharp-Regular.otf</SourceUrl>
+      </MaterialIconFont>
     </ItemGroup>
     <MakeDir Directories="$(MaterialIconsDirectory)" />
     <DownloadMaterialIconFont
-      DestinationDirectory="$(MaterialIconsDirectory.Trim())"
-      IconFamilies="@(MaterialIconFamily)"
+      DestinationDirectory="$(MaterialIconsDirectory)"
+      IconFonts="@(MaterialIconFont)"
     />
   </Target>
   <UsingTask
@@ -26,61 +35,48 @@
     TaskName="DownloadMaterialIconFont"
   >
     <ParameterGroup>
-      <IconFamilies ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <IconFonts ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
       <DestinationDirectory ParameterType="System.String" Required="true" />
     </ParameterGroup>
     <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
       <Using Namespace="System.Net.Http" />
-      <Using Namespace="System.Text.RegularExpressions" />
       <Using Namespace="Microsoft.Build.Framework" />
       <Code Language="cs" Type="Fragment">
         <![CDATA[
-                var debugMessages = new StringBuilder($"Downloading Material Icons to {DestinationDirectory}");
-                var client = new HttpClient();
+                using var client = new HttpClient();
 
-                void DownloadFont(ITaskItem family)
+                foreach (var font in IconFonts)
                 {
-                    var css = client.GetStringAsync($"https://fonts.googleapis.com/icon?family={family.ItemSpec}").Result;
-
-                    var match = Regex.Match(css, @"src:\s*url\((.*?)\)\s*format\(['""](\w+)['""]\)");
-                    if (!match.Success)
+                    var sourceUrl = font.GetMetadata("SourceUrl");
+                    if (string.IsNullOrWhiteSpace(sourceUrl))
                     {
-                        throw new Exception($"Could not find font URL for {family.ItemSpec}" +
-                            $"\nCSS content for {family.ItemSpec}:\n{css}" +
-                            $"\nDebug messages:\n{debugMessages.ToString()}");
+                        throw new Exception($"Missing SourceUrl metadata for {font.ItemSpec}.");
                     }
 
-                    var fontUrl = match.Groups[1].Value;
-                    var format = match.Groups[2].Value switch
-                    {
-                        "opentype" => "otf",
-                        "truetype" => "ttf",
-                        "woff2" => throw new Exception($"Font is woff2.\n{debugMessages.ToString()}"),
-                        _ => throw new Exception($"Unknown font format: {match.Groups[2].Value}.\n{debugMessages.ToString()}")
-                    };
-
-                    var fileName = family.ItemSpec.Count(c => c == '+') == 1 
-                        ? $"{family.ItemSpec.Replace('+', '-')}-Regular.{format}" 
-                        : $"{family.ItemSpec.Replace('+', '-')}.{format}";
+                    var fileName = string.IsNullOrWhiteSpace(font.ItemSpec)
+                        ? Path.GetFileName(new Uri(sourceUrl).AbsolutePath)
+                        : font.ItemSpec;
                     var filePath = Path.Combine(DestinationDirectory, fileName);
 
-                    var fontResponse = client.GetAsync(fontUrl).Result;
-                    if (!fontResponse.IsSuccessStatusCode)
-                        throw new Exception($"Failed to download {fileName}. Status code: {fontResponse.StatusCode}" +
-                            $"\nDebug messages:\n{debugMessages.ToString()}");
-
-                    var fs = new FileStream(filePath, FileMode.Create);
-                    fontResponse.Content.CopyToAsync(fs).Wait();
-                    debugMessages.AppendLine($"Downloaded {fileName} to {filePath}");
-                    Log.LogMessage(MessageImportance.High, $"Successfully downloaded: {fileName}");
-                }
-
-                foreach (var family in IconFamilies)
-                {
-                    try { DownloadFont(family); }
-                    catch (Exception ex) {
-                        throw new Exception(ex.Message + $"\nDebug messages:\n{debugMessages.ToString()}");
+                    if (File.Exists(filePath))
+                    {
+                        Log.LogMessage(MessageImportance.Low, $"Skipping download for {fileName}; file already exists.");
+                        continue;
                     }
+
+                    Log.LogMessage(MessageImportance.High, $"Downloading {fileName} from {sourceUrl}.");
+
+                    using var response = client.GetAsync(sourceUrl).Result;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception($"Failed to download {fileName} from {sourceUrl}. Status code: {response.StatusCode}");
+                    }
+
+                    using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                    response.Content.CopyToAsync(fs).Wait();
+                    Log.LogMessage(MessageImportance.High, $"Saved {fileName} to {filePath}.");
                 }
               ]]>
       </Code>

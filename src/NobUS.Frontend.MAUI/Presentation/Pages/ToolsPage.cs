@@ -20,11 +20,11 @@ internal class ToolsPage : Component, INavigationAware
                         .TextColor(Styler.Scheme.OnSurfaceVariant),
                 }
                     .Spacing(4)
-                    .Margin(0, 0, 0, 12),
+                    .Margin(0, 0, 0, 10),
                 _facilityList,
             }
-                .Spacing(24)
-                .Padding(24, 0, 24, 120),
+                .Spacing(20)
+                .Padding(20, 0, 20, 80),
         }.Background(
             new Microsoft.Maui.Controls.LinearGradientBrush
             {

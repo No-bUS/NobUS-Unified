@@ -24,7 +24,7 @@ internal class SportFacilityListState
 
 internal class SportFacilityList : Component<SportFacilityListState>, INavigationAware
 {
-    private readonly double _ringSize = 54;
+    private readonly double _ringSize = 48;
     private bool _isFetching;
 
     private enum RefreshTrigger
@@ -60,7 +60,7 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                     .Drawable(new ProgressArc { Progress = displayProgress, Type = facility.Type })
                     .GridColumn(0)
                     .GridRowSpan(2)
-                    .Margin(0, 0, 14, 0),
+                    .Margin(0, 0, 12, 0),
                 new VerticalStackLayout
                 {
                     new Label(facility.Name)
@@ -75,7 +75,7 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                 }
                     .GridColumn(1)
                     .Spacing(2)
-                    .Margin(0, 0, 0, 4),
+                    .Margin(0, 0, 0, 2),
                 new Label($"{displayProgress:P0}")
                     .FontFamily("SemiBold")
                     .Base()
@@ -83,17 +83,17 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                     .GridColumn(1)
                     .GridRow(1),
             }
-                .ColumnSpacing(14)
-                .RowSpacing(6),
+                .ColumnSpacing(12)
+                .RowSpacing(4),
         }
             .ToCard(24)
-            .Padding(18)
+            .Padding(16)
             .Background(
                 highlightChange
                     ? Styler.Scheme.SecondaryContainer
                     : Styler.Scheme.SurfaceContainerHigh
             )
-            .Margin(0, 0, 12, 0);
+            .Margin(0, 0, 10, 0);
     }
 
     private VisualNode RenderType(Type type) =>
@@ -106,7 +106,7 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                 .Margin(4, 0, 0, 8),
             new CollectionView()
                 .ItemsSource(State.Facilities.Where(f => f.Type == type), RenderFacility)
-                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(14))
+                .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(12))
                 .HorizontalScrollBarVisibility(ScrollBarVisibility.Never),
         };
 
@@ -196,12 +196,12 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                         .GridRow(2)
                         .FontFamily("Regular")
                         .Margin(0, 16, 0, 0),
-                }.RowSpacing(18),
-            }
-                .Padding(24)
-                .StrokeThickness(0)
-                .Stroke(Colors.Transparent)
-                .Background(
+                }.RowSpacing(16),
+        }
+            .Padding(20)
+            .StrokeThickness(0)
+            .Stroke(Colors.Transparent)
+            .Background(
                     new Microsoft.Maui.Controls.LinearGradientBrush
                     {
                         GradientStops =
@@ -230,7 +230,7 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                         .VCenter(),
                 }
                     .BackgroundColor(Styler.Scheme.Surface.WithAlpha(0.65f))
-                    .Padding(32)
+                    .Padding(24)
                 : null,
             !string.IsNullOrWhiteSpace(State.ErrorMessage)
                 ? new Border
@@ -242,9 +242,9 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                         .HCenter(),
                 }
                     .Background(Styler.Scheme.ErrorContainer)
-                    .Padding(12)
+                    .Padding(10)
                     .ToCard(18)
-                    .Margin(0, 12, 0, 0)
+                    .Margin(0, 8, 0, 0)
                     .VerticalOptions(LayoutOptions.End)
                 : null,
         };

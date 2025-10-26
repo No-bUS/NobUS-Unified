@@ -52,7 +52,7 @@ internal class NavigationBar : Component<NavigationBarState>
             new Border
             {
                 new CollectionView()
-                    .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(16))
+                    .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(12))
                     .ItemsSource(_items, RenderItem)
                     .ItemSizingStrategy(ItemSizingStrategy.MeasureAllItems)
                     .VCenter()
@@ -60,7 +60,7 @@ internal class NavigationBar : Component<NavigationBarState>
             }
                 .StrokeThickness(0)
                 .Stroke(Colors.Transparent)
-                .HeightRequest(84)
+                .HeightRequest(68)
                 .Background(
                     new Microsoft.Maui.Controls.LinearGradientBrush
                     {
@@ -79,7 +79,7 @@ internal class NavigationBar : Component<NavigationBarState>
                     }
                 )
                 .GridRow(1)
-                .Margin(20, 0, 20, 24),
+                .Margin(16, 0, 16, 18),
         }.Background(
             new Microsoft.Maui.Controls.LinearGradientBrush
             {
@@ -109,11 +109,11 @@ internal class NavigationBar : Component<NavigationBarState>
                             ? Styler.Scheme.OnSecondaryContainer
                             : Styler.Scheme.OnSurfaceVariant
                     )
-                    .FontSize(Sizes.Large * 1.2)
+                    .FontSize(Sizes.Medium * 1.25)
                     .HCenter(),
             }
-                .HeightRequest(36)
-                .WidthRequest(68)
+                .HeightRequest(32)
+                .WidthRequest(60)
                 .Background(
                     new Microsoft.Maui.Controls.LinearGradientBrush
                     {
@@ -131,7 +131,7 @@ internal class NavigationBar : Component<NavigationBarState>
                         EndPoint = new Point(1, 1),
                     }
                 )
-                .ToCard(32)
+                .ToCard(28)
                 .Padding(0, 4),
             new Label()
                 .Text(item.Title)
@@ -153,9 +153,9 @@ internal class NavigationBar : Component<NavigationBarState>
                 previous?.NotifyDeactivated();
                 item.NotifyActivated();
             })
-            .MinimumWidthRequest(56)
-            .Margin(0, 16, 0, 20)
-            .Spacing(6)
+            .MinimumWidthRequest(52)
+            .Margin(0, 12, 0, 16)
+            .Spacing(4)
             .HStart()
             .VCenter();
     }
