@@ -11,11 +11,17 @@ internal static class Adapter
         string routeName,
         _etas rawEta
     ) =>
-        new(stationCode, rawEta.Jobid, routeName, TimeSpan.FromSeconds(rawEta.Eta_s), DateTime.Now);
+        new(
+            stationCode,
+            rawEta.Jobid ?? 0,
+            routeName,
+            TimeSpan.FromSeconds(Convert.ToDouble(rawEta.Eta_s ?? rawEta.Eta ?? 0)),
+            DateTime.Now
+        );
 
     internal static MassPoint AdaptMassPoint(Activebus rawMassPoint) =>
         new(
-            new Coordinate(rawMassPoint.Lng, rawMassPoint.Lat),
-            new Velocity(rawMassPoint.Speed, rawMassPoint.Direction)
+            new Coordinate(rawMassPoint.Lng ?? 0, rawMassPoint.Lat ?? 0),
+            new Velocity(rawMassPoint.Speed ?? 0, rawMassPoint.Direction ?? 0)
         );
 }

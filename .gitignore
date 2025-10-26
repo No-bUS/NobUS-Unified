@@ -402,6 +402,7 @@ FodyWeavers.xsd
 # Resx codegen
 *.Designer.cs
 !src/NobUS.Resources/Definitions/StationsNRoutes.Designer.cs
+src/NobUS.DataContract.Reader.OfficialAPI/Client/SchemaClient.g.cs
 
 # Fonts
 *.[to]tf

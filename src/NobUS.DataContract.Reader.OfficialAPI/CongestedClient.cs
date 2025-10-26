@@ -133,7 +133,7 @@ public record CongestedClient : IClient
                 .Select(x =>
                     x._etas.Select(e =>
                             _shuttleJobs.AddOrUpdate(
-                                e.Jobid,
+                                e.Jobid!.Value,
                                 k => new ShuttleJob(
                                     k,
                                     Routes[x.RouteName],
