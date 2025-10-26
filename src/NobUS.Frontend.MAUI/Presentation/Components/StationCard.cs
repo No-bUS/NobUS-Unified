@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Maui.Markup;
+using System;
+using System.Collections.Generic;
+using CommunityToolkit.Maui.Markup;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
@@ -10,19 +12,22 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 internal class StationCardState
 {
     public bool Expanded { get; set; }
-    public List<ArrivalEventGroup> ArrivalEvents { get; set; }
+    public List<ArrivalEventGroup>? ArrivalEvents { get; set; }
 }
 
 internal partial class StationCard : DisposableComponent<StationCardState>
 {
-    private double _distance = 1.453;
-    private Station _station;
+    private double? _distance;
+    private Station? _station;
 
     [Inject]
-    private ILocationProvider locationProvider;
+    private ILocationProvider locationProvider = null!;
 
     [Inject]
-    private ArrivalEventListener arrivalEventListener;
+    private ArrivalEventListener arrivalEventListener = null!;
+
+    [Inject]
+    private StationViewStateStore stationViewStateStore = null!;
 
     private enum ETATiers
     {
@@ -38,7 +43,7 @@ internal partial class StationCard : DisposableComponent<StationCardState>
         return this;
     }
 
-    public StationCard Distance(double distance)
+    public StationCard Distance(double? distance)
     {
         _distance = distance;
         return this;
@@ -46,35 +51,47 @@ internal partial class StationCard : DisposableComponent<StationCardState>
 
     public override VisualNode Render()
     {
-        Color textColor = State.Expanded ? this.UseScheme().OnSecondary : Styler.Scheme.OnSurface;
-        Color backgroundColor = State.Expanded
+        var station = RequireStation();
+        var textColor = State.Expanded ? this.UseScheme().OnSecondary : Styler.Scheme.OnSurface;
+        var backgroundColor = State.Expanded
             ? this.UseScheme().Secondary
             : Styler.Scheme.SurfaceContainer;
+        var distance = _distance.HasValue ? $"{_distance.Value * 1000:F0}m" : "—";
+
         return new Border
         {
             new VerticalStackLayout
             {
                 new Grid("auto", "*,auto")
                 {
-                    new Label($"{_station.Code} | {_station.Road}")
+                    new Label($"{station.Code} | {station.Road}")
                         .GridColumn(0)
                         .Regular()
                         .Small()
                         .HorizontalOptions(LayoutOptions.Start)
                         .TextColor(textColor),
-                    new Label($"{_distance * 1000:F2}m")
+                    new Label(distance)
                         .Regular()
                         .Small()
                         .GridColumn(1)
                         .HorizontalOptions(LayoutOptions.End)
                         .TextColor(textColor),
                 },
-                new Label(_station.Name).Medium().ExtraBold().OnTapped(Load).TextColor(textColor),
+                new Label(station.Name)
+                    .Medium()
+                    .ExtraBold()
+                    .OnTapped(ToggleExpansion)
+                    .TextColor(textColor),
                 !State.Expanded
                     ? null
                     : new Border
                     {
-                        new VerticalStackLayout { State.ArrivalEvents.Select(RenderGroup) }
+                        new VerticalStackLayout
+                        {
+                            (State.ArrivalEvents ?? new List<ArrivalEventGroup>()).Select(
+                                RenderGroup
+                            ),
+                        }
                             .HFill()
                             .VFill()
                             .Margin(5),
@@ -89,18 +106,20 @@ internal partial class StationCard : DisposableComponent<StationCardState>
             .Margin(1, 5);
     }
 
-    private static VisualNode RenderArrivalEvents(ArrivalEvent ae)
+    private static VisualNode RenderArrivalEvents(ArrivalEvent arrivalEvent)
     {
-        var tier = ae.TimeToWait switch
+        var tier = arrivalEvent.TimeToWait switch
         {
-            var t when t < TimeSpan.FromMinutes(5) => ETATiers.f0t5,
-            var t when t < TimeSpan.FromMinutes(30) => ETATiers.f5t30,
-            var t when t < TimeSpan.FromMinutes(60) => ETATiers.f30t60,
+            var time when time < TimeSpan.FromMinutes(5) => ETATiers.f0t5,
+            var time when time < TimeSpan.FromMinutes(30) => ETATiers.f5t30,
+            var time when time < TimeSpan.FromMinutes(60) => ETATiers.f30t60,
             _ => ETATiers.f60,
         };
 
         return new Label()
-            .Text($"{ae.TimeToWait.TotalMinutes:0}m{(ae.TimeToWait.Seconds > 30 ? "+" : "")}")
+            .Text(
+                $"{arrivalEvent.TimeToWait.TotalMinutes:0}m{(arrivalEvent.TimeToWait.Seconds > 30 ? "+" : "")}"
+            )
             .TextDecorations(
                 tier switch
                 {
@@ -141,34 +160,67 @@ internal partial class StationCard : DisposableComponent<StationCardState>
             .Spacing(5)
             .HeightRequest(Styles.Sizes.Base * 2);
 
-    private void Load()
+    private void ToggleExpansion()
     {
+        var station = RequireStation();
         if (State.Expanded)
         {
-            SetState(s =>
+            stationViewStateStore.SetExpanded(station.Code, false);
+            arrivalEventListener.Cancel(station, this);
+            SetState(state =>
             {
-                s.Expanded = false;
-                s.ArrivalEvents = null;
+                state.Expanded = false;
+                state.ArrivalEvents = null;
             });
-            Dispose();
         }
         else
         {
-            SetState(s =>
+            var groups = arrivalEventListener.GetArrivalEventGroups(station, this);
+            stationViewStateStore.SetExpanded(station.Code, true);
+            SetState(state =>
             {
-                s.Expanded = true;
-                s.ArrivalEvents = arrivalEventListener.GetArrivalEventGroups(_station, this);
+                state.Expanded = true;
+                state.ArrivalEvents = groups;
             });
         }
     }
 
     protected override void OnMounted()
     {
-        locationProvider
-            .WhenAnyValue(x => x.Location)
-            .WhereNotNull()
-            .Subscribe(loc => _distance = _station.Coordinate.DistanceTo(loc))
-            .Invoke(RegisterResource);
         base.OnMounted();
+        var station = RequireStation();
+        var storedDistance = stationViewStateStore.GetDistance(station.Code);
+        if (storedDistance.HasValue)
+        {
+            _distance = storedDistance.Value;
+        }
+
+        locationProvider
+            .WhenAnyValue(provider => provider.Location)
+            .WhereNotNull()
+            .Subscribe(location =>
+            {
+                _distance = station.Coordinate.DistanceTo(location);
+                Invalidate();
+            })
+            .Invoke(RegisterResource);
+
+        if (stationViewStateStore.IsExpanded(station.Code) && !State.Expanded)
+        {
+            ToggleExpansion();
+        }
     }
+
+    protected override void OnWillUnmount()
+    {
+        var station = _station;
+        if (station is not null)
+        {
+            arrivalEventListener.Cancel(station, this);
+        }
+        base.OnWillUnmount();
+    }
+
+    private Station RequireStation() =>
+        _station ?? throw new InvalidOperationException("Station must be set before rendering.");
 }
