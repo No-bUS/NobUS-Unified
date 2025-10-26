@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using Microsoft.Maui;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Graphics;
 using NobUS.Frontend.MAUI.Presentation.Components;
@@ -49,40 +48,45 @@ internal class PageContainer : Component
                             .TextColor(Styler.Scheme.OnPrimary)
                             .Opacity(0.75f)
                             .Margin(0, 6, 0, 0),
-                    }
-                        .Spacing(4),
+                    }.Spacing(4),
                 }
                     .Padding(32, 52, 32, 56)
-                    .Background(new LinearGradientBrush
-                    {
-                        GradientStops =
+                    .Background(
+                        new Microsoft.Maui.Controls.LinearGradientBrush
                         {
-                            new GradientStop(Styler.Scheme.Primary, 0f),
-                            new GradientStop(Styler.Scheme.Secondary, 1f),
-                        },
-                        EndPoint = new Point(1, 1),
-                    })
-                    .StrokeShape(new RoundRectangle { CornerRadius = new CornerRadius(0, 0, 36, 36) })
+                            GradientStops =
+                            {
+                                new Microsoft.Maui.Controls.GradientStop(Styler.Scheme.Primary, 0f),
+                                new Microsoft.Maui.Controls.GradientStop(
+                                    Styler.Scheme.Secondary,
+                                    1f
+                                ),
+                            },
+                            EndPoint = new Point(1, 1),
+                        }
+                    )
                     .StrokeThickness(0)
                     .Stroke(Colors.Transparent)
                     .GridRow(0),
-                new NavigationBar
+                new ContentView
                 {
-                    new NavigationBarItem(
-                        "Stations",
-                        MaterialIcons.PinDrop,
-                        static () => new StationList()
-                    ),
-                    new NavigationBarItem(
-                        "Sports",
-                        MaterialIcons.FitnessCenter,
-                        static () => new ToolsPage()
-                    ),
+                    new NavigationBar
+                    {
+                        new NavigationBarItem(
+                            "Stations",
+                            MaterialIcons.PinDrop,
+                            static () => new StationList()
+                        ),
+                        new NavigationBarItem(
+                            "Sports",
+                            MaterialIcons.FitnessCenter,
+                            static () => new ToolsPage()
+                        ),
+                    },
                 }
-                    .GridRow(1)
-                    .Margin(0, -24, 0, 0),
+                    .Margin(0, -24, 0, 0)
+                    .GridRow(1),
             },
-        }
-            .Background(Styler.Scheme.Surface);
+        }.Background(Styler.Scheme.Surface);
     }
 }

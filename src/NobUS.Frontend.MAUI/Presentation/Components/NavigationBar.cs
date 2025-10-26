@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Graphics;
 using static NobUS.Frontend.MAUI.Presentation.Styles;
@@ -10,7 +10,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 
 internal class NavigationBarState
 {
-    public NavigationBarItem SelectedItem { get; set; }
+    public NavigationBarItem? SelectedItem { get; set; }
 }
 
 internal interface INavigationAware
@@ -28,7 +28,12 @@ internal class NavigationBar : Component<NavigationBarState>
 
     public override VisualNode Render()
     {
-        NavigationBarItem selectedItem = State.SelectedItem ?? _items.FirstOrDefault();
+        NavigationBarItem? selectedItem = State.SelectedItem ?? _items.FirstOrDefault();
+
+        if (selectedItem is null)
+        {
+            return new Grid();
+        }
 
         return new Grid("*,auto", "*")
         {
@@ -40,7 +45,7 @@ internal class NavigationBar : Component<NavigationBarState>
                         .Opacity(item == selectedItem ? 1 : 0)
                         .InputTransparent(item != selectedItem)
                         .Margin(0, 0, 0, 12)
-                )
+                ),
             }
                 .Padding(0, 0, 0, 12)
                 .GridRow(0),
@@ -53,32 +58,39 @@ internal class NavigationBar : Component<NavigationBarState>
                     .VCenter()
                     .HCenter(),
             }
-                .StrokeShape(new RoundRectangle().CornerRadius(28))
                 .StrokeThickness(0)
                 .Stroke(Colors.Transparent)
-                .Shadow(new Shadow { Brush = new SolidColorBrush(Color.FromArgb("#22000000")), Opacity = 0.4f, Radius = 12, Offset = new Point(0, 4) })
                 .HeightRequest(84)
-                .Background(new LinearGradientBrush
-                {
-                    GradientStops =
+                .Background(
+                    new Microsoft.Maui.Controls.LinearGradientBrush
                     {
-                        new GradientStop(Styler.Scheme.SurfaceContainerHigh, 0.0f),
-                        new GradientStop(Styler.Scheme.SurfaceContainer, 1.0f),
-                    },
-                    EndPoint = new Point(1, 1),
-                })
+                        GradientStops =
+                        {
+                            new Microsoft.Maui.Controls.GradientStop(
+                                Styler.Scheme.SurfaceContainerHigh,
+                                0.0f
+                            ),
+                            new Microsoft.Maui.Controls.GradientStop(
+                                Styler.Scheme.SurfaceContainer,
+                                1.0f
+                            ),
+                        },
+                        EndPoint = new Point(1, 1),
+                    }
+                )
                 .GridRow(1)
                 .Margin(20, 0, 20, 24),
-        }
-            .Background(new LinearGradientBrush
+        }.Background(
+            new Microsoft.Maui.Controls.LinearGradientBrush
             {
                 GradientStops =
                 {
-                    new GradientStop(Styler.Scheme.Surface, 0f),
-                    new GradientStop(Styler.Scheme.SurfaceContainer, 1f),
+                    new Microsoft.Maui.Controls.GradientStop(Styler.Scheme.Surface, 0f),
+                    new Microsoft.Maui.Controls.GradientStop(Styler.Scheme.SurfaceContainer, 1f),
                 },
                 EndPoint = new Point(0.5, 1),
-            });
+            }
+        );
     }
 
     private VisualNode RenderItem(NavigationBarItem item)
@@ -93,28 +105,32 @@ internal class NavigationBar : Component<NavigationBarState>
                     .Text(char.ConvertFromUtf32((int)item.Icon))
                     .FontFamily("MIcon-Regular")
                     .TextColor(
-                        selected ? Styler.Scheme.OnSecondaryContainer : Styler.Scheme.OnSurfaceVariant
+                        selected
+                            ? Styler.Scheme.OnSecondaryContainer
+                            : Styler.Scheme.OnSurfaceVariant
                     )
                     .FontSize(Sizes.Large * 1.2)
                     .HCenter(),
             }
                 .HeightRequest(36)
                 .WidthRequest(68)
-                .Background(new LinearGradientBrush
-                {
-                    GradientStops =
+                .Background(
+                    new Microsoft.Maui.Controls.LinearGradientBrush
                     {
-                        new GradientStop(
-                            selected ? Styler.Scheme.SecondaryContainer : Colors.Transparent,
-                            0f
-                        ),
-                        new GradientStop(
-                            selected ? Styler.Scheme.Secondary : Colors.Transparent,
-                            1f
-                        ),
-                    },
-                    EndPoint = new Point(1, 1),
-                })
+                        GradientStops =
+                        {
+                            new Microsoft.Maui.Controls.GradientStop(
+                                selected ? Styler.Scheme.SecondaryContainer : Colors.Transparent,
+                                0f
+                            ),
+                            new Microsoft.Maui.Controls.GradientStop(
+                                selected ? Styler.Scheme.Secondary : Colors.Transparent,
+                                1f
+                            ),
+                        },
+                        EndPoint = new Point(1, 1),
+                    }
+                )
                 .ToCard(32)
                 .Padding(0, 4),
             new Label()
@@ -148,8 +164,9 @@ internal class NavigationBar : Component<NavigationBarState>
     {
         if (_items.Any() && State.SelectedItem == null)
         {
-            SetState(s => s.SelectedItem = _items.First());
-            _items.First().NotifyActivated();
+            var first = _items.First();
+            SetState(s => s.SelectedItem = first);
+            first.NotifyActivated();
         }
 
         base.OnMounted();
@@ -159,7 +176,7 @@ internal class NavigationBar : Component<NavigationBarState>
 internal class NavigationBarItem
 {
     private readonly Func<Component> _contentFactory;
-    private Component _content;
+    private Component? _content;
 
     public NavigationBarItem(string title, MaterialIcons icon, Func<Component> contentFactory)
     {

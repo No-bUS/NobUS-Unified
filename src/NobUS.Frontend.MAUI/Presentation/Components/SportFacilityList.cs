@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui;
 using Microsoft.Maui.Dispatching;
 using Microsoft.Maui.Graphics;
 using NobUS.Extra.Campus.Facility.Sports;
-using NobUS.Frontend.MAUI.Presentation;
 using Type = NobUS.Extra.Campus.Facility.Sports.Type;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components;
@@ -21,7 +19,7 @@ internal class SportFacilityListState
     public bool IsBackgroundRefreshing { get; set; }
     public double AnimationProgress { get; set; } = 1;
     public DateTimeOffset? LastUpdated { get; set; }
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 }
 
 internal class SportFacilityList : Component<SportFacilityListState>, INavigationAware
@@ -38,72 +36,64 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
 
     private VisualNode RenderFacility(Facility facility)
     {
-        double previousOccupancy = State.PreviousOccupancies.TryGetValue(facility.Name, out double previous)
+        double previousOccupancy = State.PreviousOccupancies.TryGetValue(
+            facility.Name,
+            out double previous
+        )
             ? previous
             : facility.Occupancy;
 
-        double displayProgress = previousOccupancy + (facility.Occupancy - previousOccupancy) * State.AnimationProgress;
+        double displayProgress =
+            previousOccupancy + (facility.Occupancy - previousOccupancy) * State.AnimationProgress;
         displayProgress = Math.Clamp(displayProgress, 0, 1);
 
-        bool highlightChange = Math.Abs(facility.Occupancy - previousOccupancy) > 0.015 && State.AnimationProgress < 1;
+        bool highlightChange =
+            Math.Abs(facility.Occupancy - previousOccupancy) > 0.015 && State.AnimationProgress < 1;
 
         return new Border
+        {
+            new Grid("auto,auto", "auto,*")
             {
-                new Grid("auto,auto", "auto,*")
+                new GraphicsView()
+                    .HeightRequest(_ringSize)
+                    .WidthRequest(_ringSize)
+                    .Drawable(new ProgressArc { Progress = displayProgress, Type = facility.Type })
+                    .GridColumn(0)
+                    .GridRowSpan(2)
+                    .Margin(0, 0, 14, 0),
+                new VerticalStackLayout
                 {
-                    new GraphicsView()
-                        .HeightRequest(_ringSize)
-                        .WidthRequest(_ringSize)
-                        .Drawable(
-                            new ProgressArc
-                            {
-                                Progress = displayProgress,
-                                Type = facility.Type,
-                            }
-                        )
-                        .GridColumn(0)
-                        .GridRowSpan(2)
-                        .Margin(0, 0, 14, 0),
-                    new VerticalStackLayout
-                    {
-                        new Label(facility.Name)
-                            .Medium()
-                            .SemiBold()
-                            .TextColor(Styler.Scheme.OnSurface)
-                            .LineBreakMode(LineBreakMode.TailTruncation),
-                        new Label($"{facility.Load} / {facility.Capacity} in use")
-                            .Small()
-                            .Regular()
-                            .TextColor(Styler.Scheme.OnSurfaceVariant),
-                    }
-                        .GridColumn(1)
-                        .Spacing(2)
-                        .Margin(0, 0, 0, 4),
-                    new Label($"{displayProgress:P0}")
-                        .FontFamily("SemiBold")
-                        .Base()
+                    new Label(facility.Name)
+                        .Medium()
+                        .SemiBold()
                         .TextColor(Styler.Scheme.OnSurface)
-                        .GridColumn(1)
-                        .GridRow(1),
+                        .LineBreakMode(Microsoft.Maui.LineBreakMode.TailTruncation),
+                    new Label($"{facility.Load} / {facility.Capacity} in use")
+                        .Small()
+                        .Regular()
+                        .TextColor(Styler.Scheme.OnSurfaceVariant),
                 }
-                    .ColumnSpacing(14)
-                    .RowSpacing(6),
+                    .GridColumn(1)
+                    .Spacing(2)
+                    .Margin(0, 0, 0, 4),
+                new Label($"{displayProgress:P0}")
+                    .FontFamily("SemiBold")
+                    .Base()
+                    .TextColor(Styler.Scheme.OnSurface)
+                    .GridColumn(1)
+                    .GridRow(1),
             }
-                .ToCard(24)
-                .Padding(18)
-                .Background(
-                    highlightChange ? Styler.Scheme.SecondaryContainer : Styler.Scheme.SurfaceContainerHigh
-                )
-                .Shadow(
-                    new Shadow
-                    {
-                        Brush = new SolidColorBrush(Color.FromArgb("#1A000000")),
-                        Radius = 12,
-                        Opacity = 0.3f,
-                        Offset = new Point(0, 4),
-                    }
-                )
-                .Margin(0, 0, 12, 0);
+                .ColumnSpacing(14)
+                .RowSpacing(6),
+        }
+            .ToCard(24)
+            .Padding(18)
+            .Background(
+                highlightChange
+                    ? Styler.Scheme.SecondaryContainer
+                    : Styler.Scheme.SurfaceContainerHigh
+            )
+            .Margin(0, 0, 12, 0);
     }
 
     private VisualNode RenderType(Type type) =>
@@ -133,7 +123,7 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
             {
                 new Grid("auto,auto,*", "*")
                 {
-                    new Grid
+                    new Grid("*", "*,auto")
                     {
                         new Label("Campus activity")
                             .Large()
@@ -143,16 +133,15 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                         {
                             State.IsBackgroundRefreshing
                                 ? new Border
-                                    {
-                                        new Label("Updating…")
-                                            .Small()
-                                            .SemiBold()
-                                            .TextColor(Styler.Scheme.Primary),
-                                    }
-                                        .StrokeShape(new RoundRectangle().CornerRadius(12))
-                                        .Background(Styler.Scheme.SurfaceContainerHigh)
-                                        .Padding(8, 4)
-                                        .Margin(0, 0, 8, 0)
+                                {
+                                    new Label("Updating…")
+                                        .Small()
+                                        .SemiBold()
+                                        .TextColor(Styler.Scheme.Primary),
+                                }
+                                    .Background(Styler.Scheme.SurfaceContainerHigh)
+                                    .Padding(8, 4)
+                                    .Margin(0, 0, 8, 0)
                                 : null,
                             new Border
                             {
@@ -173,10 +162,8 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                         }
                             .Spacing(8)
                             .HEnd(),
-                    }
-                        .ColumnDefinitions("*,auto")
-                        .ColumnSpacing(12),
-                    new Grid
+                    }.ColumnSpacing(12),
+                    new Grid("*", "*,auto")
                     {
                         new Label(
                             State.LastUpdated is null
@@ -196,7 +183,6 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                                 .VCenter()
                             : null,
                     }
-                        .ColumnDefinitions("*,auto")
                         .ColumnSpacing(8)
                         .GridRow(1),
                     sections.Any()
@@ -204,68 +190,62 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                             .ItemsSource(sections, RenderType)
                             .ItemsLayout(new VerticalLinearItemsLayout().ItemSpacing(18))
                             .GridRow(2)
-                        : State.IsLoading
-                            ? null
-                            : new Label("No live facility information right now.")
-                                .TextColor(Styler.Scheme.OnSurfaceVariant)
-                                .GridRow(2)
-                                .FontFamily("Regular")
-                                .Margin(0, 16, 0, 0),
-                }
-                    .RowSpacing(18),
+                    : State.IsLoading ? null
+                    : new Label("No live facility information right now.")
+                        .TextColor(Styler.Scheme.OnSurfaceVariant)
+                        .GridRow(2)
+                        .FontFamily("Regular")
+                        .Margin(0, 16, 0, 0),
+                }.RowSpacing(18),
             }
                 .Padding(24)
-                .StrokeShape(new RoundRectangle().CornerRadius(32))
                 .StrokeThickness(0)
                 .Stroke(Colors.Transparent)
                 .Background(
-                    new LinearGradientBrush
+                    new Microsoft.Maui.Controls.LinearGradientBrush
                     {
                         GradientStops =
                         {
-                            new GradientStop(Styler.Scheme.SurfaceContainerHigh, 0f),
-                            new GradientStop(Styler.Scheme.SurfaceContainer, 1f),
+                            new Microsoft.Maui.Controls.GradientStop(
+                                Styler.Scheme.SurfaceContainerHigh,
+                                0f
+                            ),
+                            new Microsoft.Maui.Controls.GradientStop(
+                                Styler.Scheme.SurfaceContainer,
+                                1f
+                            ),
                         },
                         EndPoint = new Point(1, 1),
-                    }
-                )
-                .Shadow(
-                    new Shadow
-                    {
-                        Brush = new SolidColorBrush(Color.FromArgb("#20000000")),
-                        Radius = 18,
-                        Opacity = 0.35f,
-                        Offset = new Point(0, 8),
                     }
                 ),
             State.IsLoading
                 ? new Grid
-                    {
-                        new ActivityIndicator()
-                            .IsRunning(true)
-                            .Color(Styler.Scheme.Primary)
-                            .HeightRequest(40)
-                            .WidthRequest(40)
-                            .HCenter()
-                            .VCenter(),
-                    }
-                        .BackgroundColor(Styler.Scheme.Surface.WithAlpha(0.65f))
-                        .Padding(32)
+                {
+                    new ActivityIndicator()
+                        .IsRunning(true)
+                        .Color(Styler.Scheme.Primary)
+                        .HeightRequest(40)
+                        .WidthRequest(40)
+                        .HCenter()
+                        .VCenter(),
+                }
+                    .BackgroundColor(Styler.Scheme.Surface.WithAlpha(0.65f))
+                    .Padding(32)
                 : null,
             !string.IsNullOrWhiteSpace(State.ErrorMessage)
                 ? new Border
-                    {
-                        new Label(State.ErrorMessage)
-                            .TextColor(Styler.Scheme.Error)
-                            .FontFamily("SemiBold")
-                            .LineBreakMode(LineBreakMode.WordWrap)
-                            .HCenter(),
-                    }
-                        .Background(Styler.Scheme.ErrorContainer)
-                        .Padding(12)
-                        .ToCard(18)
-                        .Margin(0, 12, 0, 0)
-                        .VerticalOptions(LayoutOptions.End)
+                {
+                    new Label(State.ErrorMessage)
+                        .TextColor(Styler.Scheme.Error)
+                        .FontFamily("SemiBold")
+                        .LineBreakMode(Microsoft.Maui.LineBreakMode.WordWrap)
+                        .HCenter(),
+                }
+                    .Background(Styler.Scheme.ErrorContainer)
+                    .Padding(12)
+                    .ToCard(18)
+                    .Margin(0, 12, 0, 0)
+                    .VerticalOptions(LayoutOptions.End)
                 : null,
         };
     }
@@ -335,7 +315,9 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
         const double duration = 0.45;
         DateTimeOffset start = DateTimeOffset.Now;
 
-        var dispatcher = Dispatcher.GetForCurrentThread() ?? Application.Current?.Dispatcher;
+        var dispatcher =
+            Dispatcher.GetForCurrentThread()
+            ?? Microsoft.Maui.Controls.Application.Current?.Dispatcher;
         if (dispatcher is null)
         {
             SetState(s =>
@@ -346,22 +328,25 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
             return;
         }
 
-        dispatcher.StartTimer(TimeSpan.FromMilliseconds(16), () =>
-        {
-            double elapsed = (DateTimeOffset.Now - start).TotalSeconds;
-            double progress = Math.Clamp(elapsed / duration, 0, 1);
-
-            SetState(s =>
+        dispatcher.StartTimer(
+            TimeSpan.FromMilliseconds(16),
+            () =>
             {
-                s.AnimationProgress = progress;
-                if (progress >= 1)
-                {
-                    s.PreviousOccupancies = new();
-                }
-            });
+                double elapsed = (DateTimeOffset.Now - start).TotalSeconds;
+                double progress = Math.Clamp(elapsed / duration, 0, 1);
 
-            return progress < 1;
-        });
+                SetState(s =>
+                {
+                    s.AnimationProgress = progress;
+                    if (progress >= 1)
+                    {
+                        s.PreviousOccupancies = new();
+                    }
+                });
+
+                return progress < 1;
+            }
+        );
     }
 
     protected override async void OnMounted()
@@ -375,9 +360,7 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
         _ = LoadAsync(RefreshTrigger.Background);
     }
 
-    public void OnNavigatedFrom()
-    {
-    }
+    public void OnNavigatedFrom() { }
 
     private class ProgressArc : IDrawable
     {
@@ -386,6 +369,7 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
 
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
+            float thickness = dirtyRect.Width / 10f;
             float sweep = (float)Math.Min(Progress * 360 + 6, 359.99);
             canvas.StrokeColor = Progress switch
             {
@@ -394,14 +378,14 @@ internal class SportFacilityList : Component<SportFacilityListState>, INavigatio
                 < 0.75 => Color.FromArgb("#FFC043"),
                 _ => Color.FromArgb("#FF6B6B"),
             };
-            canvas.StrokeSize = dirtyRect.Width / 10;
+            canvas.StrokeSize = thickness;
             canvas.StrokeLineCap = LineCap.Round;
 
             canvas.DrawArc(
-                canvas.StrokeSize / 2,
-                canvas.StrokeSize / 2,
-                dirtyRect.Width - canvas.StrokeSize,
-                dirtyRect.Height - canvas.StrokeSize,
+                thickness / 2,
+                thickness / 2,
+                dirtyRect.Width - thickness,
+                dirtyRect.Height - thickness,
                 0,
                 sweep,
                 false,

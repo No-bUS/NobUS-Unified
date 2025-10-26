@@ -4,7 +4,6 @@ using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Markup;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
 using Microsoft.Maui.Graphics;
 using NobUS.DataContract.Model;
