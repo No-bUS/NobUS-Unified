@@ -30,6 +30,7 @@
       Include="Microsoft.Extensions.DependencyInjection"
       Version="10.0.0-rc.2.25502.107"
     />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0-rc.2.25502.107" />
     <PackageVersion Include="Fody" Version="6.9.3" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0-rc.2.25502.107" />
     <PackageVersion Include="PublishAotCompressed" Version="1.0.5" />

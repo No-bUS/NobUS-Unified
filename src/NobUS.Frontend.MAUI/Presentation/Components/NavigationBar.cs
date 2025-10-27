@@ -1,10 +1,14 @@
-﻿using static NobUS.Frontend.MAUI.Presentation.Styles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static NobUS.Frontend.MAUI.Presentation.Styles;
 
 namespace NobUS.Frontend.MAUI.Presentation.Components;
 
 internal class NavigationBarState
 {
-    public NavigationBarItem SelectedItem { get; set; }
+    public NavigationBarItem? SelectedItem { get; set; }
+    public Component? SelectedContent { get; set; }
 }
 
 internal class NavigationBar : Component<NavigationBarState>
@@ -13,10 +17,12 @@ internal class NavigationBar : Component<NavigationBarState>
 
     public void Add(NavigationBarItem item) => _items.Add(item);
 
-    public override VisualNode Render() =>
-        new Grid("*,auto", "*")
+    public override VisualNode Render()
+    {
+        var content = State.SelectedContent;
+        return new Grid("*,auto", "*")
         {
-            new ContentView { State.SelectedItem?.Content() }
+            new ContentView { content }
                 .GridRow(0)
                 .HCenter(),
             new Border
@@ -33,10 +39,11 @@ internal class NavigationBar : Component<NavigationBarState>
                 .Background(Styler.Scheme.SurfaceContainer)
                 .GridRow(1),
         }.Background(Styler.Scheme.Surface);
+    }
 
     private VisualNode RenderItem(NavigationBarItem item)
     {
-        bool selected = item == State.SelectedItem;
+        var selected = item == State.SelectedItem;
 
         return new VerticalStackLayout
         {
@@ -66,7 +73,11 @@ internal class NavigationBar : Component<NavigationBarState>
             {
                 if (State.SelectedItem != item)
                 {
-                    SetState(s => s.SelectedItem = item);
+                    SetState(state =>
+                    {
+                        state.SelectedItem = item;
+                        state.SelectedContent = item.CreateContent();
+                    });
                 }
             })
             .MinimumWidthRequest(48)
@@ -78,9 +89,21 @@ internal class NavigationBar : Component<NavigationBarState>
 
     protected override void OnMounted()
     {
-        State.SelectedItem = _items.First();
+        if (State.SelectedItem is null && _items.Count > 0)
+        {
+            var firstItem = _items.First();
+            SetState(state =>
+            {
+                state.SelectedItem = firstItem;
+                state.SelectedContent = firstItem.CreateContent();
+            });
+        }
         base.OnMounted();
     }
 }
 
-internal record NavigationBarItem(string Title, MaterialIcons Icon, Func<Component> Content);
+internal sealed record NavigationBarItem(
+    string Title,
+    MaterialIcons Icon,
+    Func<Component> CreateContent
+);

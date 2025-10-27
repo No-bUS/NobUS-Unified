@@ -8,16 +8,18 @@ using NobUS.DataContract.Reader.OfficialAPI.Client;
 
 namespace NobUS.DataContract.Reader.OfficialAPI;
 
-internal static class Utility
+public static class Utility
 {
-    public static HttpClient GetHttpClientWithAuth()
+    private static readonly string AuthorizationValue = Convert.ToBase64String(
+        Encoding.ASCII.GetBytes("NUSnextbus:13dL?zY,3feWR^\"T")
+    );
+
+    public static void ConfigureAuth(HttpClient httpClient)
     {
-        var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Basic",
-            Convert.ToBase64String(Encoding.ASCII.GetBytes("NUSnextbus:13dL?zY,3feWR^\"T"))
+            AuthorizationValue
         );
-        return httpClient;
     }
 
     public static IEnumerable<_etas> GetEtasFromShuttles(IEnumerable<Shuttles> shuttles) =>

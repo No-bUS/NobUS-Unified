@@ -1,3 +1,8 @@
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices.Sensors;
 using NobUS.DataContract.Model;
 using ReactiveUI;
@@ -5,45 +10,73 @@ using ReactiveUI.Fody.Helpers;
 
 namespace NobUS.Frontend.MAUI.Service;
 
-internal class LocationProvider : ReactiveObject, ILocationProvider
+internal sealed class LocationProvider : ReactiveObject, ILocationProvider
 {
-    [Reactive]
-    public Coordinate Location { get; private set; }
-    private readonly Task _backgroundTask;
+    private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(30);
+    private readonly IGeolocation _geolocation;
+    private readonly PeriodicTimer _timer = new(RefreshInterval);
     private readonly CancellationTokenSource _cancellationTokenSource = new();
-    private readonly CancellationToken _cancellationToken;
+    private readonly Task _backgroundTask;
+
+    [Reactive]
+    public Coordinate? Location { get; private set; }
 
     public LocationProvider()
+        : this(Geolocation.Default) { }
+
+    public LocationProvider(IGeolocation geolocation)
     {
-        _cancellationToken = _cancellationTokenSource.Token;
-        _backgroundTask = BackgroundTask();
-        LocationTask.ContinueWith(t =>
-            Location = new Coordinate(t.Result.Longitude, t.Result.Latitude)
-        );
+        _geolocation = geolocation;
+        _backgroundTask = RunAsync(_cancellationTokenSource.Token);
     }
 
-    private static Task<Location> LocationTask =>
-        Geolocation.Default.GetLocationAsync(
-            new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(30))
-        );
-
-    private Task BackgroundTask() =>
-        Task.Run(
-            async () =>
+    private async Task RunAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await UpdateLocationAsync(cancellationToken).ConfigureAwait(false);
+            while (await _timer.WaitForNextTickAsync(cancellationToken).ConfigureAwait(false))
             {
-                while (!_cancellationToken.IsCancellationRequested)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(30));
-                    var location = await LocationTask;
-                    Location = new Coordinate(location.Longitude, location.Latitude);
-                }
-            },
-            _cancellationToken
-        );
+                await UpdateLocationAsync(cancellationToken).ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    private async Task UpdateLocationAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var request = new GeolocationRequest(GeolocationAccuracy.High, RefreshInterval);
+            var location = await _geolocation
+                .GetLocationAsync(request, cancellationToken)
+                .ConfigureAwait(false);
+            if (location is not null)
+            {
+                Location = new Coordinate(location.Longitude, location.Latitude);
+            }
+        }
+        catch (FeatureNotEnabledException)
+        {
+            Location = null;
+        }
+        catch (PermissionException)
+        {
+            Location = null;
+        }
+    }
 
     public void Dispose()
     {
         _cancellationTokenSource.Cancel();
-        _backgroundTask.Dispose();
+        _timer.Dispose();
+        try
+        {
+            _backgroundTask.Wait();
+        }
+        catch (AggregateException ex)
+            when (ex.InnerExceptions.All(e => e is OperationCanceledException))
+        { }
+        _cancellationTokenSource.Dispose();
     }
 }

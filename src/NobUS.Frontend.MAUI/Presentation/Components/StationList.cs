@@ -1,10 +1,8 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
-using CommunityToolkit.Maui.Core.Extensions;
-using CommunityToolkit.Maui.Markup;
-using DynamicData;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Dispatching;
+using Microsoft.Maui.ApplicationModel;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using ReactiveUI;
@@ -14,50 +12,26 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 
 internal partial class StationList : DisposableComponent
 {
-    private ObservableCollection<Station> _stations = [.. GetAllStations];
-    private readonly IDispatcher dispatcher = Dispatcher.GetForCurrentThread()!;
+    private readonly ObservableCollection<Station> _stations = new(GetAllStations);
+    private readonly Dictionary<int, double> _distanceLookup = new();
 
     [Inject]
-    private ILocationProvider locationProvider;
+    private ILocationProvider locationProvider = null!;
+
+    [Inject]
+    private StationViewStateStore stationViewStateStore = null!;
 
     public StationList Stations(IList<Station> stations)
     {
-        _stations = [.. stations];
+        var ordered = stationViewStateStore.OrderStations(stations);
+        ReplaceStations(ordered);
+        stationViewStateStore.UpdateOrdering(ordered);
         return this;
     }
 
-    private static SwipeItems SwipeItems =>
-        new(
-            new Microsoft.Maui.Controls.ISwipeItem[]
-            {
-#if WINDOWS
-                new SwipeItem { Text = "Pin", BackgroundColor = Styler.Scheme.Surface },
-#else
-                new SwipeItemView
-                {
-                    Content = new Microsoft.Maui.Controls.Grid
-                    {
-                        new Microsoft.Maui.Controls.Label
-                        {
-                            Text = "Pin",
-                            FontFamily = "SemiBold",
-                            FontSize = Styles.Sizes.Medium,
-                        },
-                    },
-                }
-#endif
-            }
-        )
-        {
-            Mode = SwipeMode.Execute,
-        };
-
     public override VisualNode Render() =>
         new ListView()
-            .ItemsSource(
-                _stations,
-                s => new ViewCell() { new StationCard().Station(s).Invoke(RegisterResource) }
-            )
+            .ItemsSource(_stations, station => new ViewCell() { CreateCard(station) })
             .SelectionMode(ListViewSelectionMode.None)
             .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
             .SeparatorVisibility(SeparatorVisibility.None)
@@ -66,19 +40,78 @@ internal partial class StationList : DisposableComponent
 
     protected override void OnMounted()
     {
-        locationProvider
-            .WhenAnyValue(x => x.Location)
-            .WhereNotNull()
-            .Subscribe(loc =>
-            {
-                dispatcher.Dispatch(() =>
-                {
-                    var sorted = _stations.OrderBy(s => s.Coordinate.DistanceTo(loc)).ToList();
-                    _stations.Clear();
-                    _stations.AddRange(sorted);
-                });
-            })
-            .Invoke(RegisterResource);
         base.OnMounted();
+        ApplyStoredOrdering();
+        SubscribeToLocationUpdates();
+    }
+
+    private StationCard CreateCard(Station station)
+    {
+        var card = new StationCard().Station(station);
+        if (_distanceLookup.TryGetValue(station.Code, out var distance))
+        {
+            card = card.Distance(distance);
+        }
+        return card;
+    }
+
+    private void ApplyStoredOrdering()
+    {
+        var ordered = stationViewStateStore.OrderStations(_stations);
+        if (!ordered.SequenceEqual(_stations))
+        {
+            ReplaceStations(ordered);
+        }
+
+        foreach (var station in ordered)
+        {
+            if (stationViewStateStore.GetDistance(station.Code) is { } distance)
+            {
+                _distanceLookup[station.Code] = distance;
+            }
+        }
+    }
+
+    private void SubscribeToLocationUpdates()
+    {
+        var subscription = locationProvider
+            .WhenAnyValue(provider => provider.Location)
+            .WhereNotNull()
+            .Subscribe(location =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    var ordered = _stations
+                        .OrderBy(station => station.Coordinate.DistanceTo(location))
+                        .ToList();
+
+                    foreach (var station in ordered)
+                    {
+                        var distance = station.Coordinate.DistanceTo(location);
+                        _distanceLookup[station.Code] = distance;
+                    }
+
+                    stationViewStateStore.SetDistances(
+                        ordered.Select(station => (station.Code, _distanceLookup[station.Code]))
+                    );
+                    stationViewStateStore.UpdateOrdering(ordered);
+
+                    if (!ordered.SequenceEqual(_stations))
+                    {
+                        ReplaceStations(ordered);
+                    }
+                });
+            });
+
+        RegisterResource(subscription);
+    }
+
+    private void ReplaceStations(IEnumerable<Station> stations)
+    {
+        _stations.Clear();
+        foreach (var station in stations)
+        {
+            _stations.Add(station);
+        }
     }
 }

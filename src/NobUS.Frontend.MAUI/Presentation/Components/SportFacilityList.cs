@@ -1,4 +1,8 @@
-﻿using Microsoft.Maui.Graphics;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Maui.Graphics;
 using NobUS.Extra.Campus.Facility.Sports;
 using Type = NobUS.Extra.Campus.Facility.Sports.Type;
 
@@ -7,13 +11,17 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 internal class SportFacilityListState
 {
     public Facility[] Facilities { get; set; } = Array.Empty<Facility>();
+    public bool IsLoading { get; set; }
 }
 
-internal class SportFacilityList : Component<SportFacilityListState>
+internal partial class SportFacilityList : DisposableComponent<SportFacilityListState>
 {
     private readonly double _ringSize = 50;
 
-    private VisualNode RenderFacility(Facility f) =>
+    [Inject]
+    private IFacilityParser facilityParser = null!;
+
+    private VisualNode RenderFacility(Facility facility) =>
         new Border
         {
             new Grid("auto,*,auto", "*")
@@ -24,20 +32,20 @@ internal class SportFacilityList : Component<SportFacilityListState>
                     .Drawable(
                         new ProgressArc
                         {
-                            Progress = f.Occupancy,
-                            Name = f.Name,
-                            Type = f.Type,
+                            Progress = facility.Occupancy,
+                            Name = facility.Name,
+                            Type = facility.Type,
                         }
                     )
                     .Margin(0, 0, 0, _ringSize / 10)
                     .GridRow(0),
-                new Label(f.Name)
+                new Label(facility.Name)
                     .Base()
                     .VerticalOptions(LayoutOptions.Center)
                     .TextColor(Styler.Scheme.OnSurface)
                     .SemiBold()
                     .GridRow(1),
-                new Label($"{f.Load} / {f.Capacity}")
+                new Label($"{facility.Load} / {facility.Capacity}")
                     .Regular()
                     .TextColor(Styler.Scheme.OnSurface)
                     .SemiBold()
@@ -48,55 +56,83 @@ internal class SportFacilityList : Component<SportFacilityListState>
             .Padding(20)
             .BackgroundColor(Styler.Scheme.SurfaceContainerHigh);
 
-    private VisualNode RenderType(Type t) =>
+    private VisualNode RenderType(Type type) =>
         new VerticalStackLayout
         {
-            new Label(t.ToString())
+            new Label(type.ToString())
                 .Large()
                 .SemiBold()
                 .GridRow(0)
                 .TextColor(Styler.Scheme.OnSurface)
                 .Margin(0, 0, 0, 5),
             new CollectionView()
-                .ItemsSource(State.Facilities.Where(f => f.Type == t), RenderFacility)
+                .ItemsSource(
+                    State.Facilities.Where(facility => facility.Type == type),
+                    RenderFacility
+                )
                 .ItemsLayout(new HorizontalLinearItemsLayout().ItemSpacing(5)),
         };
 
-    public override VisualNode Render() =>
-        new Border
-        {
-            new CollectionView()
+    public override VisualNode Render()
+    {
+        VisualNode content = State.IsLoading
+            ? new ActivityIndicator()
+                .IsRunning(true)
+                .IsVisible(true)
+                .HorizontalOptions(LayoutOptions.Center)
+                .VerticalOptions(LayoutOptions.Center)
+            : new CollectionView()
                 .ItemsSource(
                     Enum.GetValues(typeof(Type))
                         .Cast<Type>()
-                        .Where(t => State.Facilities.Where(f => f.Type == t).Any()),
+                        .Where(type => State.Facilities.Any(facility => facility.Type == type)),
                     RenderType
                 )
-                .ItemsLayout(new VerticalLinearItemsLayout().ItemSpacing(5)),
-        }
+                .ItemsLayout(new VerticalLinearItemsLayout().ItemSpacing(5));
+
+        return new Border { content }
             .ToCard(20)
             .Padding(20)
             .Background(Styler.Scheme.SurfaceContainer)
             .VerticalOptions(LayoutOptions.Start)
             .HorizontalOptions(LayoutOptions.Start);
+    }
 
-    protected async Task Load()
+    protected async Task LoadAsync(CancellationToken cancellationToken)
     {
-        var facilities = await Parser.GetAllAsync();
-        SetState(s => s.Facilities = facilities);
+        SetState(state => state.IsLoading = true);
+        try
+        {
+            var facilities = await facilityParser
+                .GetAllAsync(cancellationToken)
+                .ConfigureAwait(false);
+            SetState(state =>
+            {
+                state.Facilities = facilities.ToArray();
+                state.IsLoading = false;
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            SetState(state => state.IsLoading = false);
+        }
     }
 
     protected override async void OnMounted()
     {
-        await Load();
+        var cts = new CancellationTokenSource();
+        RegisterResource(cts);
+        await LoadAsync(cts.Token);
         base.OnMounted();
     }
 
     private class ProgressArc : IDrawable
     {
-        public double Progress { get; set; }
-        public string Name { get; set; }
-        public Type Type { get; set; }
+        public double Progress { get; init; }
+
+        public required string Name { get; init; }
+
+        public required Type Type { get; init; }
 
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
