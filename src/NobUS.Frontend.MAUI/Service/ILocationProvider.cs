@@ -1,8 +1,11 @@
-﻿using NobUS.DataContract.Model;
+using System;
+using NobUS.DataContract.Model;
 
 namespace NobUS.Frontend.MAUI.Service;
 
-internal interface ILocationProvider : IDisposable
+public interface ILocationProvider : IDisposable
 {
-    public Coordinate Location { get; }
+    Coordinate? Location { get; }
+
+    IObservable<Coordinate> LocationChanges { get; }
 }
