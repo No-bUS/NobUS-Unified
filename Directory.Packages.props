@@ -26,14 +26,23 @@
     <PackageVersion Include="System.CommandLine" Version="2.0.0-rc.2.25502.107" />
     <PackageVersion Include="Spectre.Console" Version="0.52.0" />
     <!-- General -->
+    <PackageVersion Include="Avalonia" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.Android" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.7" />
     <PackageVersion
       Include="Microsoft.Extensions.DependencyInjection"
       Version="10.0.0-rc.2.25502.107"
     />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0-rc.2.25502.107" />
     <PackageVersion Include="Fody" Version="6.9.3" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0-rc.2.25502.107" />
+    <PackageVersion Include="Semi.Avalonia" Version="11.3.7" />
     <PackageVersion Include="PublishAotCompressed" Version="1.0.5" />
     <PackageVersion Include="System.Reactive" Version="6.1.0" />
     <PackageVersion Include="System.Reactive.Linq" Version="6.1.0" />
+    <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.17" />
   </ItemGroup>
 </Project>

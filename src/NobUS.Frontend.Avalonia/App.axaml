@@ -1,0 +1,18 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:NobUS.Frontend.Avalonia"
+             xmlns:conv="clr-namespace:NobUS.Frontend.Avalonia.Converters"
+             xmlns:semi="https://irihi.tech/semi"
+             x:Class="NobUS.Frontend.Avalonia.App"
+             RequestedThemeVariant="Default">
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
+  <Application.Styles>
+    <FluentTheme />
+    <semi:SemiTheme Locale="en-US" />
+  </Application.Styles>
+  <Application.Resources>
+    <conv:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+  </Application.Resources>
+</Application>

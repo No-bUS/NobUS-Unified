@@ -1,10 +1,12 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using MaterialColorUtilities.Maui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
 using MoreLinq;
 using NobUS.DataContract.Reader.OfficialAPI;
+using NobUS.DataContract.Reader.OfficialAPI.Client;
+using NobUS.Extra.Campus.Facility.Sports;
 using NobUS.Frontend.MAUI.Presentation;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
@@ -33,8 +35,8 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiReactorApp<PageContainer>(
-                (app) => IMaterialColorService.Current.Initialize(app.Resources)
+            .UseMauiReactorApp<PageContainer>(app =>
+                IMaterialColorService.Current.Initialize(app.Resources)
             )
             .UseMauiCommunityToolkit()
             .UseMaterialColors()
@@ -46,12 +48,18 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+        builder.Services.AddSingleton<StationViewStateStore>();
+        builder.Services.AddHttpClient<SchemaClient>(Utility.ConfigureAuth);
+        builder.Services.AddHttpClient<FacilityParser>();
+        builder.Services.AddScoped<IFacilityParser>(provider =>
+            provider.GetRequiredService<FacilityParser>()
+        );
+
         builder
             .Services.AddScoped<IClient, CongestedClient>()
             .AddScoped<ILocationProvider, LocationProvider>()
-            .AddScoped(provider => new ArrivalEventListener(
-                async (station) =>
-                    await provider.GetRequiredService<IClient>().GetArrivalEventsAsync(station)
+            .AddScoped(provider => new ArrivalEventListener(async station =>
+                await provider.GetRequiredService<IClient>().GetArrivalEventsAsync(station)
             ));
 
         return builder.Build();

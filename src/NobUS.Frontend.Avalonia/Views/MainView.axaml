@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:NobUS.Frontend.Avalonia.ViewModels"
+             x:Class="NobUS.Frontend.Avalonia.Views.MainView"
+             mc:Ignorable="d">
+  <Grid RowDefinitions="Auto,*" ColumnDefinitions="*" d:DataContext="{x:Static vm:DesignData.Main}">
+    <StackPanel Orientation="Vertical" Spacing="12">
+      <TextBlock Classes="h2" Text="NobUS Demo Arrivals" Margin="0,0,0,8" />
+      <TextBlock Text="Pick a station to preview simulated arrivals" FontSize="14" />
+      <ComboBox ItemsSource="{Binding Stations}" SelectedItem="{Binding SelectedStation}" DisplayMemberBinding="{Binding DisplayName}" />
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="Refresh" Command="{Binding Refresh}" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanNegationConverter}}" />
+        <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" />
+      </StackPanel>
+      <ItemsControl ItemsSource="{Binding ArrivalGroups}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="{x:Type vm:RouteArrivalGroupViewModel}">
+            <Border Classes="semi-card" Padding="16" Margin="0,0,0,12">
+              <StackPanel Spacing="6">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                  <TextBlock Text="{Binding RouteName}" Classes="h3" />
+                  <TextBlock Text="{Binding $parent[ItemsControl].DataContext.SelectedStation.LastUpdated, StringFormat='Updated {0:HH:mm:ss}'}" FontSize="12" Foreground="Gray" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Arrivals}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:RouteArrivalGroupViewModel+ArrivalPredictionViewModel}">
+                      <Grid ColumnDefinitions="Auto,*" Margin="0,2">
+                        <TextBlock Text="{Binding VehiclePlate}" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="1" Text="{Binding DisplayWait}" HorizontalAlignment="Right" />
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+  </Grid>
+</UserControl>
