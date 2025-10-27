@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using Microsoft.Maui.Dispatching;
+using Microsoft.Maui.ApplicationModel;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using ReactiveUI;
@@ -14,7 +14,6 @@ internal partial class StationList : DisposableComponent
 {
     private readonly ObservableCollection<Station> _stations = new(GetAllStations);
     private readonly Dictionary<int, double> _distanceLookup = new();
-    private readonly IDispatcher _dispatcher = Dispatcher.GetForCurrentThread()!;
 
     [Inject]
     private ILocationProvider locationProvider = null!;
@@ -80,7 +79,7 @@ internal partial class StationList : DisposableComponent
             .WhereNotNull()
             .Subscribe(location =>
             {
-                _dispatcher.Dispatch(() =>
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
                     var ordered = _stations
                         .OrderBy(station => station.Coordinate.DistanceTo(location))
