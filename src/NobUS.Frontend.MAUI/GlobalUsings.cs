@@ -4,8 +4,6 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
-// MAUI Reactor
-global using MauiReactor;
 // MAUI control aliases
 global using ClearButtonVisibility = Microsoft.Maui.ClearButtonVisibility;
 global using Color = Microsoft.Maui.Graphics.Color;

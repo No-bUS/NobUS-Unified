@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="NobUS.Frontend.MAUI.Views.SportsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:NobUS.Frontend.MAUI.Controls"
+    xmlns:sports="clr-namespace:NobUS.Extra.Campus.Facility.Sports;assembly=NobUS.Extra.Campus.Facility.Sports"
+    xmlns:viewmodels="clr-namespace:NobUS.Frontend.MAUI.ViewModels"
+    Title="Sports"
+    BackgroundColor="{DynamicResource SurfaceColor}">
+    <RefreshView
+        Command="{Binding RefreshCommand}"
+        IsRefreshing="{Binding IsRefreshing}">
+        <CollectionView
+            Margin="16,0"
+            ItemsSource="{Binding FacilityGroups}"
+            SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="16" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:SportsPageViewModel.FacilityGroup">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="{Binding Type}"
+                            TextColor="{DynamicResource OnSurfaceColor}" />
+                        <CollectionView ItemsSource="{Binding Facilities}" SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="12" Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="sports:Facility">
+                                    <Border
+                                        BackgroundColor="{DynamicResource SurfaceContainerHighColor}"
+                                        Padding="12"
+                                        Stroke="Transparent">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="20" />
+                                        </Border.StrokeShape>
+                                        <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                                            <controls:FacilityOccupancyView Facility="{Binding .}" />
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="14"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding Name}"
+                                                TextColor="{DynamicResource OnSurfaceColor}" />
+                                            <Label
+                                                FontSize="12"
+                                                HorizontalTextAlignment="Center"
+                                                TextColor="{DynamicResource OnSurfaceColor}">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Load}" />
+                                                        <Span Text=" / " />
+                                                        <Span Text="{Binding Capacity}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

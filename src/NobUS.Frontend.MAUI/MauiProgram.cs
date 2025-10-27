@@ -2,11 +2,13 @@
 using MaterialColorUtilities.Maui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using MoreLinq;
 using NobUS.DataContract.Reader.OfficialAPI;
-using NobUS.Frontend.MAUI.Presentation;
 using NobUS.Frontend.MAUI.Service;
+using NobUS.Frontend.MAUI.ViewModels;
+using NobUS.Frontend.MAUI.Views;
 using NobUS.Infrastructure;
 
 namespace NobUS.Frontend.MAUI;
@@ -33,9 +35,7 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiReactorApp<PageContainer>(
-                (app) => IMaterialColorService.Current.Initialize(app.Resources)
-            )
+            .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .UseMaterialColors()
             .ConfigureFonts(fonts =>
@@ -46,13 +46,17 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-        builder
-            .Services.AddScoped<IClient, CongestedClient>()
-            .AddScoped<ILocationProvider, LocationProvider>()
-            .AddScoped(provider => new ArrivalEventListener(
-                async (station) =>
-                    await provider.GetRequiredService<IClient>().GetArrivalEventsAsync(station)
-            ));
+        builder.Services
+            .AddSingleton<IClient, CongestedClient>()
+            .AddSingleton<ILocationProvider, LocationProvider>()
+            .AddSingleton(provider => new ArrivalEventListener(
+                station => provider.GetRequiredService<IClient>().GetArrivalEventsAsync(station)
+            ))
+            .AddSingleton<AppShell>()
+            .AddTransient<StationsPage>()
+            .AddTransient<SportsPage>()
+            .AddTransient<StationsPageViewModel>()
+            .AddTransient<SportsPageViewModel>();
 
         return builder.Build();
     }

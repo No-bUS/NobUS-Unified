@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application
+    x:Class="NobUS.Frontend.MAUI.App"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="SurfaceColor">#FFFFFF</Color>
+            <Color x:Key="SurfaceContainerColor">#F6F6F6</Color>
+            <Color x:Key="SurfaceContainerHighColor">#EEEEEE</Color>
+            <Color x:Key="SecondaryContainerColor">#E0E0E0</Color>
+            <Color x:Key="SecondaryColor">#6200EE</Color>
+            <Color x:Key="OnSurfaceColor">#000000</Color>
+            <Color x:Key="OnSecondaryColor">#FFFFFF</Color>
+            <Color x:Key="OnSecondaryContainerColor">#000000</Color>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

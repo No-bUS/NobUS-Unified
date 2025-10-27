@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="NobUS.Frontend.MAUI.Views.StationsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:NobUS.Frontend.MAUI.Converters"
+    xmlns:infrastructure="clr-namespace:NobUS.Infrastructure;assembly=NobUS.Infrastructure"
+    xmlns:model="clr-namespace:NobUS.DataContract.Model;assembly=NobUS.DataContract.Model"
+    xmlns:viewmodels="clr-namespace:NobUS.Frontend.MAUI.ViewModels"
+    Title="Stations"
+    BackgroundColor="{DynamicResource SurfaceColor}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:TimeSpanToEtaConverter x:Key="EtaConverter" />
+            <converters:TimeSpanToTextDecorationsConverter x:Key="EtaDecorationConverter" />
+            <converters:TimeSpanToFontAttributesConverter x:Key="EtaFontConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <Label
+            Grid.Row="0"
+            Margin="16,16,16,8"
+            FontAttributes="Bold"
+            FontSize="32"
+            HorizontalOptions="Start"
+            Text="NobUS"
+            TextColor="{DynamicResource OnSurfaceColor}" />
+
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Stations}"
+            SelectionMode="None"
+            VerticalOptions="FillAndExpand">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:StationItemViewModel">
+                    <Border
+                        BackgroundColor="{DynamicResource SurfaceContainerColor}"
+                        Margin="16,0"
+                        Padding="16"
+                        Stroke="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleExpandedCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label
+                                    FontFamily="Regular"
+                                    FontSize="14"
+                                    Text="{Binding StationTitle}"
+                                    TextColor="{DynamicResource OnSurfaceColor}" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontFamily="Regular"
+                                    FontSize="14"
+                                    HorizontalOptions="End"
+                                    Text="{Binding DistanceDisplay}"
+                                    TextColor="{DynamicResource OnSurfaceColor}" />
+                            </Grid>
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="20"
+                                Text="{Binding Station.Name}"
+                                TextColor="{DynamicResource OnSurfaceColor}" />
+
+                            <Border
+                                BackgroundColor="{DynamicResource SecondaryContainerColor}"
+                                IsVisible="{Binding IsExpanded}"
+                                Padding="12"
+                                Stroke="Transparent">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
+                                <CollectionView
+                                    ItemsSource="{Binding ArrivalGroups}"
+                                    SelectionMode="None">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="infrastructure:ArrivalEventListener.ArrivalEventGroup">
+                                            <VerticalStackLayout Spacing="6">
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="16"
+                                                    Text="{Binding RouteName}"
+                                                    TextColor="{DynamicResource OnSecondaryContainerColor}" />
+                                                <CollectionView
+                                                    ItemsSource="{Binding Events}"
+                                                    SelectionMode="None">
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout ItemSpacing="8" Orientation="Horizontal" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="model:ArrivalEvent">
+                                                            <Label
+                                                                FontFamily="Regular"
+                                                                FontSize="16"
+                                                                HorizontalOptions="Start"
+                                                                Text="{Binding TimeToWait, Converter={StaticResource EtaConverter}}"
+                                                                TextColor="{DynamicResource OnSecondaryContainerColor}">
+                                                                <Label.TextDecorations>
+                                                                    <Binding
+                                                                        Path="TimeToWait"
+                                                                        Converter="{StaticResource EtaDecorationConverter}" />
+                                                                </Label.TextDecorations>
+                                                                <Label.FontAttributes>
+                                                                    <Binding
+                                                                        Path="TimeToWait"
+                                                                        Converter="{StaticResource EtaFontConverter}" />
+                                                                </Label.FontAttributes>
+                                                            </Label>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </VerticalStackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

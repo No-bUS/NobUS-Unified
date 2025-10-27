@@ -3,7 +3,6 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <MauiVersion>10.0.0-rc.2.25504.7</MauiVersion>
-    <MauiReactorVersion>3.0.37</MauiReactorVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- MAUI -->
@@ -11,13 +10,11 @@
     <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
     <PackageVersion Include="CommunityToolkit.Maui" Version="12.2.0" />
     <PackageVersion Include="CommunityToolkit.Maui.Markup" Version="6.0.1" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.3.2" />
     <PackageVersion Include="MoreLinq" Version="4.4.0" />
     <PackageVersion Include="ReactiveUI" Version="22.2.1" />
     <PackageVersion Include="ReactiveUI.Fody" Version="19.5.41" />
     <PackageVersion Include="ReactiveUI.Maui" Version="22.2.1" />
-    <PackageVersion Include="Reactor.Maui" Version="$(MauiReactorVersion)" />
-    <PackageVersion Include="Reactor.Maui.Canvas" Version="$(MauiReactorVersion)" />
-    <PackageVersion Include="Reactor.Maui.ScaffoldGenerator" Version="2.0.15-beta" />
     <PackageVersion Include="MaterialColorUtilities.Maui" Version="0.3.0" />
     <!-- IO -->
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
