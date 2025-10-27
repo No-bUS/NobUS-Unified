@@ -47,11 +47,12 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
         builder
-            .Services.AddScoped<IClient, CongestedClient>()
+            .Services.AddSingleton<CongestedClient>()
+            .AddSingleton<IClient>(provider => provider.GetRequiredService<CongestedClient>())
+            .AddHostedService<VehicleLocationRefreshService>()
             .AddScoped<ILocationProvider, LocationProvider>()
-            .AddScoped(provider => new ArrivalEventListener(
-                async (station) =>
-                    await provider.GetRequiredService<IClient>().GetArrivalEventsAsync(station)
+            .AddSingleton(provider => new ArrivalEventListener(
+                async station => await provider.GetRequiredService<IClient>().GetArrivalEventsAsync(station)
             ));
 
         return builder.Build();

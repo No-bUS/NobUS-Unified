@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Maui.Markup;
+﻿using System;
+using System.Collections.Generic;
+using CommunityToolkit.Maui.Markup;
+using Microsoft.Maui.ApplicationModel;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
 using NobUS.Infrastructure;
@@ -10,7 +13,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 internal class StationCardState
 {
     public bool Expanded { get; set; }
-    public List<ArrivalEventGroup> ArrivalEvents { get; set; }
+    public IReadOnlyList<ArrivalEventGroup> ArrivalEvents { get; set; }
 }
 
 internal partial class StationCard : DisposableComponent<StationCardState>
@@ -74,7 +77,7 @@ internal partial class StationCard : DisposableComponent<StationCardState>
                     ? null
                     : new Border
                     {
-                        new VerticalStackLayout { State.ArrivalEvents.Select(RenderGroup) }
+                        new VerticalStackLayout { (State.ArrivalEvents ?? Array.Empty<ArrivalEventGroup>()).Select(RenderGroup) }
                             .HFill()
                             .VFill()
                             .Margin(5),
@@ -141,6 +144,8 @@ internal partial class StationCard : DisposableComponent<StationCardState>
             .Spacing(5)
             .HeightRequest(Styles.Sizes.Base * 2);
 
+    private IDisposable? arrivalSubscription;
+
     private void Load()
     {
         if (State.Expanded)
@@ -150,15 +155,24 @@ internal partial class StationCard : DisposableComponent<StationCardState>
                 s.Expanded = false;
                 s.ArrivalEvents = null;
             });
-            Dispose();
+            arrivalSubscription?.Dispose();
+            arrivalSubscription = null;
         }
         else
         {
             SetState(s =>
             {
                 s.Expanded = true;
-                s.ArrivalEvents = arrivalEventListener.GetArrivalEventGroups(_station, this);
+                s.ArrivalEvents = Array.Empty<ArrivalEventGroup>();
             });
+            arrivalSubscription = arrivalEventListener
+                .ObserveArrivalEvents(_station)
+                .Subscribe(groups =>
+                    MainThread.BeginInvokeOnMainThread(() =>
+                        SetState(s => s.ArrivalEvents = groups)
+                    )
+                );
+            RegisterResource(arrivalSubscription);
         }
     }
 
