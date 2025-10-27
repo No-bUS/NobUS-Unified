@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using CommunityToolkit.Maui.Core.Extensions;
 using Microsoft.Maui.Dispatching;
 using NobUS.DataContract.Model;
 using NobUS.Frontend.MAUI.Service;
@@ -26,18 +25,14 @@ internal partial class StationList : DisposableComponent
     public StationList Stations(IList<Station> stations)
     {
         var ordered = stationViewStateStore.OrderStations(stations);
-        _stations.Clear();
-        _stations.AddRange(ordered);
+        ReplaceStations(ordered);
         stationViewStateStore.UpdateOrdering(ordered);
         return this;
     }
 
     public override VisualNode Render() =>
         new ListView()
-            .ItemsSource(
-                _stations,
-                station => new ViewCell() { CreateCard(station).Invoke(RegisterResource) }
-            )
+            .ItemsSource(_stations, station => new ViewCell() { CreateCard(station) })
             .SelectionMode(ListViewSelectionMode.None)
             .VerticalScrollBarVisibility(ScrollBarVisibility.Never)
             .SeparatorVisibility(SeparatorVisibility.None)
@@ -66,8 +61,7 @@ internal partial class StationList : DisposableComponent
         var ordered = stationViewStateStore.OrderStations(_stations);
         if (!ordered.SequenceEqual(_stations))
         {
-            _stations.Clear();
-            _stations.AddRange(ordered);
+            ReplaceStations(ordered);
         }
 
         foreach (var station in ordered)
@@ -81,7 +75,7 @@ internal partial class StationList : DisposableComponent
 
     private void SubscribeToLocationUpdates()
     {
-        locationProvider
+        var subscription = locationProvider
             .WhenAnyValue(provider => provider.Location)
             .WhereNotNull()
             .Subscribe(location =>
@@ -105,11 +99,20 @@ internal partial class StationList : DisposableComponent
 
                     if (!ordered.SequenceEqual(_stations))
                     {
-                        _stations.Clear();
-                        _stations.AddRange(ordered);
+                        ReplaceStations(ordered);
                     }
                 });
-            })
-            .Invoke(RegisterResource);
+            });
+
+        RegisterResource(subscription);
+    }
+
+    private void ReplaceStations(IEnumerable<Station> stations)
+    {
+        _stations.Clear();
+        foreach (var station in stations)
+        {
+            _stations.Add(station);
+        }
     }
 }

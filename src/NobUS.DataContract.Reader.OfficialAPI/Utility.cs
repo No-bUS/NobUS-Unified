@@ -8,7 +8,7 @@ using NobUS.DataContract.Reader.OfficialAPI.Client;
 
 namespace NobUS.DataContract.Reader.OfficialAPI;
 
-internal static class Utility
+public static class Utility
 {
     private static readonly string AuthorizationValue = Convert.ToBase64String(
         Encoding.ASCII.GetBytes("NUSnextbus:13dL?zY,3feWR^\"T")

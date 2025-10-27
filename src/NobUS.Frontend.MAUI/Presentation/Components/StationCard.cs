@@ -195,15 +195,15 @@ internal partial class StationCard : DisposableComponent<StationCardState>
             _distance = storedDistance.Value;
         }
 
-        locationProvider
+        var locationSubscription = locationProvider
             .WhenAnyValue(provider => provider.Location)
             .WhereNotNull()
             .Subscribe(location =>
             {
                 _distance = station.Coordinate.DistanceTo(location);
                 Invalidate();
-            })
-            .Invoke(RegisterResource);
+            });
+        RegisterResource(locationSubscription);
 
         if (stationViewStateStore.IsExpanded(station.Code) && !State.Expanded)
         {

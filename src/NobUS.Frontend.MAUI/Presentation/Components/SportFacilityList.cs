@@ -14,7 +14,7 @@ internal class SportFacilityListState
     public bool IsLoading { get; set; }
 }
 
-internal class SportFacilityList : Component<SportFacilityListState>
+internal partial class SportFacilityList : DisposableComponent<SportFacilityListState>
 {
     private readonly double _ringSize = 50;
 
