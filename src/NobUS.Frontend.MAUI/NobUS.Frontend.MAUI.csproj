@@ -33,6 +33,7 @@
             </IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="MoreLinq" />
     <PackageReference Include="ReactiveUI" />
     <PackageReference Include="ReactiveUI.Fody" />

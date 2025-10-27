@@ -1,23 +1,26 @@
-﻿namespace NobUS.Frontend.MAUI.Presentation.Components;
+using System;
+using System.Collections.Generic;
+
+namespace NobUS.Frontend.MAUI.Presentation.Components;
 
 internal abstract class DisposableComponent : Component, IDisposable
 {
-    protected internal readonly List<WeakReference<IDisposable>> _disposables = new();
+    private readonly List<IDisposable> _disposables = new();
 
-    public void Dispose() =>
-        Task.Run(() =>
-            _disposables
-                .Select(cr =>
-                {
-                    cr.TryGetTarget(out var c);
-                    return c;
-                })
-                .ToList()
-                .ForEach(c => c.Dispose())
-        );
+    public void Dispose()
+    {
+        foreach (var disposable in _disposables.ToArray())
+        {
+            disposable.Dispose();
+        }
+        _disposables.Clear();
+    }
 
-    protected internal void RegisterResource(IDisposable resource) =>
-        _disposables.Add(new(resource));
+    protected internal void RegisterResource(IDisposable resource)
+    {
+        ArgumentNullException.ThrowIfNull(resource);
+        _disposables.Add(resource);
+    }
 
     protected override void OnWillUnmount()
     {
@@ -29,22 +32,22 @@ internal abstract class DisposableComponent : Component, IDisposable
 internal abstract class DisposableComponent<T> : Component<T>, IDisposable
     where T : class, new()
 {
-    protected internal readonly List<WeakReference<IDisposable>> _disposables = new();
+    private readonly List<IDisposable> _disposables = new();
 
-    public void Dispose() =>
-        Task.Run(() =>
-            _disposables
-                .Select(cr =>
-                {
-                    cr.TryGetTarget(out var c);
-                    return c;
-                })
-                .ToList()
-                .ForEach(c => c.Dispose())
-        );
+    public void Dispose()
+    {
+        foreach (var disposable in _disposables.ToArray())
+        {
+            disposable.Dispose();
+        }
+        _disposables.Clear();
+    }
 
-    protected internal void RegisterResource(IDisposable resource) =>
-        _disposables.Add(new(resource));
+    protected internal void RegisterResource(IDisposable resource)
+    {
+        ArgumentNullException.ThrowIfNull(resource);
+        _disposables.Add(resource);
+    }
 
     protected override void OnWillUnmount()
     {
