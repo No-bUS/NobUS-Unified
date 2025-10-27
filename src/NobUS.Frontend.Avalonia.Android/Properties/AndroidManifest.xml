@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.nobus.frontend.avalonia">
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="36" />
+  <application android:label="NobUS.Avalonia" android:icon="@drawable/appicon" />
+</manifest>

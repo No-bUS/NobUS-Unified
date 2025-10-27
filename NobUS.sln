@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Extra.Campus.Facility
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Resources", "src\NobUS.Resources\NobUS.Resources.csproj", "{A590C598-0EE5-4193-9F1F-C4B77082BAE7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Frontend.Avalonia", "src\NobUS.Frontend.Avalonia\NobUS.Frontend.Avalonia.csproj", "{B09E9B70-29E3-478A-A5DE-9EAFEB816505}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobUS.Frontend.Avalonia.Android", "src\NobUS.Frontend.Avalonia.Android\NobUS.Frontend.Avalonia.Android.csproj", "{18EABE56-72FF-4EE7-9452-EF43599CB979}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{A67A82AF-00C5-437C-A066-A09A01F8B219}"
 	ProjectSection(SolutionItems) = preProject
 		.prettierrc.yaml = .prettierrc.yaml
@@ -69,6 +73,16 @@ Global
 		{30B19E07-82B8-4718-8FA0-8474A83D8030}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30B19E07-82B8-4718-8FA0-8474A83D8030}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30B19E07-82B8-4718-8FA0-8474A83D8030}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B09E9B70-29E3-478A-A5DE-9EAFEB816505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B09E9B70-29E3-478A-A5DE-9EAFEB816505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B09E9B70-29E3-478A-A5DE-9EAFEB816505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B09E9B70-29E3-478A-A5DE-9EAFEB816505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18EABE56-72FF-4EE7-9452-EF43599CB979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18EABE56-72FF-4EE7-9452-EF43599CB979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18EABE56-72FF-4EE7-9452-EF43599CB979}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{18EABE56-72FF-4EE7-9452-EF43599CB979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18EABE56-72FF-4EE7-9452-EF43599CB979}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18EABE56-72FF-4EE7-9452-EF43599CB979}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
