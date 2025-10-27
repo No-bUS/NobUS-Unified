@@ -8,6 +8,7 @@ namespace NobUS.Frontend.MAUI.Presentation.Components;
 internal class NavigationBarState
 {
     public NavigationBarItem? SelectedItem { get; set; }
+    public Component? SelectedContent { get; set; }
 }
 
 internal class NavigationBar : Component<NavigationBarState>
@@ -18,7 +19,7 @@ internal class NavigationBar : Component<NavigationBarState>
 
     public override VisualNode Render()
     {
-        var content = State.SelectedItem?.GetOrCreateContent();
+        var content = State.SelectedContent;
         return new Grid("*,auto", "*")
         {
             new ContentView { content }
@@ -72,7 +73,11 @@ internal class NavigationBar : Component<NavigationBarState>
             {
                 if (State.SelectedItem != item)
                 {
-                    SetState(state => state.SelectedItem = item);
+                    SetState(state =>
+                    {
+                        state.SelectedItem = item;
+                        state.SelectedContent = item.CreateContent();
+                    });
                 }
             })
             .MinimumWidthRequest(48)
@@ -84,9 +89,14 @@ internal class NavigationBar : Component<NavigationBarState>
 
     protected override void OnMounted()
     {
-        if (State.SelectedItem is null)
+        if (State.SelectedItem is null && _items.Count > 0)
         {
-            State.SelectedItem = _items.FirstOrDefault();
+            var firstItem = _items.First();
+            SetState(state =>
+            {
+                state.SelectedItem = firstItem;
+                state.SelectedContent = firstItem.CreateContent();
+            });
         }
         base.OnMounted();
     }
@@ -96,9 +106,4 @@ internal sealed record NavigationBarItem(
     string Title,
     MaterialIcons Icon,
     Func<Component> CreateContent
-)
-{
-    private Component? _instance;
-
-    public Component GetOrCreateContent() => _instance ??= CreateContent();
-}
+);

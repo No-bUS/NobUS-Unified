@@ -75,7 +75,8 @@ internal sealed class LocationProvider : ReactiveObject, ILocationProvider
             _backgroundTask.Wait();
         }
         catch (AggregateException ex)
-            when (ex.InnerExceptions.All(e => e is OperationCanceledException)) { }
+            when (ex.InnerExceptions.All(e => e is OperationCanceledException))
+        { }
         _cancellationTokenSource.Dispose();
     }
 }
